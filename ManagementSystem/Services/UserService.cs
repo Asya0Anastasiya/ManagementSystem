@@ -1,6 +1,7 @@
 ﻿using ManagementSystem.Data;
 using ManagementSystem.Interfaces;
 using ManagementSystem.Models;
+using ManagementSystem.Models.UserDTO;
 using ManagementSystem.Models.UserModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -35,9 +36,14 @@ namespace ManagementSystem.Services
             context.SaveChanges();
         }
 
-        public List<UserModel> GetUsers()
+        public IQueryable<UserInfoModel> GetUsers()
         {
-            return context.Users.ToList();
+            return context.Users.Select(user => new UserInfoModel
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                DateOfBirth = user.DateOfBirth,
+            }); 
         }
 
         public string Login(SignInModel signInModel)
@@ -51,6 +57,7 @@ namespace ManagementSystem.Services
             return string.Empty;
         }
 
+        //null
         private UserModel Authenticate(SignInModel signInModel)
         {
             var user = context.Users.Where(x => x.Email == signInModel.Email).FirstOrDefault();

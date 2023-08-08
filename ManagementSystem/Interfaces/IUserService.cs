@@ -1,4 +1,5 @@
 ﻿using ManagementSystem.Models;
+using ManagementSystem.Models.UserDTO;
 using ManagementSystem.Models.UserModels;
 
 namespace ManagementSystem.Interfaces
@@ -13,7 +14,7 @@ namespace ManagementSystem.Interfaces
 
         public string Login(SignInModel signInModel);
 
-        public List<UserModel> GetUsers();
+        public IQueryable<UserInfoModel> GetUsers();
 
         public bool ChangePassword(string token, string oldPassword, string newPassword);
     }
