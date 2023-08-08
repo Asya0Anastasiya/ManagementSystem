@@ -1,5 +1,7 @@
 ﻿using ManagementSystem.Data;
 using ManagementSystem.Entities;
+using ManagementSystem.Interfaces;
+using ManagementSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +17,17 @@ namespace ManagementSystem.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly Context context;
+        private readonly IPassword iPassword;
 
-        public LoginController(IConfiguration configuration, Context _context)
+        public LoginController(IConfiguration configuration,
+                               Context _context,
+                               IPassword _pass)
         {
             _configuration = configuration; 
             context = _context;
+            iPassword = _pass;
         }
 
         [AllowAnonymous]
@@ -38,6 +44,7 @@ namespace ManagementSystem.Controllers
             return NotFound("User not found");
         }
 
+        // отдельный сервис для JWT???
         private string Generate(UserEntity user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -58,11 +65,16 @@ namespace ManagementSystem.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        //сделать что-то с ретурнами
         private UserEntity Authenticate(UserLogin userLogin)
         {
-            UserEntity user = context.Users.Where(x => x.UserName == userLogin.Username && x.Password == userLogin.Password).FirstOrDefault();
+            UserEntity user = context.Users.Where(x => x.UserName == userLogin.Username).FirstOrDefault();
             if (user != null) 
             { 
+                if (!iPassword.VerifyPasswordHash(userLogin.Password, user.PasswordHash, user.PasswordSalt))
+                {
+                    return null;
+                }
                 return user;
             }
             return null;

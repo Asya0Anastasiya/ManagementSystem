@@ -17,32 +17,22 @@ namespace ManagementSystem.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Employee")]
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult GetAll() 
         { 
             return Ok(iUser.GetAll());
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] UserEntity userEntity) 
         { 
-            iUser.Create(userEntity);
-            return Ok(userEntity);
+            if (ModelState.IsValid)
+            {
+                iUser.Create(userEntity);
+                return Ok(userEntity);
+            }
+            return BadRequest("Invalid user");
         }
-
-
-        //[HttpGet]
-        //public IActionResult Public()
-        //{
-        //    return Ok("This is public method");
-        //}
-
-        //[HttpGet("Admins")]
-        //[Authorize(Roles = "Administrator")]
-        //public IActionResult Private()
-        //{
-        //    return Ok("Private message");
-        //}
     }
 }

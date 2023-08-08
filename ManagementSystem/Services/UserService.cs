@@ -7,13 +7,19 @@ namespace ManagementSystem.Services
     public class UserService : IUser
     {
         private readonly Context context;
-        public UserService(Context _context)
+        private readonly IPassword iPassword;
+
+        public UserService(Context _context, IPassword _password)
         {
             context = _context;
+            iPassword = _password;
         }
 
         public void Create(UserEntity entity)
         {
+            iPassword.CreatePasswordHash(entity.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            entity.PasswordHash = passwordHash;
+            entity.PasswordSalt = passwordSalt;
             context.Users.Add(entity);
             context.SaveChanges();
         }
