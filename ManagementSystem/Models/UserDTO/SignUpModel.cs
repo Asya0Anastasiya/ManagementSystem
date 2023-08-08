@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ManagementSystem.Entities
+namespace ManagementSystem.Models.UserModels
 {
-    public class SignUpEntity
+    public class SignUpModel
     {
         [Required]
         public string Firstname { get; set; }
@@ -16,9 +16,5 @@ namespace ManagementSystem.Entities
 
         [Required]
         public string Password { get; set; }
-
-        [Required]
-        [Compare("Password")]
-        public string ConfirmPassword { get; set; }
     }
 }

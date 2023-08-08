@@ -1,82 +1,127 @@
 ﻿using ManagementSystem.Data;
-using ManagementSystem.Entities;
 using ManagementSystem.Interfaces;
-using Microsoft.AspNetCore.Identity;
+using ManagementSystem.Models;
+using ManagementSystem.Models.UserModels;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ManagementSystem.Services
 {
-    public class UserService : IUser
+    public class UserService : IUserService
     {
         private readonly Context context;
-        private readonly UserManager<UserIdentity> userManager;
-        private readonly SignInManager<UserIdentity> signInManager;
-        private readonly IHttpContextAccessor httpContext;
+        private readonly IConfiguration config;
 
-        public UserService(Context _context, 
-                           UserManager<UserIdentity> _userManager,
-                           SignInManager<UserIdentity> _signInManager,
-                           IHttpContextAccessor _httpContext)
+        public UserService(Context _context, IConfiguration _config)
         {
             context = _context;
-            userManager = _userManager;
-            signInManager = _signInManager;
-            httpContext = _httpContext;
+            config = _config;
         }
 
-        //USING IDENTITYCORE
-        public async Task<IdentityResult> CreateIdentity(SignUpEntity userLogin)
+        // вынести в отдельный метод создание UserModel из signUpModel???
+        public void Create(SignUpModel signUpModel)
         {
-            var user = new UserIdentity()
+            UserModel userModel = new();
+            CreatePasswordHash(signUpModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            userModel.Email = signUpModel.Email;
+            userModel.FirstName = signUpModel.Firstname;
+            userModel.LastName = signUpModel.Lastname;
+            userModel.PasswordHash = passwordHash;
+            userModel.PasswordSalt = passwordSalt;
+            context.Users.Add(userModel);
+            context.SaveChanges();
+        }
+
+        public List<UserModel> GetUsers()
+        {
+            return context.Users.ToList();
+        }
+
+        public string Login(SignInModel signInModel)
+        {
+            var user = Authenticate(signInModel);
+            if (user != null)
             {
-                Firstname = userLogin.Firstname,
-                Lasttname = userLogin.Lastname,
-                Email = userLogin.Email,
-                UserName = userLogin.Email
+                var token = Generate(user);
+                return token;
+            }
+            return string.Empty;
+        }
+
+        private UserModel Authenticate(SignInModel signInModel)
+        {
+            var user = context.Users.Where(x => x.Email == signInModel.Email).FirstOrDefault();
+            if (user != null)
+            {
+                if (!VerifyPasswordHash(signInModel.Password, user.PasswordHash, user.PasswordSalt))
+                {
+                    return null;
+                }
+                return user;
+            }
+            return null;
+        }
+
+        public bool ChangePassword(string token, string oldPassword, string newPassword)
+        {
+            JwtSecurityToken jwtSecurityToken = new(token);
+            string userId = GetUserIdByToken(jwtSecurityToken);
+            // async
+            var currentUser = context.Users.Where(x => x.Id.ToString().Equals(userId)).First();
+            if (!VerifyPasswordHash(oldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
+            {
+                return false;
+            }
+            else
+            {
+                CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                currentUser.PasswordHash = passwordHash;
+                currentUser.PasswordSalt = passwordSalt;
+                context.Users.Update(currentUser);
+                context.SaveChanges();
+                return true;
+            }
+        }
+
+        public string GetUserIdByToken(JwtSecurityToken token)
+        {
+            var userId = token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            return userId;
+        }
+
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using var hmac = new HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using var hmac = new HMACSHA512(passwordSalt);
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return computedHash.SequenceEqual(passwordHash);
+        }
+
+        private string Generate(UserModel userModel)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Email, userModel.Email),
+                new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString())
             };
-            var result = await userManager.CreateAsync(user, userLogin.Password);
-            return result;
-        }
 
-        public List<UserIdentity> GetAll()
-        {
-            return userManager.Users.ToList();
-        }
-
-        //public UserEntity GetById(int id)
-        //{
-        //    var user = context.AppUsers.Find(id);
-
-        //    if (user != null) return user;
-        //    return null;
-        //}
-
-        public async Task<SignInResult> PasswordSignInAsync(SignInEntity signInEntity)
-        {
-            var result = await signInManager.PasswordSignInAsync(signInEntity.Email, signInEntity.Password, signInEntity.RememberMe, false);
-            return result;
-        }
-
-        public async Task SignOutAsync()
-        {
-            await signInManager.SignOutAsync();
-        }
-
-        public string GetUserId()
-        {
-            return httpContext.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier).Value;
-        }
-
-        public bool IsAuthenticated()
-        {
-            return httpContext.HttpContext.User.Identity.IsAuthenticated;
-        }
-
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePassword changePassword)
-        {
-            var userId = GetUserId();
-            var user = await userManager.FindByIdAsync(userId);
-            return await userManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
+            var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:audience"],
+                        claims,
+                        expires: DateTime.Now.AddMinutes(15),
+                        signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

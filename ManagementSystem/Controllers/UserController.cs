@@ -1,9 +1,6 @@
-﻿using ManagementSystem.Entities;
-using ManagementSystem.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using ManagementSystem.Interfaces;
+using ManagementSystem.Models.UserModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace ManagementSystem.Controllers
 {
@@ -11,59 +8,42 @@ namespace ManagementSystem.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUser iUser;
-        public UserController(IUser user)
+        private readonly IUserService userService;
+        public UserController(IUserService _userService)
         {
-            iUser = user;
+            userService = _userService;
+        }
+
+        [HttpPost("create")]
+        public IActionResult Create([FromBody] SignUpModel signUpModel)
+        {
+            userService.Create(signUpModel);
+            return Ok();
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin, Employee")]
-        public IActionResult GetAll() 
+        public IActionResult GetUsers() 
         { 
-            return Ok(iUser.GetAll());
+            return Ok(userService.GetUsers());
         }
 
-        [Route("CreateIdentity")]
-        [HttpPost]
-        public async Task<IActionResult> CreateIdentity(SignUpEntity userLogin)
+        [HttpPut("change-password")]
+        public IActionResult ChangePassword(string token, string oldPassword, string newPassword)
         {
-            if (ModelState.IsValid)
+            var result = userService.ChangePassword(token, oldPassword, newPassword);
+            if (result) return Ok();
+            return BadRequest("Wrong password");
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] SignInModel signInModel)
+        {
+            string token = userService.Login(signInModel);
+            if (!string.IsNullOrEmpty(token)) 
             {
-                var result = await iUser.CreateIdentity(userLogin);
-                if (result.Succeeded)
-                {
-                    return Ok(result);
-                }
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError("", item.Description);
-                }
+                return Ok(token);
             }
             return BadRequest("Invalid data");
-        }
-
-        [Route("logout")]
-        [HttpPost]
-        public async Task<IActionResult> LogOut()
-        {
-            await iUser.SignOutAsync();
-            return Ok("Successfull logout");
-        }
-
-        [Route("change-password")]
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await iUser.ChangePasswordAsync(changePassword);
-                if (result.Succeeded)
-                {
-                    return Ok(result);
-                }
-            }
-            return BadRequest("Error while changing password");
         }
     }
 }

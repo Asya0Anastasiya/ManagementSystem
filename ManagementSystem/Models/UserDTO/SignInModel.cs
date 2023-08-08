@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ManagementSystem.Entities
+namespace ManagementSystem.Models.UserModels
 {
-    public class SignInEntity
+    public class SignInModel
     {
         [Required, EmailAddress]
         public string Email { get; set; }
@@ -10,8 +10,5 @@ namespace ManagementSystem.Entities
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        [Display(Name = "Remember me")]
-        public bool RememberMe { get; set; }
     }
 }
