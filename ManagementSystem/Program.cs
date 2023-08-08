@@ -1,7 +1,9 @@
 using ManagementSystem.Data;
+using ManagementSystem.Entities;
 using ManagementSystem.Interfaces;
 using ManagementSystem.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -9,8 +11,10 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddIdentity<UserIdentity, IdentityRole>()
+    .AddEntityFrameworkStores<Context>();
 builder.Services.AddScoped<IUser, UserService>();
-builder.Services.AddScoped<IPassword, PasswordService>();
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 

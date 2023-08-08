@@ -19,43 +19,76 @@ namespace ManagementSystem.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly Context context;
-        private readonly IPassword iPassword;
+        private readonly IUser iUser;
 
         public LoginController(IConfiguration configuration,
                                Context _context,
-                               IPassword _pass)
+                               IUser _iUser)
         {
             _configuration = configuration; 
             context = _context;
-            iPassword = _pass;
+            iUser = _iUser;
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult Login([FromBody] UserLogin userLogin)
-        {
-            var user = Authenticate(userLogin);
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public IActionResult Login([FromBody] SignUpEntity userLogin)
+        //{
+        //    var user = Authenticate(userLogin);
 
-            if (user != null) 
+        //    if (user != null) 
+        //    {
+        //        var token = Generate(user);
+        //        return Ok(token);
+        //    }
+        //    return NotFound("User not found");
+        //}
+
+        [Route("loginWithIdentity")]
+        [HttpPost]
+        public async Task<IActionResult> LoginWithIdentity(SignInEntity signInEntity)
+        {
+            if (ModelState.IsValid)
             {
-                var token = Generate(user);
-                return Ok(token);
+                var result = await iUser.PasswordSignInAsync(signInEntity);
+                if (result.Succeeded)
+                {
+                    var token = GenerateJWTForIentity(signInEntity);
+                    return Ok(token);
+                }
             }
-            return NotFound("User not found");
+            return BadRequest("Invalid credentials"); 
         }
 
         // отдельный сервис для JWT???
-        private string Generate(UserEntity user)
+        //private string Generate(UserEntity user)
+        //{
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        //    var claims = new[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, user.UserName),
+        //        new Claim(ClaimTypes.Email, user.Email),
+        //        new Claim(ClaimTypes.Surname, user.Surname),
+        //        new Claim(ClaimTypes.Role, user.Role),
+        //    };
+
+        //    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:audience"],
+        //                claims,
+        //                expires: DateTime.Now.AddMinutes(15),
+        //                signingCredentials: credentials);
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+
+        private string GenerateJWTForIentity(SignInEntity user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Surname, user.Surname),
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:audience"],
@@ -66,18 +99,18 @@ namespace ManagementSystem.Controllers
         }
 
         //сделать что-то с ретурнами
-        private UserEntity Authenticate(UserLogin userLogin)
-        {
-            UserEntity user = context.Users.Where(x => x.UserName == userLogin.Username).FirstOrDefault();
-            if (user != null) 
-            { 
-                if (!iPassword.VerifyPasswordHash(userLogin.Password, user.PasswordHash, user.PasswordSalt))
-                {
-                    return null;
-                }
-                return user;
-            }
-            return null;
-        }
+        //private UserEntity Authenticate(SignUpEntity userLogin)
+        //{
+        //    UserEntity user = context.AppUsers.Where(x => x.Email == userLogin.Email).FirstOrDefault();
+        //    if (user != null) 
+        //    { 
+        //        if (!iPassword.VerifyPasswordHash(userLogin.Password, user.PasswordHash, user.PasswordSalt))
+        //        {
+        //            return null;
+        //        }
+        //        return user;
+        //    }
+        //    return null;
+        //}
     }
 }
