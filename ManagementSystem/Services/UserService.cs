@@ -51,7 +51,7 @@ namespace ManagementSystem.Services
             var user = Authenticate(signInModel);
             if (user != null)
             {
-                var token = Generate(user);
+                var token = GenerateJwt(user);
                 return token;
             }
             return string.Empty;
@@ -65,17 +65,19 @@ namespace ManagementSystem.Services
             {
                 if (!VerifyPasswordHash(signInModel.Password, user.PasswordHash, user.PasswordSalt))
                 {
-                    return null;
+                    throw new Exception("Wrong password");
+                    //return null;
                 }
                 return user;
             }
+            else throw new Exception("Such user does not exist");
             return null;
         }
 
-        public bool ChangePassword(string token, string oldPassword, string newPassword)
+        public bool ChangePassword(string userId, string oldPassword, string newPassword)
         {
-            JwtSecurityToken jwtSecurityToken = new(token);
-            string userId = GetUserIdByToken(jwtSecurityToken);
+            //JwtSecurityToken jwtSecurityToken = new(token);
+            //string userId = GetUserIdByToken(jwtSecurityToken);
             // async
             var currentUser = context.Users.Where(x => x.Id.ToString().Equals(userId)).First();
             if (!VerifyPasswordHash(oldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
@@ -113,7 +115,7 @@ namespace ManagementSystem.Services
             return computedHash.SequenceEqual(passwordHash);
         }
 
-        private string Generate(UserModel userModel)
+        private string GenerateJwt(UserModel userModel)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

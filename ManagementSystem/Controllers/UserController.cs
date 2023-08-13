@@ -35,15 +35,39 @@ namespace ManagementSystem.Controllers
             return BadRequest("Wrong password");
         }
 
-        [HttpPost("login")]
+
+        // должно возвращать токен, но пока не возвращает из-за фронта
+        [HttpPost("signin")]
         public IActionResult Login([FromBody] SignInModel signInModel)
         {
-            string token = userService.Login(signInModel);
-            if (!string.IsNullOrEmpty(token)) 
+            try
             {
-                return Ok(token);
+                string token = userService.Login(signInModel);
+                return Ok(new
+                {
+                    Message = "Login ok"
+                }) ;
             }
-            return BadRequest("Invalid data");
+            catch (Exception ex)
+            {
+
+                return BadRequest(new
+                {
+                    Message = ex.Message
+                });
+            }
+            //string token = userService.Login(signInModel);
+            //if (!string.IsNullOrEmpty(token))
+            //{
+            //    return Ok(new
+            //    {
+            //        Message = "Successfully login"
+            //    });
+            //}
+            //return BadRequest(new
+            //{
+            //    Message = "Bad Credentials"
+            //});
         }
     }
 }
