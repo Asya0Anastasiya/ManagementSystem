@@ -19,6 +19,11 @@ namespace ManagementSystem.Models
         [Required, EmailAddress]
         public string Email { get; set; }
 
+        //[Required]
+        public string Role { get; set; }
+
+        public string Token { get; set; }
+
         //[Phone]
         public string? PhoneNumber { get; set; }
 

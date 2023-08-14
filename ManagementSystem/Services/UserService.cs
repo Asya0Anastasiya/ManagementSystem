@@ -1,4 +1,5 @@
 ﻿using ManagementSystem.Data;
+using ManagementSystem.Helpers;
 using ManagementSystem.Interfaces;
 using ManagementSystem.Models;
 using ManagementSystem.Models.UserDTO;
@@ -8,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ManagementSystem.Services
 {
@@ -25,15 +27,25 @@ namespace ManagementSystem.Services
         // вынести в отдельный метод создание UserModel из signUpModel???
         public void Create(SignUpModel signUpModel)
         {
-            UserModel userModel = new();
-            CreatePasswordHash(signUpModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            userModel.Email = signUpModel.Email;
-            userModel.FirstName = signUpModel.Firstname;
-            userModel.LastName = signUpModel.Lastname;
-            userModel.PasswordHash = passwordHash;
-            userModel.PasswordSalt = passwordSalt;
-            context.Users.Add(userModel);
-            context.SaveChanges();
+            if (!CheckUserExist(signUpModel.Email))
+            {
+                string passErrors = CheckPasswordStrength(signUpModel.Password);
+                if (string.IsNullOrEmpty(passErrors))
+                {
+                    UserModel userModel = new();
+                    CreatePasswordHash(signUpModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
+                    userModel.Email = signUpModel.Email;
+                    userModel.FirstName = signUpModel.Firstname;
+                    userModel.LastName = signUpModel.Lastname;
+                    userModel.Role = "user";
+                    userModel.PasswordHash = passwordHash;
+                    userModel.PasswordSalt = passwordSalt;
+                    context.Users.Add(userModel);
+                    context.SaveChanges();
+                }
+                else throw new Exception(passErrors);
+            }
+            else throw new Exception("Such user already exists");
         }
 
         public IQueryable<UserInfoModel> GetUsers()
@@ -51,13 +63,16 @@ namespace ManagementSystem.Services
             var user = Authenticate(signInModel);
             if (user != null)
             {
-                var token = GenerateJwt(user);
+                var token = new JwtGenerator(config).CreateJwt(user);
+                user.Token = token;
                 return token;
+                //var token = GenerateJwt(user);
+                //return token;
             }
             return string.Empty;
+            //return false;
         }
 
-        //null
         private UserModel Authenticate(SignInModel signInModel)
         {
             var user = context.Users.Where(x => x.Email == signInModel.Email).FirstOrDefault();
@@ -66,12 +81,10 @@ namespace ManagementSystem.Services
                 if (!VerifyPasswordHash(signInModel.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     throw new Exception("Wrong password");
-                    //return null;
                 }
                 return user;
             }
             else throw new Exception("Such user does not exist");
-            return null;
         }
 
         public bool ChangePassword(string userId, string oldPassword, string newPassword)
@@ -101,6 +114,7 @@ namespace ManagementSystem.Services
             return userId;
         }
 
+        //отдельный вервис
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512();
@@ -108,6 +122,8 @@ namespace ManagementSystem.Services
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
+
+        //отдельный вервис
         public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512(passwordSalt);
@@ -115,6 +131,7 @@ namespace ManagementSystem.Services
             return computedHash.SequenceEqual(passwordHash);
         }
 
+        //отдельный вервис
         private string GenerateJwt(UserModel userModel)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
@@ -131,6 +148,21 @@ namespace ManagementSystem.Services
                         expires: DateTime.Now.AddMinutes(15),
                         signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private bool CheckUserExist(string email)
+        => context.Users.Any(x => x.Email == email);
+
+        private string CheckPasswordStrength(string password)
+        {
+            StringBuilder sb = new();
+            if (password.Length < 8)
+                sb.Append("Password length should be more than 8" + Environment.NewLine);
+            if (!(Regex.IsMatch(password, "[a-z]") && Regex.IsMatch(password, "[A-Z]") && Regex.IsMatch(password, "[0-9]")))
+                sb.Append("Password should be Alphanumeric" + Environment.NewLine);
+            if (!Regex.IsMatch(password, "[!,@,#,$,%,^,&,*,(,),_,=,+,{,}]"))
+                sb.Append("Password should contain special chars" + Environment.NewLine);
+            return sb.ToString();
         }
     }
 }

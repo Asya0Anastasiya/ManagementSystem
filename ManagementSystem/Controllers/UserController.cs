@@ -1,5 +1,6 @@
 ﻿using ManagementSystem.Interfaces;
 using ManagementSystem.Models.UserModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagementSystem.Controllers
@@ -17,10 +18,24 @@ namespace ManagementSystem.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] SignUpModel signUpModel)
         {
-            userService.Create(signUpModel);
-            return Ok();
+            try
+            {
+                //Qwerty1234%
+                userService.Create(signUpModel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new
+                {
+                    Message = ex.Message
+                });
+            }
+            
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetUsers() 
         { 
@@ -36,7 +51,6 @@ namespace ManagementSystem.Controllers
         }
 
 
-        // должно возвращать токен, но пока не возвращает из-за фронта
         [HttpPost("signin")]
         public IActionResult Login([FromBody] SignInModel signInModel)
         {
@@ -45,6 +59,7 @@ namespace ManagementSystem.Controllers
                 string token = userService.Login(signInModel);
                 return Ok(new
                 {
+                    Token = token,
                     Message = "Login ok"
                 }) ;
             }
