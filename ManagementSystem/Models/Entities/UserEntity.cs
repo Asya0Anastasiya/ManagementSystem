@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ManagementSystem.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ManagementSystem.Models
+namespace ManagementSystem.Models.Entities
 {
-    public class UserModel
+    public class UserEntity
     {
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,18 +20,17 @@ namespace ManagementSystem.Models
         [Required, EmailAddress]
         public string Email { get; set; }
 
-        //[Required]
-        public string Role { get; set; }
+        [Required]
+        public Roles Role { get; set; }
 
         public string Token { get; set; }
 
-        //[Phone]
-        public string? PhoneNumber { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
-        public byte[]? PasswordHash { get; set; }
-
-        public byte[]? PasswordSalt { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

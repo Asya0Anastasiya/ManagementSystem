@@ -4,11 +4,10 @@ namespace ManagementSystem.Models.UserModels
 {
     public class SignInModel
     {
-        //[Required, EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
-        //[Required]
-        //[DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
     }
 }

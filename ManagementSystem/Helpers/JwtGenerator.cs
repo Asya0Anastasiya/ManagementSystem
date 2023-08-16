@@ -14,14 +14,14 @@ namespace ManagementSystem.Helpers
         {
                 configuration = _configuration;
         }
-        public string CreateJwt(UserModel userModel)
+        public string CreateJwt(string role, string email)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
             var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]));
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Role, userModel.Role),
-                new Claim(ClaimTypes.Name, $"{userModel.FirstName} {userModel.LastName}")
+                new Claim(ClaimTypes.Role, role),
+                new Claim(ClaimTypes.Email, email)
             });
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor

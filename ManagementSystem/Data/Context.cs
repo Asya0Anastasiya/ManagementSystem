@@ -1,4 +1,4 @@
-﻿using ManagementSystem.Models;
+﻿using ManagementSystem.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagementSystem.Data
@@ -9,6 +9,6 @@ namespace ManagementSystem.Data
         { 
         }
 
-        public DbSet<UserModel> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
     }
 }

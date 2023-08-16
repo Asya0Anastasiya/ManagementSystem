@@ -1,4 +1,4 @@
-﻿using ManagementSystem.Interfaces;
+﻿using ManagementSystem.Interfaces.Services;
 using ManagementSystem.Models.UserModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,73 +16,36 @@ namespace ManagementSystem.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] SignUpModel signUpModel)
+        public async Task<IActionResult> CreateUserAsync([FromBody] SignUpModel signUpModel)
         {
-            try
-            {
-                //Qwerty1234%
-                userService.Create(signUpModel);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new
-                {
-                    Message = ex.Message
-                });
-            }
-            
+            await userService.Create(signUpModel);
+            return Ok();
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetUsers() 
+        public async Task<IActionResult> GetUsersAsync() 
         { 
-            return Ok(userService.GetUsers());
+            return Ok(await userService.GetUsers());
         }
 
         [HttpPut("change-password")]
-        public IActionResult ChangePassword(string token, string oldPassword, string newPassword)
+        public IActionResult ChangePassword(Guid id, string oldPassword, string newPassword)
         {
-            var result = userService.ChangePassword(token, oldPassword, newPassword);
-            if (result) return Ok();
-            return BadRequest("Wrong password");
+            userService.ChangePassword(id, oldPassword, newPassword);
+            return Ok();
         }
 
 
         [HttpPost("signin")]
         public IActionResult Login([FromBody] SignInModel signInModel)
         {
-            try
+            string token = userService.Login(signInModel);
+            return Ok(new
             {
-                string token = userService.Login(signInModel);
-                return Ok(new
-                {
-                    Token = token,
-                    Message = "Login ok"
-                }) ;
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new
-                {
-                    Message = ex.Message
-                });
-            }
-            //string token = userService.Login(signInModel);
-            //if (!string.IsNullOrEmpty(token))
-            //{
-            //    return Ok(new
-            //    {
-            //        Message = "Successfully login"
-            //    });
-            //}
-            //return BadRequest(new
-            //{
-            //    Message = "Bad Credentials"
-            //});
+                Token = token,
+                Message = "Login ok"
+            });
         }
     }
 }
