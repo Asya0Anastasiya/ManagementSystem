@@ -24,12 +24,12 @@ namespace ManagementSystem.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetUsersAsync() 
+        public IActionResult GetUsers() 
         { 
-            return Ok(await userService.GetUsers());
+            return Ok(userService.GetUsers());
         }
 
-        [HttpPut("change-password")]
+        [HttpPut("changePassword")]
         public IActionResult ChangePassword(Guid id, string oldPassword, string newPassword)
         {
             userService.ChangePassword(id, oldPassword, newPassword);

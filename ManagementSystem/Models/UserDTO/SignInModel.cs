@@ -4,7 +4,7 @@ namespace ManagementSystem.Models.UserModels
 {
     public class SignInModel
     {
-        [Required, EmailAddress]
+        [Required, EmailAddress, MinLength(10)]
         public string Email { get; set; }
 
         [Required]

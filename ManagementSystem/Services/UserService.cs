@@ -1,4 +1,4 @@
-﻿using ManagementSystem.Data;
+﻿using AutoMapper;
 using ManagementSystem.Exceptions;
 using ManagementSystem.Helpers;
 using ManagementSystem.Interfaces.Repositories;
@@ -8,8 +8,6 @@ using ManagementSystem.Models.UserDTO;
 using ManagementSystem.Models.UserModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace ManagementSystem.Services
 {
@@ -17,22 +15,35 @@ namespace ManagementSystem.Services
     {
         private readonly IConfiguration config;
         private readonly IUserRepository userRepository;
+        private readonly IMapper mapper;
 
         public UserService( IConfiguration _config,
-                          IUserRepository _userRepository)
+                          IUserRepository _userRepository,
+                          IMapper _mapper)
         {
             config = _config;
             userRepository = _userRepository;
+            mapper = _mapper;
         }
 
         public async Task Create(SignUpModel signUpModel)
         {
-            await userRepository.CreateUserAsync(signUpModel);
+            if (!(userRepository.GetUserByEmailAsync(signUpModel.Email).Result == null))
+            {
+                throw new InternalException("Such user already exists");
+            }
+            List<string> passErrors = PasswordValidator.CheckPasswordStrength(signUpModel.Password);
+            if (passErrors.Count != 0)
+            {
+                throw new InternalException("Your paswword is not strength enought");
+            }
+            await userRepository.CreateUserAsync(mapper.Map<UserEntity>(signUpModel));
         }
 
-        public async Task<List<UserInfoModel>> GetUsers()
+        public List<UserInfoModel> GetUsers()
         {
-            return await userRepository.GetUsersAsync();
+            var users = userRepository.GetUsersAsync().Result;
+            return mapper.Map<List<UserInfoModel>>(users);
         }
 
         public string Login(SignInModel signInModel)
@@ -48,7 +59,6 @@ namespace ManagementSystem.Services
             }
             // user.Role.ToString() Ok????
             var token = new JwtGenerator(config).CreateJwt(user.Role.ToString(), user.Email);
-            user.Token = token;
             return token;
         }
 
@@ -57,7 +67,7 @@ namespace ManagementSystem.Services
             var currentUser = userRepository.GetUserByIdAsync(id).Result;
             if (currentUser == null)
             {
-                throw new NotFoundException("Null User");
+                throw new NotFoundException("User not found");
             }
             if (!BCrypt.Net.BCrypt.Verify(oldPassword, currentUser.Password))
             {

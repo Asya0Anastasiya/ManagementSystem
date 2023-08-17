@@ -4,14 +4,15 @@ namespace ManagementSystem.Models.UserModels
 {
     public class SignUpModel
     {
-        [Required]
+        [Required, MinLength(2)]
         public string Firstname { get; set; }
 
-        [Required]
+        [Required, MinLength(2)]
         public string Lastname { get; set; }
 
         [Required]
         [EmailAddress]
+        [MinLength(10)]
         public string Email { get; set; }
 
         [Required]

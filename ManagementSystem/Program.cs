@@ -1,6 +1,8 @@
+using AutoMapper;
 using ManagementSystem.Data;
 using ManagementSystem.Interfaces.Repositories;
 using ManagementSystem.Interfaces.Services;
+using ManagementSystem.Mappers;
 using ManagementSystem.Middleware;
 using ManagementSystem.Repositories;
 using ManagementSystem.Services;
@@ -45,6 +47,13 @@ builder.Services.AddDbContext<Context>(options => options.UseSqlServer(
 //        };
 //    });
 
+var mappingConfig = new MapperConfiguration(x =>
+{
+    x.AddProfile(new AutoMappers());
+});
+
+var mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,16 +77,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-app.UseDeveloperExceptionPage();
-app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
 app.UseAuthentication();

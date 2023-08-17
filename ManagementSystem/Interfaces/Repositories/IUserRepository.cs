@@ -6,11 +6,11 @@ namespace ManagementSystem.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        public Task CreateUserAsync(SignUpModel signUpModel);
+        public Task CreateUserAsync(UserEntity userEntity);
 
-        public Task<List<UserInfoModel>> GetUsersAsync();
+        public Task<List<UserEntity>> GetUsersAsync();
 
-        public Task<bool> CheckUserExistAsync(string email);
+        //public Task<bool> CheckUserExistAsync(string email);
 
         public Task<UserEntity> GetUserByIdAsync(Guid id);
 
