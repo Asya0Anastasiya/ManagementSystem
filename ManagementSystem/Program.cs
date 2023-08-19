@@ -51,9 +51,9 @@ var mappingConfig = new MapperConfiguration(x =>
 {
     x.AddProfile(new AutoMappers());
 });
-
 var mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -24,7 +24,7 @@ namespace ManagementSystem.Models.Entities
         public string Email { get; set; }
 
         [Required]
-        public Roles Role { get; set; }
+        public Roles Role { get; set; } = Roles.User; 
 
         [Phone]
         public string PhoneNumber { get; set; }
@@ -32,6 +32,6 @@ namespace ManagementSystem.Models.Entities
         public DateTime? DateOfBirth { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
     }
 }

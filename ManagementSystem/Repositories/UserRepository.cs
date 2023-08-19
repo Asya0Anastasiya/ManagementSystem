@@ -1,10 +1,6 @@
 ﻿using ManagementSystem.Data;
-using ManagementSystem.Exceptions;
-using ManagementSystem.Helpers;
 using ManagementSystem.Interfaces.Repositories;
 using ManagementSystem.Models.Entities;
-using ManagementSystem.Models.UserDTO;
-using ManagementSystem.Models.UserModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagementSystem.Repositories
@@ -17,11 +13,6 @@ namespace ManagementSystem.Repositories
         {
             context = _context;
         }
-
-        //public async Task<bool> CheckUserExistAsync(string email)
-        //{
-        //    return await context.Users.AnyAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
-        //}
 
         public async Task CreateUserAsync(UserEntity userEntity)
         {

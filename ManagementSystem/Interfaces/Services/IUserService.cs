@@ -10,7 +10,7 @@ namespace ManagementSystem.Interfaces.Services
 
         public string Login(SignInModel signInModel);
 
-        public List<UserInfoModel> GetUsers();
+        public Task<List<UserInfoModel>> GetUsersAsync();
 
         public void ChangePassword(Guid id, string oldPassword, string newPassword);
     }

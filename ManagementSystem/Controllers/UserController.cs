@@ -24,9 +24,9 @@ namespace ManagementSystem.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetUsers() 
+        public async Task<IActionResult> GetUsersAsync() 
         { 
-            return Ok(userService.GetUsers());
+            return Ok(await userService.GetUsersAsync());
         }
 
         [HttpPut("changePassword")]

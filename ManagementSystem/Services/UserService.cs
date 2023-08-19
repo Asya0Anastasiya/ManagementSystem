@@ -4,6 +4,7 @@ using ManagementSystem.Helpers;
 using ManagementSystem.Interfaces.Repositories;
 using ManagementSystem.Interfaces.Services;
 using ManagementSystem.Models.Entities;
+using ManagementSystem.Models.Enums;
 using ManagementSystem.Models.UserDTO;
 using ManagementSystem.Models.UserModels;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,12 +38,15 @@ namespace ManagementSystem.Services
             {
                 throw new InternalException("Your paswword is not strength enought");
             }
-            await userRepository.CreateUserAsync(mapper.Map<UserEntity>(signUpModel));
+            var user = mapper.Map<UserEntity>(signUpModel);
+            user.Role = Roles.User;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
+            await userRepository.CreateUserAsync(user);
         }
 
-        public List<UserInfoModel> GetUsers()
+        public async Task<List<UserInfoModel>> GetUsersAsync()
         {
-            var users = userRepository.GetUsersAsync().Result;
+            var users = await userRepository.GetUsersAsync();
             return mapper.Map<List<UserInfoModel>>(users);
         }
 
