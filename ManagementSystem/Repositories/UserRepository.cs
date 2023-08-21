@@ -1,9 +1,9 @@
-﻿using ManagementSystem.Data;
-using ManagementSystem.Interfaces.Repositories;
-using ManagementSystem.Models.Entities;
+﻿using UserServiceAPI.Data;
+using UserServiceAPI.Interfaces.Repositories;
+using UserServiceAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManagementSystem.Repositories
+namespace UserServiceAPI.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -25,11 +25,6 @@ namespace ManagementSystem.Repositories
             return await context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
-        public async Task<UserEntity> GetUserByIdAsync(Guid id)
-        {
-            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        }
-
         public async Task<List<UserEntity>> GetUsersAsync()
         {
             return await context.Users.ToListAsync();
@@ -39,6 +34,16 @@ namespace ManagementSystem.Repositories
         {
             context.Users.Update(user);
             await context.SaveChangesAsync();
+        }
+
+        public UserEntity GetUserById(Guid id)
+        {
+            // не работает асинхронный метод  
+
+            //can't parse JSON.  Raw result:
+
+            //Serialization and deserialization of 'System.Action' instances are not supported. Path: $.MoveNextAction.
+            return context.Users.Find(id);
         }
     }
 }

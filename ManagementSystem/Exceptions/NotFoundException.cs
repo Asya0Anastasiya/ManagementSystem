@@ -1,4 +1,4 @@
-﻿namespace ManagementSystem.Exceptions
+﻿namespace UserServiceAPI.Exceptions
 {
     public class NotFoundException : Exception
     {

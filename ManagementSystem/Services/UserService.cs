@@ -1,30 +1,33 @@
 ﻿using AutoMapper;
-using ManagementSystem.Exceptions;
-using ManagementSystem.Helpers;
-using ManagementSystem.Interfaces.Repositories;
-using ManagementSystem.Interfaces.Services;
-using ManagementSystem.Models.Entities;
-using ManagementSystem.Models.Enums;
-using ManagementSystem.Models.UserDTO;
-using ManagementSystem.Models.UserModels;
+using UserServiceAPI.Exceptions;
+using UserServiceAPI.Helpers;
+using UserServiceAPI.Interfaces.Repositories;
+using UserServiceAPI.Interfaces.Services;
+using UserServiceAPI.Models.Entities;
+using UserServiceAPI.Models.Enums;
+using UserServiceAPI.Models.UserDto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using TimeTrackingService.Models.Entities;
 
-namespace ManagementSystem.Services
+namespace UserServiceAPI.Services
 {
     public class UserService : IUserService
     {
         private readonly IConfiguration config;
         private readonly IUserRepository userRepository;
+        private readonly IDaysAccountingClientRepository client;
         private readonly IMapper mapper;
 
         public UserService( IConfiguration _config,
                           IUserRepository _userRepository,
-                          IMapper _mapper)
+                          IMapper _mapper,
+                          IDaysAccountingClientRepository _client)
         {
             config = _config;
             userRepository = _userRepository;
             mapper = _mapper;
+            client = _client;
         }
 
         public async Task Create(SignUpModel signUpModel)
@@ -50,6 +53,17 @@ namespace ManagementSystem.Services
             return mapper.Map<List<UserInfoModel>>(users);
         }
 
+        public async Task<UserInfoModel> GetUserInfo(Guid id, int month)
+        {
+            var user = userRepository.GetUserById(id);
+            var userInfo = mapper.Map<UserInfoModel>(user);
+            userInfo.WorkDays = await client.GetWorkDaysCount(id, month);
+            userInfo.SickDays = await client.GetSickDaysCount(id, month);
+            userInfo.Holidays = await client.GetHolidaysCount(id, month);
+            userInfo.PaidDays = await client.GetPaidDaysCount(id, month);
+            return userInfo;
+        }
+
         public string Login(SignInModel signInModel)
         {
             var user = userRepository.GetUserByEmailAsync(signInModel.Email).Result;
@@ -68,7 +82,7 @@ namespace ManagementSystem.Services
 
         public void ChangePassword(Guid id, string oldPassword, string newPassword)
         {
-            var currentUser = userRepository.GetUserByIdAsync(id).Result;
+            var currentUser = userRepository.GetUserById(id);
             if (currentUser == null)
             {
                 throw new NotFoundException("User not found");
@@ -80,6 +94,11 @@ namespace ManagementSystem.Services
             currentUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             userRepository.UpdateUserAsync(currentUser);
         }
+
+        //public List<DaysAccounting> GetDays(Guid id)
+        //{
+        //    return client.GetDays(id);
+        //}
 
         public string GetUserIdByToken(JwtSecurityToken token)
         {

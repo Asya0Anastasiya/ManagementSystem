@@ -1,10 +1,9 @@
-﻿using ManagementSystem.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ManagementSystem.Helpers
+namespace UserServiceAPI.Helpers
 {
     public class JwtGenerator
     {

@@ -1,7 +1,7 @@
-﻿using ManagementSystem.Models.Entities;
+﻿using UserServiceAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManagementSystem.Data
+namespace UserServiceAPI.Data
 {
     public class Context : DbContext
     {

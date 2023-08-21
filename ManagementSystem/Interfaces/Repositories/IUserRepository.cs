@@ -1,8 +1,6 @@
-﻿using ManagementSystem.Models.Entities;
-using ManagementSystem.Models.UserDTO;
-using ManagementSystem.Models.UserModels;
+﻿using UserServiceAPI.Models.Entities;
 
-namespace ManagementSystem.Interfaces.Repositories
+namespace UserServiceAPI.Interfaces.Repositories
 {
     public interface IUserRepository
     {
@@ -12,10 +10,10 @@ namespace ManagementSystem.Interfaces.Repositories
 
         //public Task<bool> CheckUserExistAsync(string email);
 
-        public Task<UserEntity> GetUserByIdAsync(Guid id);
-
         public Task<UserEntity> GetUserByEmailAsync(string email);
 
         public Task UpdateUserAsync(UserEntity userEntity);
+
+        public UserEntity GetUserById(Guid id);
     }
 }

@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Mappers;
 using TimeTrackingService.Repositories;
 using TimeTrackingService.Services;
 
@@ -18,6 +20,13 @@ builder.Services.AddScoped<IDaysAccountingService, DaysAccountingService>();
 
 builder.Services.AddDbContext<TimeTrackingContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var mappingConfig = new MapperConfiguration(x =>
+{
+    x.AddProfile(new AutoMappers());
+});
+var mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 

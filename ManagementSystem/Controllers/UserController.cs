@@ -1,9 +1,9 @@
-﻿using ManagementSystem.Interfaces.Services;
-using ManagementSystem.Models.UserModels;
+﻿using UserServiceAPI.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserServiceAPI.Models.UserDto;
 
-namespace ManagementSystem.Controllers
+namespace UserServiceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -47,5 +47,18 @@ namespace ManagementSystem.Controllers
                 Message = "Login ok"
             });
         }
+
+        [HttpGet("getUserInfo")]
+        public async Task<IActionResult> GetUserInfo(Guid id, int month)
+        {
+            return Ok(await userService.GetUserInfo(id, month));
+        }
+
+        //[HttpGet("getCount")]
+        //public IActionResult GetCount(Guid id)
+        //{
+        //    int count = userService.GetDays(id).Count;
+        //    return Ok(count);
+        //}
     }
 }

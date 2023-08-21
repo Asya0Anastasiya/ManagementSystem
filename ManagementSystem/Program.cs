@@ -1,22 +1,27 @@
 using AutoMapper;
-using ManagementSystem.Data;
-using ManagementSystem.Interfaces.Repositories;
-using ManagementSystem.Interfaces.Services;
-using ManagementSystem.Mappers;
-using ManagementSystem.Middleware;
-using ManagementSystem.Repositories;
-using ManagementSystem.Services;
+using UserServiceAPI.Data;
+using UserServiceAPI.Interfaces.Repositories;
+using UserServiceAPI.Interfaces.Services;
+using UserServiceAPI.Mappers;
+using UserServiceAPI.Middleware;
+using UserServiceAPI.Repositories;
+using UserServiceAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Refit;
+using UserServiceAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+string BaseUrl = "https://localhost:44367";
+builder.Services.AddScoped<IDayAccountingClient>(x => RestService.For<IDayAccountingClient>(BaseUrl));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDaysAccountingClientRepository, DaysAccountingClientRepository>();
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>

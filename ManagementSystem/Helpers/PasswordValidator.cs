@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ManagementSystem.Helpers
+namespace UserServiceAPI.Helpers
 {
     public class PasswordValidator
     {

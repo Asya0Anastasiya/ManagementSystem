@@ -1,8 +1,7 @@
-﻿using ManagementSystem.Models;
-using ManagementSystem.Models.UserDTO;
-using ManagementSystem.Models.UserModels;
+﻿using TimeTrackingService.Models.Entities;
+using UserServiceAPI.Models.UserDto;
 
-namespace ManagementSystem.Interfaces.Services
+namespace UserServiceAPI.Interfaces.Services
 {
     public interface IUserService
     {
@@ -13,5 +12,9 @@ namespace ManagementSystem.Interfaces.Services
         public Task<List<UserInfoModel>> GetUsersAsync();
 
         public void ChangePassword(Guid id, string oldPassword, string newPassword);
+
+        //public List<DaysAccounting> GetDays(Guid id);
+
+        public Task<UserInfoModel> GetUserInfo(Guid id, int month);
     }
 }

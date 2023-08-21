@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TimeTrackingService.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Controllers
@@ -17,9 +16,9 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpPost("addDay")]
-        public async Task<IActionResult> PostDay([FromBody] DaysAccounting daysAccounting)
+        public async Task<IActionResult> PostDay([FromBody] DaysAccountingModel daysAccounting, Guid id)
         {
-            await service.AddDay(daysAccounting);
+            await service.AddDay(daysAccounting, id);
             return Ok();
         }
 
@@ -48,6 +47,44 @@ namespace TimeTrackingService.Controllers
         {
             await service.RemoveRangeOfDays(ids);
             return Ok();
+        }
+
+        [HttpPut("updateDay")]
+        public async Task<IActionResult> UpdateDay(DaysAccounting day)
+        {
+            await service.UpdateDay(day);
+            return Ok();
+        }
+
+        [HttpPut("approveDay")]
+        public async Task<IActionResult> ApproveDay(Guid id)
+        {
+            await service.ApproveDay(id);
+            return Ok("Successfully approved");
+        }
+
+        [HttpGet("workDaysCount")]
+        public int GetWorkDays(Guid id, int month)
+        {
+            return service.GetUsersWorkDaysCount(id, month);
+        }
+
+        [HttpGet("sickDaysCount")]
+        public int GetSickDays(Guid id, int month)
+        {
+            return service.GetUsersSickDaysCount(id, month);
+        }
+        
+        [HttpGet("holidaysCount")]
+        public int GetHoliday(Guid id, int month)
+        {
+            return service.GetUsersHolidaysCount(id, month);
+        }
+
+        [HttpGet("paidDaysCount")]
+        public int GetPaidDaysCount(Guid id, int month)
+        {
+            return service.GetPaidDaysCount(id, month);
         }
     }
 }

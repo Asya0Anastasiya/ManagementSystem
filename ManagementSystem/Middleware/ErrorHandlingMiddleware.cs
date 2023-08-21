@@ -1,8 +1,7 @@
-﻿using ManagementSystem.Exceptions;
-using System;
+﻿using UserServiceAPI.Exceptions;
 using System.Net;
 
-namespace ManagementSystem.Middleware
+namespace UserServiceAPI.Middleware
 {
     public class ErrorHandlingMiddleware
     {

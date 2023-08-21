@@ -1,4 +1,4 @@
-﻿namespace ManagementSystem.Models.UserDTO
+﻿namespace UserServiceAPI.Models.UserDto
 {
     public class UserInfoModel
     {
@@ -9,5 +9,13 @@
         public string Email { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
+
+        public int WorkDays { get; set; }
+
+        public int SickDays { get; set; }
+
+        public int Holidays { get; set; }
+
+        public int PaidDays { get; set; }
     }
 }

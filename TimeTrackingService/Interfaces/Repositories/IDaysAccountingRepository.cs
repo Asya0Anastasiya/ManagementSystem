@@ -14,5 +14,17 @@ namespace TimeTrackingService.Interfaces.Repositories
         public Task RemoveDay(Guid id);
 
         public Task RemoveRangeOfDays(List<Guid> ids);
+
+        public Task UpdateDay(DaysAccounting daysAccounting);
+
+        public Task ApproveDay(Guid id);
+
+        public int GetUsersWorkDaysCount(Guid id, int month);
+
+        public int GetUsersSickDaysCount(Guid id, int month);
+
+        public int GetUsersHolidaysCount(Guid id, int month);
+
+        public int GetPaidDaysCount(Guid id, int month);
     }
 }
