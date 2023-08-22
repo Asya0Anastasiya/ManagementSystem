@@ -48,17 +48,12 @@ namespace UserServiceAPI.Controllers
             });
         }
 
-        [HttpGet("getUserInfo")]
-        public async Task<IActionResult> GetUserInfo(Guid id, int month)
+        [HttpGet] // спросить про передачу id на фронт в UserInfoModel
+        [Route("{email}")]
+        // получать месяц с UI
+        public async Task<IActionResult> GetUserInfo([FromRoute] string email, int month)
         {
-            return Ok(await userService.GetUserInfo(id, month));
+            return Ok(await userService.GetUserInfo(email, 12));
         }
-
-        //[HttpGet("getCount")]
-        //public IActionResult GetCount(Guid id)
-        //{
-        //    int count = userService.GetDays(id).Count;
-        //    return Ok(count);
-        //}
     }
 }

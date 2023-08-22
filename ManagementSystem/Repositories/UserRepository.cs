@@ -20,9 +20,9 @@ namespace UserServiceAPI.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<UserEntity> GetUserByEmailAsync(string email)
+        public UserEntity GetUserByEmail(string email)
         {
-            return await context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
+            return context.Users.FirstOrDefault(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
         public async Task<List<UserEntity>> GetUsersAsync()

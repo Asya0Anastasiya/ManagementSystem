@@ -10,7 +10,7 @@ namespace UserServiceAPI.Interfaces.Repositories
 
         //public Task<bool> CheckUserExistAsync(string email);
 
-        public Task<UserEntity> GetUserByEmailAsync(string email);
+        public UserEntity GetUserByEmail(string email);
 
         public Task UpdateUserAsync(UserEntity userEntity);
 

@@ -32,7 +32,7 @@ namespace UserServiceAPI.Services
 
         public async Task Create(SignUpModel signUpModel)
         {
-            if (!(userRepository.GetUserByEmailAsync(signUpModel.Email).Result == null))
+            if (!(userRepository.GetUserByEmail(signUpModel.Email) == null))
             {
                 throw new InternalException("Such user already exists");
             }
@@ -53,20 +53,22 @@ namespace UserServiceAPI.Services
             return mapper.Map<List<UserInfoModel>>(users);
         }
 
-        public async Task<UserInfoModel> GetUserInfo(Guid id, int month)
+        public async Task<UserInfoModel> GetUserInfo(string email, int month)
         {
-            var user = userRepository.GetUserById(id);
+            // проверить с асинхронным поиском
+            var user = userRepository.GetUserByEmail(email);
             var userInfo = mapper.Map<UserInfoModel>(user);
-            userInfo.WorkDays = await client.GetWorkDaysCount(id, month);
-            userInfo.SickDays = await client.GetSickDaysCount(id, month);
-            userInfo.Holidays = await client.GetHolidaysCount(id, month);
-            userInfo.PaidDays = await client.GetPaidDaysCount(id, month);
+            userInfo.WorkDays = await client.GetWorkDaysCount(user.Id, month);
+            userInfo.SickDays = await client.GetSickDaysCount(user.Id, month);
+            userInfo.Holidays = await client.GetHolidaysCount(user.Id, month);
+            userInfo.PaidDays = await client.GetPaidDaysCount(user.Id, month);
             return userInfo;
         }
 
         public string Login(SignInModel signInModel)
         {
-            var user = userRepository.GetUserByEmailAsync(signInModel.Email).Result;
+            //поменять на асинхронный поиск
+            var user = userRepository.GetUserByEmail(signInModel.Email);
             if (user == null)
             {
                 throw new NotFoundException("Such user does not exist");

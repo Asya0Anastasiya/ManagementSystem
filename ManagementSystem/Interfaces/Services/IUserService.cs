@@ -1,4 +1,5 @@
-﻿using TimeTrackingService.Models.Entities;
+﻿using System.Globalization;
+using TimeTrackingService.Models.Entities;
 using UserServiceAPI.Models.UserDto;
 
 namespace UserServiceAPI.Interfaces.Services
@@ -15,6 +16,6 @@ namespace UserServiceAPI.Interfaces.Services
 
         //public List<DaysAccounting> GetDays(Guid id);
 
-        public Task<UserInfoModel> GetUserInfo(Guid id, int month);
+        public Task<UserInfoModel> GetUserInfo(string email, int month);
     }
 }
