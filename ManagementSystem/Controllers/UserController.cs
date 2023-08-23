@@ -30,17 +30,17 @@ namespace UserServiceAPI.Controllers
         }
 
         [HttpPut("changePassword")]
-        public IActionResult ChangePassword(Guid id, string oldPassword, string newPassword)
+        public async Task<IActionResult> ChangePasswordAsync(Guid id, string oldPassword, string newPassword)
         {
-            userService.ChangePassword(id, oldPassword, newPassword);
+            await userService.ChangePassword(id, oldPassword, newPassword);
             return Ok();
         }
 
 
         [HttpPost("signin")]
-        public IActionResult Login([FromBody] SignInModel signInModel)
+        public async Task<IActionResult> Login([FromBody] SignInModel signInModel)
         {
-            string token = userService.Login(signInModel);
+            string token = await userService.Login(signInModel);
             return Ok(new
             {
                 Token = token,

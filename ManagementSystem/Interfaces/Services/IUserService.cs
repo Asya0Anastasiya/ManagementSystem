@@ -8,13 +8,11 @@ namespace UserServiceAPI.Interfaces.Services
     {
         public Task Create(SignUpModel user);
 
-        public string Login(SignInModel signInModel);
+        public Task<string> Login(SignInModel signInModel);
 
         public Task<List<UserInfoModel>> GetUsersAsync();
 
-        public void ChangePassword(Guid id, string oldPassword, string newPassword);
-
-        //public List<DaysAccounting> GetDays(Guid id);
+        public Task ChangePassword(Guid id, string oldPassword, string newPassword);
 
         public Task<UserInfoModel> GetUserInfo(string email, int month);
     }

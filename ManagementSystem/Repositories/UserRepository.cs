@@ -20,9 +20,9 @@ namespace UserServiceAPI.Repositories
             await context.SaveChangesAsync();
         }
 
-        public UserEntity GetUserByEmail(string email)
+        public async Task<UserEntity> GetUserByEmailAsync(string email)
         {
-            return context.Users.FirstOrDefault(u => u.Email.ToUpper() == email.Trim().ToUpper());
+            return await context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
         public async Task<List<UserEntity>> GetUsersAsync()
@@ -36,14 +36,14 @@ namespace UserServiceAPI.Repositories
             await context.SaveChangesAsync();
         }
 
-        public UserEntity GetUserById(Guid id)
+        public async Task<UserEntity> GetUserByIdAsync(Guid id)
         {
             // не работает асинхронный метод  
 
             //can't parse JSON.  Raw result:
 
             //Serialization and deserialization of 'System.Action' instances are not supported. Path: $.MoveNextAction.
-            return context.Users.Find(id);
+            return await context.Users.FindAsync(id);
         }
     }
 }

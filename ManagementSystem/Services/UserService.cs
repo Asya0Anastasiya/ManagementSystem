@@ -32,7 +32,7 @@ namespace UserServiceAPI.Services
 
         public async Task Create(SignUpModel signUpModel)
         {
-            if (!(userRepository.GetUserByEmail(signUpModel.Email) == null))
+            if (!(await userRepository.GetUserByEmailAsync(signUpModel.Email) == null))
             {
                 throw new InternalException("Such user already exists");
             }
@@ -55,8 +55,7 @@ namespace UserServiceAPI.Services
 
         public async Task<UserInfoModel> GetUserInfo(string email, int month)
         {
-            // проверить с асинхронным поиском
-            var user = userRepository.GetUserByEmail(email);
+            var user = await userRepository.GetUserByEmailAsync(email);
             var userInfo = mapper.Map<UserInfoModel>(user);
             userInfo.WorkDays = await client.GetWorkDaysCount(user.Id, month);
             userInfo.SickDays = await client.GetSickDaysCount(user.Id, month);
@@ -65,10 +64,9 @@ namespace UserServiceAPI.Services
             return userInfo;
         }
 
-        public string Login(SignInModel signInModel)
+        public async Task<string> Login(SignInModel signInModel)
         {
-            //поменять на асинхронный поиск
-            var user = userRepository.GetUserByEmail(signInModel.Email);
+            var user = await userRepository.GetUserByEmailAsync(signInModel.Email);
             if (user == null)
             {
                 throw new NotFoundException("Such user does not exist");
@@ -82,9 +80,9 @@ namespace UserServiceAPI.Services
             return token;
         }
 
-        public void ChangePassword(Guid id, string oldPassword, string newPassword)
+        public async Task ChangePassword(Guid id, string oldPassword, string newPassword)
         {
-            var currentUser = userRepository.GetUserById(id);
+            var currentUser = await userRepository.GetUserByIdAsync(id);
             if (currentUser == null)
             {
                 throw new NotFoundException("User not found");
@@ -94,7 +92,7 @@ namespace UserServiceAPI.Services
                 throw new InternalException("Wrong password!!!");
             }
             currentUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            userRepository.UpdateUserAsync(currentUser);
+            await userRepository.UpdateUserAsync(currentUser);
         }
 
         //public List<DaysAccounting> GetDays(Guid id)
