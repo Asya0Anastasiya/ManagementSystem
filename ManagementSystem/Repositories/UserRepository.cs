@@ -36,6 +36,12 @@ namespace UserServiceAPI.Repositories
             await context.SaveChangesAsync();
         }
 
+        public async Task DeleteUserAsync(UserEntity user)
+        {
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<UserEntity> GetUserByIdAsync(Guid id)
         {
             // не работает асинхронный метод  

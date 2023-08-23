@@ -8,7 +8,6 @@ using UserServiceAPI.Models.Enums;
 using UserServiceAPI.Models.UserDto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TimeTrackingService.Models.Entities;
 
 namespace UserServiceAPI.Services
 {
@@ -56,12 +55,26 @@ namespace UserServiceAPI.Services
         public async Task<UserInfoModel> GetUserInfo(string email, int month)
         {
             var user = await userRepository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
             var userInfo = mapper.Map<UserInfoModel>(user);
             userInfo.WorkDays = await client.GetWorkDaysCount(user.Id, month);
             userInfo.SickDays = await client.GetSickDaysCount(user.Id, month);
             userInfo.Holidays = await client.GetHolidaysCount(user.Id, month);
             userInfo.PaidDays = await client.GetPaidDaysCount(user.Id, month);
             return userInfo;
+        }
+
+        public async Task DeleteUserAsync(Guid id)
+        {
+            var user = await userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+            await userRepository.DeleteUserAsync(user);
         }
 
         public async Task<string> Login(SignInModel signInModel)
@@ -95,50 +108,20 @@ namespace UserServiceAPI.Services
             await userRepository.UpdateUserAsync(currentUser);
         }
 
-        //public List<DaysAccounting> GetDays(Guid id)
-        //{
-        //    return client.GetDays(id);
-        //}
-
         public string GetUserIdByToken(JwtSecurityToken token)
         {
             var userId = token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
             return userId;
         }
 
-        //отдельный вервис
-        //public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        //{
-        //    using var hmac = new HMACSHA512();
-        //    passwordSalt = hmac.Key;
-        //    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        //}
-
-
-        //отдельный вервис
-        //public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        //{
-        //    using var hmac = new HMACSHA512(passwordSalt);
-        //    var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        //    return computedHash.SequenceEqual(passwordHash);
-        //}
-
-        //private string GenerateJwt(UserModel userModel)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        //    var claims = new[]
-        //    {
-        //        new Claim(ClaimTypes.Email, userModel.Email),
-        //        new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString())
-        //    };
-
-        //    var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:audience"],
-        //                claims,
-        //                expires: DateTime.Now.AddMinutes(15),
-        //                signingCredentials: credentials);
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
+        public async Task UpdateUserAsync(UserInfoModel model)
+        {
+            var user = await userRepository.GetUserByEmailAsync(model.Email);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+            await userRepository.UpdateUserAsync(user);
+        }
     }
 }

@@ -55,5 +55,19 @@ namespace UserServiceAPI.Controllers
         {
             return Ok(await userService.GetUserInfo(email, 12));
         }
+
+        [HttpDelete("removeUser")]
+        public async Task<IActionResult> DeleteUserAsync(Guid id)
+        {
+            await userService.DeleteUserAsync(id);
+            return Ok();
+        }
+
+        [HttpPut("updateUser")]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] UserInfoModel model)
+        {
+            await userService.UpdateUserAsync(model);
+            return Ok();
+        }
     }
 }

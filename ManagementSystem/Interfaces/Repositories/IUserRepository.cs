@@ -12,6 +12,8 @@ namespace UserServiceAPI.Interfaces.Repositories
 
         public Task UpdateUserAsync(UserEntity userEntity);
 
+        public Task DeleteUserAsync(UserEntity userEntity);
+
         public Task<UserEntity> GetUserByIdAsync(Guid id);
     }
 }
