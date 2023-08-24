@@ -52,9 +52,9 @@ namespace UserServiceAPI.Services
             return mapper.Map<List<UserInfoModel>>(users);
         }
 
-        public async Task<UserInfoModel> GetUserInfo(string email, int month)
+        public async Task<UserInfoModel> GetUserInfo(Guid id, int month)
         {
-            var user = await userRepository.GetUserByEmailAsync(email);
+            var user = await userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
@@ -116,11 +116,12 @@ namespace UserServiceAPI.Services
 
         public async Task UpdateUserAsync(UserInfoModel model)
         {
-            var user = await userRepository.GetUserByEmailAsync(model.Email);
+            var user = await userRepository.GetUserByIdAsync(model.Id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
+            user = mapper.Map<UserEntity>(model);
             await userRepository.UpdateUserAsync(user);
         }
     }

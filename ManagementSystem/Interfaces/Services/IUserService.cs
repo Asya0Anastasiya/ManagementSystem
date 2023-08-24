@@ -14,7 +14,7 @@ namespace UserServiceAPI.Interfaces.Services
 
         public Task ChangePassword(Guid id, string oldPassword, string newPassword);
 
-        public Task<UserInfoModel> GetUserInfo(string email, int month);
+        public Task<UserInfoModel> GetUserInfo(Guid id, int month);
 
         public Task DeleteUserAsync(Guid id);
 

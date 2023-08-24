@@ -48,23 +48,25 @@ namespace UserServiceAPI.Controllers
             });
         }
 
-        [HttpGet] // спросить про передачу id на фронт в UserInfoModel
-        [Route("{email}")]
+        [HttpGet]
+        [Route("getUser/{id}")]
         // получать месяц с UI
-        public async Task<IActionResult> GetUserInfo([FromRoute] string email, int month)
+        public async Task<IActionResult> GetUserInfo([FromRoute] Guid id, int month)
         {
-            return Ok(await userService.GetUserInfo(email, 12));
+            return Ok(await userService.GetUserInfo(id, 12));
         }
 
-        [HttpDelete("removeUser")]
+        [HttpDelete]
+        [Route("removeUser/{id}")]
         public async Task<IActionResult> DeleteUserAsync(Guid id)
         {
             await userService.DeleteUserAsync(id);
             return Ok();
         }
 
-        [HttpPut("updateUser")]
-        public async Task<IActionResult> UpdateUserAsync([FromBody] UserInfoModel model)
+        [HttpPut]
+        [Route("updateUser/{id}")]
+        public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, UserInfoModel model)
         {
             await userService.UpdateUserAsync(model);
             return Ok();

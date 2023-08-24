@@ -16,6 +16,8 @@ namespace UserServiceAPI.Mappers
             CreateMap<UserEntity, UserInfoModel>();
 
             CreateMap<SignUpModel, UserEntity>();
+
+            CreateMap<UserInfoModel, UserEntity>();
         } 
     }
 }
