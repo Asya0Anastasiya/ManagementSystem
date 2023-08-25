@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using TimeTrackingService.Models.Entities;
+using UserServiceAPI.Helpers;
+using UserServiceAPI.Helpers.Pagination;
 using UserServiceAPI.Models.UserDto;
 
 namespace UserServiceAPI.Interfaces.Services
@@ -10,7 +12,7 @@ namespace UserServiceAPI.Interfaces.Services
 
         public Task<string> Login(SignInModel signInModel);
 
-        public Task<List<UserInfoModel>> GetUsersAsync();
+        public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
         public Task ChangePassword(Guid id, string oldPassword, string newPassword);
 

@@ -4,18 +4,19 @@ namespace UserServiceAPI.Models.UserDto
 {
     public class SignUpModel
     {
-        [Required, MinLength(2)]
+        [Required, MaxLength(50)]
         public string Firstname { get; set; }
 
-        [Required, MinLength(2)]
+        [Required, MaxLength(50)]
         public string Lastname { get; set; }
 
         [Required]
         [EmailAddress]
-        [MinLength(10)]
+        [MaxLength(50)]
         public string Email { get; set; }
 
         [Required]
+        [MaxLength (25)]
         public string Password { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace TimeTrackingService.Mappers
 
         private void Days()
         {
-            CreateMap<DaysAccountingModel, DaysAccounting>();
+            CreateMap<DayAccountingModel, DayAccounting>();
         }
     }
 }

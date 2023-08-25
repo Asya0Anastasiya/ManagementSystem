@@ -1,85 +1,82 @@
 ﻿using AutoMapper;
 using UserServiceAPI.Exceptions;
 using UserServiceAPI.Helpers;
+using UserServiceAPI.Helpers.Pagination;
 using UserServiceAPI.Interfaces.Repositories;
 using UserServiceAPI.Interfaces.Services;
 using UserServiceAPI.Models.Entities;
 using UserServiceAPI.Models.Enums;
 using UserServiceAPI.Models.UserDto;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace UserServiceAPI.Services
 {
     public class UserService : IUserService
     {
-        private readonly IConfiguration config;
-        private readonly IUserRepository userRepository;
-        private readonly IDaysAccountingClientRepository client;
-        private readonly IMapper mapper;
+        private readonly IConfiguration _config;
+        private readonly IUserRepository _userRepository;
+        private readonly IDaysAccountingClientRepository _client;
+        private readonly IMapper _mapper;
 
-        public UserService( IConfiguration _config,
-                          IUserRepository _userRepository,
-                          IMapper _mapper,
-                          IDaysAccountingClientRepository _client)
+        public UserService( IConfiguration config,
+                          IUserRepository userRepository,
+                          IMapper mapper,
+                          IDaysAccountingClientRepository client)
         {
-            config = _config;
-            userRepository = _userRepository;
-            mapper = _mapper;
-            client = _client;
+            _config = config;
+            _userRepository = userRepository;
+            _mapper = mapper;
+            _client = client;
         }
 
         public async Task Create(SignUpModel signUpModel)
         {
-            if (!(await userRepository.GetUserByEmailAsync(signUpModel.Email) == null))
+            var user = await _userRepository.GetUserByEmailAsync(signUpModel.Email);
+            if (user != null)
             {
                 throw new InternalException("Such user already exists");
             }
-            List<string> passErrors = PasswordValidator.CheckPasswordStrength(signUpModel.Password);
-            if (passErrors.Count != 0)
-            {
-                throw new InternalException("Your paswword is not strength enought");
-            }
-            var user = mapper.Map<UserEntity>(signUpModel);
+            PasswordValidator.CheckPasswordStrength(signUpModel.Password);
+            user = _mapper.Map<UserEntity>(signUpModel);
             user.Role = Roles.User;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
-            await userRepository.CreateUserAsync(user);
+            await _userRepository.CreateUserAsync(user);
         }
 
-        public async Task<List<UserInfoModel>> GetUsersAsync()
+        public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
+                                                            PaginationParameters pagination)
         {
-            var users = await userRepository.GetUsersAsync();
-            return mapper.Map<List<UserInfoModel>>(users);
+            var users = await _userRepository.GetUsersAsync(parameters, pagination);
+            return _mapper.Map<List<UserInfoModel>>(users);
         }
 
         public async Task<UserInfoModel> GetUserInfo(Guid id, int month)
         {
-            var user = await userRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
-            var userInfo = mapper.Map<UserInfoModel>(user);
-            userInfo.WorkDays = await client.GetWorkDaysCount(user.Id, month);
-            userInfo.SickDays = await client.GetSickDaysCount(user.Id, month);
-            userInfo.Holidays = await client.GetHolidaysCount(user.Id, month);
-            userInfo.PaidDays = await client.GetPaidDaysCount(user.Id, month);
+            var userInfo = _mapper.Map<UserInfoModel>(user);
+            userInfo.WorkDays = await _client.GetWorkDaysCount(user.Id, month);
+            userInfo.SickDays = await _client.GetSickDaysCount(user.Id, month);
+            userInfo.Holidays = await _client.GetHolidaysCount(user.Id, month);
+            userInfo.PaidDays = await _client.GetPaidDaysCount(user.Id, month);
             return userInfo;
         }
 
         public async Task DeleteUserAsync(Guid id)
         {
-            var user = await userRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
-            await userRepository.DeleteUserAsync(user);
+            await _userRepository.DeleteUserAsync(user);
         }
 
         public async Task<string> Login(SignInModel signInModel)
         {
-            var user = await userRepository.GetUserByEmailAsync(signInModel.Email);
+            var user = await _userRepository.GetUserByEmailAsync(signInModel.Email);
             if (user == null)
             {
                 throw new NotFoundException("Such user does not exist");
@@ -88,14 +85,13 @@ namespace UserServiceAPI.Services
             {
                 throw new InternalException("Wrong password");
             }
-            // user.Role.ToString() Ok????
-            var token = new JwtGenerator(config).CreateJwt(user.Role.ToString(), user.Email);
+            var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email);
             return token;
         }
 
         public async Task ChangePassword(Guid id, string oldPassword, string newPassword)
         {
-            var currentUser = await userRepository.GetUserByIdAsync(id);
+            var currentUser = await _userRepository.GetUserByIdAsync(id);
             if (currentUser == null)
             {
                 throw new NotFoundException("User not found");
@@ -105,24 +101,18 @@ namespace UserServiceAPI.Services
                 throw new InternalException("Wrong password!!!");
             }
             currentUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            await userRepository.UpdateUserAsync(currentUser);
-        }
-
-        public string GetUserIdByToken(JwtSecurityToken token)
-        {
-            var userId = token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            return userId;
+            await _userRepository.UpdateUserAsync(currentUser);
         }
 
         public async Task UpdateUserAsync(UserInfoModel model)
         {
-            var user = await userRepository.GetUserByIdAsync(model.Id);
+            var user = await _userRepository.GetUserByIdAsync(model.Id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
-            user = mapper.Map<UserEntity>(model);
-            await userRepository.UpdateUserAsync(user);
+            user = _mapper.Map<UserEntity>(model);
+            await _userRepository.UpdateUserAsync(user);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace UserServiceAPI.Interfaces.Repositories
 {
     public interface IDaysAccountingClientRepository
     {
-        public Task<List<DaysAccounting>> GetDays(Guid id);
+        public Task<List<DayAccounting>> GetDays(Guid id);
 
         public Task<int> GetWorkDaysCount(Guid id, int month);
 

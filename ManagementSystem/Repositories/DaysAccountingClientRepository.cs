@@ -12,7 +12,7 @@ namespace UserServiceAPI.Repositories
             client = _client;
         }
 
-        public async Task<List<DaysAccounting>> GetDays(Guid id)
+        public async Task<List<DayAccounting>> GetDays(Guid id)
         {
             return await client.GetDays(id);
         }

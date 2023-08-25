@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using TimeTrackingService.Models.Enums;
 
-namespace TimeTrackingService.Models.Entities
+namespace TimeTrackingService.Models.Dto
 {
-    public class DaysAccounting
+    public class DayAccountingModel
     {
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public Guid Id { get; set; }
 
         [Required, Range(0, 12)]

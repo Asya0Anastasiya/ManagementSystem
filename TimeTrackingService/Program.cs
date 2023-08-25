@@ -15,8 +15,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IDaysAccountingRepository, DaysAccountingRepository>();
-builder.Services.AddScoped<IDaysAccountingService, DaysAccountingService>();
+builder.Services.AddScoped<IDayAccountingRepository, DayAccountingRepository>();
+builder.Services.AddScoped<IDayAccountingService, DayAccountingService>();
 
 builder.Services.AddDbContext<TimeTrackingContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));

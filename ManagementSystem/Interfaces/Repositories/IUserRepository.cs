@@ -1,4 +1,6 @@
-﻿using UserServiceAPI.Models.Entities;
+﻿using UserServiceAPI.Helpers;
+using UserServiceAPI.Helpers.Pagination;
+using UserServiceAPI.Models.Entities;
 
 namespace UserServiceAPI.Interfaces.Repositories
 {
@@ -6,7 +8,7 @@ namespace UserServiceAPI.Interfaces.Repositories
     {
         public Task CreateUserAsync(UserEntity userEntity);
 
-        public Task<List<UserEntity>> GetUsersAsync();
+        public Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
         public Task<UserEntity> GetUserByEmailAsync(string email);
 

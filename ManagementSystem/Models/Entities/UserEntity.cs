@@ -20,18 +20,20 @@ namespace UserServiceAPI.Models.Entities
         public string LastName { get; set; }
 
         [Required, EmailAddress]
-        [MaxLength(100)]
+        [MaxLength(50)]
         public string Email { get; set; }
 
         [Required]
         public Roles Role { get; set; } = Roles.User; 
 
         [Phone]
+        [MaxLength(15)]
         public string PhoneNumber { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
         [Required]
+        [MaxLength(65)]
         public string Password { get; set; } = "";
     }
 }

@@ -4,10 +4,10 @@ namespace UserServiceAPI.Models.UserDto
 {
     public class SignInModel
     {
-        [Required, EmailAddress, MinLength(10)]
+        [Required, EmailAddress, MaxLength(50)]
         public string Email { get; set; }
 
-        [Required]
+        [Required, MaxLength(25)]
         public string Password { get; set; }
     }
 }

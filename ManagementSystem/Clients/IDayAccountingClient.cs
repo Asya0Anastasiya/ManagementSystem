@@ -6,7 +6,7 @@ namespace UserServiceAPI.Clients
     public interface IDayAccountingClient
     {
         [Get("/api/DaysAccounting/getUsersDays")]
-        public Task<List<DaysAccounting>> GetDays(Guid id);
+        public Task<List<DayAccounting>> GetDays(Guid id);
 
         [Get("/api/DaysAccounting/workDaysCount")]
         public Task<int> GetWorkDaysCount(Guid id, int month);

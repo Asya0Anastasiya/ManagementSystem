@@ -15,6 +15,6 @@ namespace TimeTrackingService.Data
         //        .HasNoKey();
         //}
 
-        public DbSet<DaysAccounting> DaysAccounting { get; set;}
+        public DbSet<DayAccounting> DaysAccounting { get; set;}
     }
 }

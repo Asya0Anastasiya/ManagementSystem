@@ -4,6 +4,7 @@
     {
         Work = 1,
         Holiday,
-        Sick
+        Sick,
+        Vacation
     }
 }
