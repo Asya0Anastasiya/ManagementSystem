@@ -2,8 +2,9 @@
 using UserServiceAPI.Interfaces.Repositories;
 using UserServiceAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using UserServiceAPI.Helpers;
 using UserServiceAPI.Helpers.Pagination;
+using UserServiceAPI.Helpers.Filtering;
+using UserServiceAPI.Helpers;
 
 namespace UserServiceAPI.Repositories
 {
@@ -28,35 +29,14 @@ namespace UserServiceAPI.Repositories
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
-        public async Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters,
+        public async Task<PagedList<UserEntity>> GetUsersAsync(FilteringParameters parameters,
                                                           PaginationParameters pagination)
         {
-            List<UserEntity> users = new();
-            if (parameters.FirstName != null)
-            {
-                users.AddRange(await _context.Users.Where(x => x.FirstName.Contains(parameters.FirstName)).ToListAsync());
-            }
-            if (parameters.LastName != null)
-            {
-                users.AddRange(await _context.Users.Where(x => x.LastName.Contains(parameters.LastName)).ToListAsync());
-            }
-            if (parameters.Email != null)
-            {
-                users.AddRange(await _context.Users.Where(x => x.Email.Contains(parameters.Email)).ToListAsync());
-            }
-            if (parameters.DateOfBirth != null)
-            {
-                users.AddRange(await _context.Users.Where(x => x.DateOfBirth == parameters.DateOfBirth).ToListAsync());
-            }
-            if (parameters.PhoneNumber != null)
-            {
-                users.AddRange(await _context.Users.Where(x => x.FirstName.StartsWith(parameters.FirstName)).ToListAsync());
-            }
-
-            return await _context.Users
-                .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-                .Take(pagination.PageSize)
-                .ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            FilteringHelper filteringHelper = new();
+            users = filteringHelper.FilterUsers(parameters, users);
+            // в сервис? 
+            return PagedList<UserEntity>.ToPagedList(users, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task UpdateUserAsync(UserEntity user)

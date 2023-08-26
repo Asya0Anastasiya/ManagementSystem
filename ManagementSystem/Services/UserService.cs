@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using UserServiceAPI.Exceptions;
 using UserServiceAPI.Helpers;
+using UserServiceAPI.Helpers.Filtering;
 using UserServiceAPI.Helpers.Pagination;
 using UserServiceAPI.Interfaces.Repositories;
 using UserServiceAPI.Interfaces.Services;
@@ -42,11 +43,11 @@ namespace UserServiceAPI.Services
             await _userRepository.CreateUserAsync(user);
         }
 
-        public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
+        public async Task<PagedList<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
                                                             PaginationParameters pagination)
         {
             var users = await _userRepository.GetUsersAsync(parameters, pagination);
-            return _mapper.Map<List<UserInfoModel>>(users);
+            return _mapper.Map<PagedList<UserInfoModel>>(users);
         }
 
         public async Task<UserInfoModel> GetUserInfo(Guid id, int month)

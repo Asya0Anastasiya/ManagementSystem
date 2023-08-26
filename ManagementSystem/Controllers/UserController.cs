@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserServiceAPI.Models.UserDto;
-using UserServiceAPI.Helpers;
 using UserServiceAPI.Helpers.Pagination;
+using UserServiceAPI.Helpers;
+using Newtonsoft.Json;
 
 namespace UserServiceAPI.Controllers
 {
@@ -24,12 +25,22 @@ namespace UserServiceAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}")]
         public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize) 
         {
             var pagination = new PaginationParameters(pageNumber, pageSize);
-
+            var users = await _userService.GetUsersAsync(parameters, pagination);
+            var metadata = new
+            {
+                users.TotalCount,
+                users.PageSize,
+                users.CurrentPage,
+                users.TotalPages,
+                users.HasNext,
+                users.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             return Ok(await _userService.GetUsersAsync(parameters, pagination));
         }
 
