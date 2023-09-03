@@ -24,13 +24,23 @@ namespace UserServiceAPI.Models.Entities
         public string Email { get; set; }
 
         [Required]
-        public Roles Role { get; set; } = Roles.User; 
+        [MaxLength(30)]
+        public string Department { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Position { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string Level { get; set; }
+
+        [Required]
+        public Roles Role { get; set; } = Roles.Admin; 
 
         [Phone]
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
-
-        public DateTime? DateOfBirth { get; set; }
 
         [Required]
         [MaxLength(65)]

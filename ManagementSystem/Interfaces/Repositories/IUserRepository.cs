@@ -8,7 +8,7 @@ namespace UserServiceAPI.Interfaces.Repositories
     {
         public Task CreateUserAsync(UserEntity userEntity);
 
-        public Task<PagedList<UserEntity>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
+        public Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
         public Task<UserEntity> GetUserByEmailAsync(string email);
 

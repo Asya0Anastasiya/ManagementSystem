@@ -13,14 +13,15 @@ namespace UserServiceAPI.Helpers
         {
                 configuration = _configuration;
         }
-        public string CreateJwt(string role, string email)
+        public string CreateJwt(string role, string email, Guid id)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
             var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]));
             var identity = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Role, role),
-                new Claim(ClaimTypes.Email, email)
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, id.ToString())
             });
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor

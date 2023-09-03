@@ -17,24 +17,24 @@ namespace UserServiceAPI.Repositories
             return await client.GetDays(id);
         }
 
-        public async Task<int> GetHolidaysCount(Guid id, int month)
+        public async Task<int> GetHolidaysCount(Guid id, int month, int year)
         {
-            return await client.GetHolidaysCount(id, month);
+            return await client.GetHolidaysCount(id, month, year);
         }
 
-        public async Task<int> GetPaidDaysCount(Guid id, int month)
+        public async Task<int> GetPaidDaysCount(Guid id, int month, int year)
         {
-            return await client.GetPaidDaysCount(id, month);
+            return await client.GetPaidDaysCount(id, month, year);
         }
 
-        public async Task<int> GetSickDaysCount(Guid id, int month)
+        public async Task<int> GetSickDaysCount(Guid id, int month, int year)
         {
-            return await client.GetSickDaysCount(id, month);
+            return await client.GetSickDaysCount(id, month, year);
         }
 
-        public async Task<int> GetWorkDaysCount(Guid id, int month)
+        public async Task<int> GetWorkDaysCount(Guid id, int month, int year)
         {
-            return await client.GetWorkDaysCount(id, month);
+            return await client.GetWorkDaysCount(id, month, year);
         }
     }
 }

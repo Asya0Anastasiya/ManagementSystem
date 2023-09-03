@@ -4,6 +4,7 @@ namespace UserServiceAPI.Models.UserDto
 {
     public class UserInfoModel
     {
+        // UserInfoModel SignUpModel не одно и то же ли???
         [Required]
         public Guid Id { get; set; }
 
@@ -16,18 +17,16 @@ namespace UserServiceAPI.Models.UserDto
         [Required]
         public string Email { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        [Required]
+        [MaxLength(20)]
+        public string Department { get; set; }
 
         [Required]
-        public int WorkDays { get; set; }
+        [MaxLength(20)]
+        public string Position { get; set; }
 
         [Required]
-        public int SickDays { get; set; }
-
-        [Required]
-        public int Holidays { get; set; }
-
-        [Required]
-        public int PaidDays { get; set; }
+        [MaxLength(20)]
+        public string Level { get; set; }
     }
 }

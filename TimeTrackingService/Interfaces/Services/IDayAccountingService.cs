@@ -1,4 +1,6 @@
-﻿using TimeTrackingService.Models.Dto;
+﻿using TimeTrackingService.Helpers.Filtering;
+using TimeTrackingService.Helpers.Pagination;
+using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Interfaces.Services
@@ -9,7 +11,7 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task AddRangeOfDays(List<DayAccountingModel> days, Guid id);
 
-        public Task<List<DayAccounting>> GetUsersDays(Guid id);
+        public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, PaginationParameters pagination);
 
         public Task RemoveDay(Guid id);
 
@@ -26,5 +28,7 @@ namespace TimeTrackingService.Interfaces.Services
         public int GetUsersHolidaysCount(Guid id, int month, int year);
 
         public int GetPaidDaysCount(Guid id, int month, int year);
+
+        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year);
     }
 }

@@ -21,6 +21,7 @@ string BaseUrl = "https://localhost:44367";
 builder.Services.AddScoped<IDayAccountingClient>(x => RestService.For<IDayAccountingClient>(BaseUrl));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IDaysAccountingClientRepository, DaysAccountingClientRepository>();
 builder.Services.AddCors(option =>
 {

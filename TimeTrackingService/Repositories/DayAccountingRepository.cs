@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
+using TimeTrackingService.Helpers.Filtering;
+using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
+using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Enums;
 
@@ -26,11 +29,13 @@ namespace TimeTrackingService.Repositories
             await _timeTrackingContext.SaveChangesAsync();
         }
 
-        public async Task<List<DayAccounting>> GetUsersDays(Guid id)
+        public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination)
         {
+            var days = await _timeTrackingContext.DaysAccounting.ToListAsync();
+            FilteringHelper filteringHelper = new();
+            days = filteringHelper.FilterDays(filtering, days);
             //AsNoTracking??
-            return await _timeTrackingContext.DaysAccounting
-                .Where(x => x.UserId == id).ToListAsync();
+            return PagedList<DayAccounting>.ToPagedItems(days, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task RemoveDay(Guid id)
@@ -91,6 +96,18 @@ namespace TimeTrackingService.Repositories
             return GetUsersWorkDaysCount(id, month, year) 
                     + GetUsersSickDaysCount(id, month, year) 
                     + GetUsersHolidaysCount(id, month, year);
+        }
+
+        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year)
+        {
+            UsersDaysModel model = new UsersDaysModel
+            {
+                WorkDaysCount = GetUsersWorkDaysCount(id, month, year),
+                SickDaysCount = GetUsersSickDaysCount(id, month, year),
+                HolidaysCount = GetUsersHolidaysCount(id, month, year),
+                PaidDaysCount = GetPaidDaysCount(id, month, year)
+            };
+            return model;
         }
     }
 }

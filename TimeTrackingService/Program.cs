@@ -18,6 +18,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDayAccountingRepository, DayAccountingRepository>();
 builder.Services.AddScoped<IDayAccountingService, DayAccountingService>();
 
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("MyPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddDbContext<TimeTrackingContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -38,7 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();

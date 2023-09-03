@@ -18,10 +18,6 @@ namespace UserServiceAPI.Helpers.Filtering
             {
                 users = users.Where(x => x.Email.Contains(parameters.Email)).ToList();
             }
-            if (parameters.DateOfBirth != null)
-            {
-                users = users.Where(x => x.DateOfBirth == parameters.DateOfBirth).ToList();
-            }
             if (parameters.PhoneNumber != null)
             {
                 users = users.Where(x => x.FirstName.StartsWith(parameters.FirstName)).ToList();

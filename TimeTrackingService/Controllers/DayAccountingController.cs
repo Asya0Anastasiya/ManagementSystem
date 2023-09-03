@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TimeTrackingService.Helpers.Filtering;
+using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
@@ -29,10 +31,12 @@ namespace TimeTrackingService.Controllers
             return Ok();
         }
 
-        [HttpGet("getUsersDays")]
-        public async Task<List<DayAccounting>> GetUsersDaysAsync(Guid id)
+        [HttpGet]
+        [Route("getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}")]
+        public async Task<List<DayAccountingModel>> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
-            return await _service.GetUsersDays(id);
+            var pagination = new PaginationParameters(pageNumber, pageSize);
+            return await _service.GetUsersDays(parameters, pagination);
         }
 
         [HttpDelete("removeDay")]
@@ -56,10 +60,11 @@ namespace TimeTrackingService.Controllers
             return Ok();
         }
 
-        [HttpPut("approveDay")]
-        public async Task<IActionResult> ApproveDayAsync(Guid id)
+        [HttpPut]
+        [Route("approveDay")]
+        public async Task<IActionResult> ApproveDayAsync([FromBody] DayAccounting dayAccounting)
         {
-            await _service.ApproveDay(id);
+            await _service.ApproveDay(dayAccounting.Id);
             return Ok("Successfully approved");
         }
 
@@ -85,6 +90,13 @@ namespace TimeTrackingService.Controllers
         public int GetPaidDaysCount(Guid id, int month, int year)
         {
             return _service.GetPaidDaysCount(id, month, year);
+        }
+
+        [HttpGet]
+        [Route("getUsersDaysInfo/{userId}/month/{month}/year/{year}")]
+        public UsersDaysModel GetUsersDaysInfo(Guid userId, int month, int year)
+        {
+            return _service.GetUsersDaysInfo(userId, month, year);
         }
     }
 }

@@ -18,5 +18,21 @@ namespace UserServiceAPI.Models.UserDto
         [Required]
         [MaxLength (25)]
         public string Password { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Department { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Position { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string Level { get; set; }
+
+        [Required]
+        [MaxLength(15)]
+        public string Phone { get; set; }
     }
 }

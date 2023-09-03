@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using TimeTrackingService.Helpers.Filtering;
+using TimeTrackingService.Helpers.Pagination;
+using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Interfaces.Repositories
@@ -9,7 +11,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task AddRangeOfDays(List<DayAccounting> daysAccounts);
 
-        public Task<List<DayAccounting>> GetUsersDays(Guid id);
+        public Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination);
 
         public Task<DayAccounting> GetDayByIdAsync(Guid id);
 
@@ -26,5 +28,7 @@ namespace TimeTrackingService.Interfaces.Repositories
         public int GetUsersHolidaysCount(Guid id, int month, int year);
 
         public int GetPaidDaysCount(Guid id, int month, int year);
+
+        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year);
     }
 }

@@ -10,5 +10,6 @@ namespace UserServiceAPI.Data
         }
 
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }

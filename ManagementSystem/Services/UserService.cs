@@ -15,18 +15,21 @@ namespace UserServiceAPI.Services
     {
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IDaysAccountingClientRepository _client;
         private readonly IMapper _mapper;
 
         public UserService( IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
-                          IDaysAccountingClientRepository client)
+                          IDaysAccountingClientRepository client,
+                          IImageRepository imageRepository)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
             _client = client;
+            _imageRepository = imageRepository;
         }
 
         public async Task Create(SignUpModel signUpModel)
@@ -43,14 +46,14 @@ namespace UserServiceAPI.Services
             await _userRepository.CreateUserAsync(user);
         }
 
-        public async Task<PagedList<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
+        public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
                                                             PaginationParameters pagination)
         {
             var users = await _userRepository.GetUsersAsync(parameters, pagination);
-            return _mapper.Map<PagedList<UserInfoModel>>(users);
+            return _mapper.Map<List<UserInfoModel>>(users);
         }
 
-        public async Task<UserInfoModel> GetUserInfo(Guid id, int month)
+        public async Task<UserInfoModel> GetUserInfo(Guid id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
@@ -58,10 +61,6 @@ namespace UserServiceAPI.Services
                 throw new NotFoundException("User not found");
             }
             var userInfo = _mapper.Map<UserInfoModel>(user);
-            userInfo.WorkDays = await _client.GetWorkDaysCount(user.Id, month);
-            userInfo.SickDays = await _client.GetSickDaysCount(user.Id, month);
-            userInfo.Holidays = await _client.GetHolidaysCount(user.Id, month);
-            userInfo.PaidDays = await _client.GetPaidDaysCount(user.Id, month);
             return userInfo;
         }
 
@@ -86,7 +85,7 @@ namespace UserServiceAPI.Services
             {
                 throw new InternalException("Wrong password");
             }
-            var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email);
+            var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id);
             return token;
         }
 
@@ -114,6 +113,58 @@ namespace UserServiceAPI.Services
             }
             user = _mapper.Map<UserEntity>(model);
             await _userRepository.UpdateUserAsync(user);
+        }
+
+        public async Task SetUserImageAsync(Guid userId, IFormFile file)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("User Not Found");
+            }
+
+            if (file.Length > 5242880 * 2)
+            {
+                throw new InternalException("File is more then 10mb.");
+            }
+
+            if (file.Length == 0)
+            {
+                throw new InternalException("File length is 0.");
+            }
+
+            using var memoryStream = new MemoryStream();
+
+            await file.CopyToAsync(memoryStream);
+
+            var image = new Image
+            {
+                User = user,
+                Data = memoryStream.ToArray()
+            };
+
+            await _imageRepository.SetUserImageAsync(image);
+        }
+
+        public async Task<byte[]> GetUserImageAsync(Guid userId)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            
+            if (user == null)
+            {
+                throw new NotFoundException("User Not FFFound");
+            }
+
+
+            var image = await _imageRepository.GetUserImageAsync(userId);
+
+            if (image == null)
+            {
+                throw new NotFoundException("Image not found");
+            }
+
+            return image.Data;
         }
     }
 }

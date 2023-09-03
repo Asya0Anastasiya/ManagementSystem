@@ -9,11 +9,11 @@ using UserServiceAPI.Data;
 
 #nullable disable
 
-namespace ManagementSystem.Migrations
+namespace UserServiceAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230825110215_UserEntityChanged")]
-    partial class UserEntityChanged
+    [Migration("20230830215831_UsersImages")]
+    partial class UsersImages
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,26 @@ namespace ManagementSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("UserServiceAPI.Models.Entities.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("UserServiceAPI.Models.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -32,6 +52,11 @@ namespace ManagementSystem.Migrations
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -48,6 +73,11 @@ namespace ManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(65)
@@ -57,12 +87,28 @@ namespace ManagementSystem.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("UserServiceAPI.Models.Entities.Image", b =>
+                {
+                    b.HasOne("UserServiceAPI.Models.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

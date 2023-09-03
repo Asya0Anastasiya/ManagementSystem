@@ -25,23 +25,23 @@ namespace UserServiceAPI.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}")]
         public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize) 
         {
             var pagination = new PaginationParameters(pageNumber, pageSize);
             var users = await _userService.GetUsersAsync(parameters, pagination);
-            var metadata = new
-            {
-                users.TotalCount,
-                users.PageSize,
-                users.CurrentPage,
-                users.TotalPages,
-                users.HasNext,
-                users.HasPrevious
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-            return Ok(await _userService.GetUsersAsync(parameters, pagination));
+            //var metadata = new
+            //{
+            //    users.TotalCount,
+            //    users.PageSize,
+            //    users.CurrentPage,
+            //    users.TotalPages,
+            //    users.HasNext,
+            //    users.HasPrevious
+            //};
+            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            return Ok(users);
         }
 
         [HttpPut("changePassword")]
@@ -63,11 +63,11 @@ namespace UserServiceAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getUser/{id}/{month}")]
+        [Route("getUser/{id}/month/{month}")]
         // получать месяц с UI
-        public async Task<IActionResult> GetUserInfo([FromRoute] Guid id, int month)
+        public async Task<IActionResult> GetUserInfo([FromRoute] Guid id)
         {
-            return Ok(await _userService.GetUserInfo(id, month));
+            return Ok(await _userService.GetUserInfo(id));
         }
 
         [HttpDelete]
@@ -85,6 +85,23 @@ namespace UserServiceAPI.Controllers
             // ne rabotajet, prichodit ne ta model
             await _userService.UpdateUserAsync(model);
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("setUserImage/{userId}")]
+        public async Task<IActionResult> SetUserImageAsync(Guid userId, IFormFile file)
+        {
+            await _userService.SetUserImageAsync(userId, file);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("getUserImage/{userId}")]
+        public async Task<IActionResult> GetUserImageAsync(Guid userId)
+        {
+            byte[] imageData = await _userService.GetUserImageAsync(userId);
+            return File(imageData, "image/png");
+            //return await _userService.GetUserImageAsync(userId);
         }
     }
 }

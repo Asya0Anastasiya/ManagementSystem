@@ -13,14 +13,18 @@ namespace UserServiceAPI.Interfaces.Services
 
         public Task<string> Login(SignInModel signInModel);
 
-        public Task<PagedList<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
+        public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
         public Task ChangePassword(Guid id, string oldPassword, string newPassword);
 
-        public Task<UserInfoModel> GetUserInfo(Guid id, int month);
+        public Task<UserInfoModel> GetUserInfo(Guid id);
 
         public Task DeleteUserAsync(Guid id);
 
         public Task UpdateUserAsync(UserInfoModel user);
+
+        public Task SetUserImageAsync(Guid userId, IFormFile file);
+
+        public Task<byte[]> GetUserImageAsync(Guid userId);
     }
 }

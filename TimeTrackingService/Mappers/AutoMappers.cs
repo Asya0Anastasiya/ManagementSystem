@@ -14,6 +14,8 @@ namespace TimeTrackingService.Mappers
         private void Days()
         {
             CreateMap<DayAccountingModel, DayAccounting>();
+
+            CreateMap<DayAccounting, DayAccountingModel>();
         }
     }
 }

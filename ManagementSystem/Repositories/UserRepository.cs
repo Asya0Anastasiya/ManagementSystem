@@ -29,14 +29,14 @@ namespace UserServiceAPI.Repositories
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
-        public async Task<PagedList<UserEntity>> GetUsersAsync(FilteringParameters parameters,
+        public async Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters,
                                                           PaginationParameters pagination)
         {
             var users = await _context.Users.ToListAsync();
             FilteringHelper filteringHelper = new();
             users = filteringHelper.FilterUsers(parameters, users);
             // в сервис? 
-            return PagedList<UserEntity>.ToPagedList(users, pagination.PageNumber, pagination.PageSize);
+            return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task UpdateUserAsync(UserEntity user)

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using TimeTrackingService.Helpers.Filtering;
+using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
@@ -26,14 +28,19 @@ namespace TimeTrackingService.Services
 
         public async Task AddRangeOfDays(List<DayAccountingModel> daysModel, Guid id)
         {
-            // Id!!!!!!!!!!!!!!!!!!!!!!
             var days = _mapper.Map<List<DayAccounting>>(daysModel);
+            for (var i = 0; i < daysModel.Count; i++)
+            {
+                days[i].UserId = id;
+            }
             await _repository.AddRangeOfDays(days);
         }
 
-        public async Task<List<DayAccounting>> GetUsersDays(Guid id)
+        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters,
+                                                            PaginationParameters pagination)
         {
-            return await _repository.GetUsersDays(id);
+            var days = await _repository.GetUsersDays(parameters, pagination);
+            return _mapper.Map<List<DayAccountingModel>>(days);
         }
 
         public async Task RemoveDay(Guid id)
@@ -80,6 +87,11 @@ namespace TimeTrackingService.Services
         public int GetPaidDaysCount(Guid id, int month, int year)
         {
             return _repository.GetPaidDaysCount(id, month, year);
+        }
+
+        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year)
+        {
+            return _repository.GetUsersDaysInfo(id, month, year);
         }
     }
 }
