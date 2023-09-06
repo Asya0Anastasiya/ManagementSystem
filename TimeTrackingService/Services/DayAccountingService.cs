@@ -18,11 +18,13 @@ namespace TimeTrackingService.Services
             _mapper = mapper;
         }
 
-        public async Task AddDay(DayAccountingModel daysAccountingModel, Guid id)
+        public async Task AddDay(CreateDayModel dayModel)
         {
-            var daysAccounting = _mapper.Map<DayAccounting>(daysAccountingModel);
+            var daysAccounting = _mapper.Map<DayAccounting>(dayModel);
             daysAccounting.IsConfirmed = false;
-            daysAccounting.UserId = id;
+            daysAccounting.Day = dayModel.Date.Day;
+            daysAccounting.Month = dayModel.Date.Month;
+            daysAccounting.Year = dayModel.Date.Year;
             await _repository.AddDay(daysAccounting);
         }
 

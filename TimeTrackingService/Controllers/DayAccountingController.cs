@@ -17,14 +17,16 @@ namespace TimeTrackingService.Controllers
             _service = service;
         }
 
-        [HttpPost("addDay")]
-        public async Task<IActionResult> PostDayAsync([FromBody] DayAccountingModel dayAccounting, Guid id)
+        [HttpPost]
+        [Route("addDay")]
+        public async Task<IActionResult> PostDayAsync(CreateDayModel dayModel)
         {
-            await _service.AddDay(dayAccounting, id);
+            await _service.AddDay(dayModel);
             return Ok();
         }
 
-        [HttpPost("addDays")]
+        [HttpPost]
+        [Route("addDays")]
         public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<DayAccountingModel> daysAccounting, Guid id)
         {
             await _service.AddRangeOfDays(daysAccounting, id);

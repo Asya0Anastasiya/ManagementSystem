@@ -15,16 +15,16 @@ namespace TimeTrackingService.Models.Entities
         public int Hours { get; set; } = 8;
 
         [Required, Range(1, 31)]
-        public int Day { get; set; }
+        public int Day { get; set; } = 1;
 
         [Required, Range(1, 12)]
-        public int Month { get; set; }
+        public int Month { get; set; } = 1;
 
         [Required]
-        public int Year { get; set; }
+        public int Year { get; set; } = 1;
 
         [Required]
-        public AccountingTypes AccountingType { get; set; }
+        public AccountingTypes? AccountingType { get; set; }
 
         [Required]
         public bool IsConfirmed { get; set; } = false;

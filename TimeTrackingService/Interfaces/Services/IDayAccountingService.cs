@@ -7,7 +7,7 @@ namespace TimeTrackingService.Interfaces.Services
 {
     public interface IDayAccountingService
     {
-        public Task AddDay(DayAccountingModel daysAccountingModel, Guid id);
+        public Task AddDay(CreateDayModel dayModel);
 
         public Task AddRangeOfDays(List<DayAccountingModel> days, Guid id);
 
