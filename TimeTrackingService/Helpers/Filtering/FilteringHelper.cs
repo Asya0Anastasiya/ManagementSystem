@@ -6,21 +6,15 @@ namespace TimeTrackingService.Helpers.Filtering
     {
         public List<DayAccounting> FilterDays(FilteringParameters parameters, List<DayAccounting> days)
         {
-            if (parameters.Month != null)
+            if (parameters.FromDate != null)
             {
-                days = days.Where(x => x.Month == parameters.Month 
+                days = days.Where(x => x.Date >= parameters.FromDate 
                 && x.UserId == parameters.UserId).ToList();
             }
 
-            if (parameters.FromDay != null)
+            if (parameters.TillDate != null)
             {
-                days = days.Where(x => x.Day >= parameters.FromDay
-                && x.UserId == parameters.UserId).ToList();
-            }
-
-            if (parameters.TillDay != null)
-            {
-                days = days.Where(x => x.Day <= parameters.TillDay
+                days = days.Where(x => x.Date <= parameters.TillDate
                 && x.UserId == parameters.UserId).ToList();
             }
 
@@ -30,7 +24,7 @@ namespace TimeTrackingService.Helpers.Filtering
                 && x.UserId == parameters.UserId).ToList();
             }
 
-            return days;
+            return days.OrderBy(day => day.Date).ToList();
         }
     }
 }

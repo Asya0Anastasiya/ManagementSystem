@@ -9,12 +9,6 @@ namespace TimeTrackingService.Data
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<DaysAccounting>()
-        //        .HasNoKey();
-        //}
-
         public DbSet<DayAccounting> DaysAccounting { get; set;}
     }
 }

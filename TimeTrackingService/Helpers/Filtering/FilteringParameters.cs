@@ -6,11 +6,9 @@ namespace TimeTrackingService.Helpers.Filtering
     {
         public Guid UserId { get; set; }
 
-        public int? Month { get; set; }
+        public DateTime? FromDate { get; set; }
 
-        public int? FromDay { get; set; }
-
-        public int? TillDay { get; set; }
+        public DateTime? TillDate { get; set; }
 
         public AccountingTypes? AccountingType { get; set; }
     }

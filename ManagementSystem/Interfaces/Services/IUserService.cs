@@ -15,6 +15,8 @@ namespace UserServiceAPI.Interfaces.Services
 
         public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
+        public int GetUsersCount();
+
         public Task ChangePassword(Guid id, string oldPassword, string newPassword);
 
         public Task<UserInfoModel> GetUserInfo(Guid id);

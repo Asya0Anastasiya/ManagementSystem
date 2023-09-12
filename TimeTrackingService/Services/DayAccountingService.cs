@@ -3,6 +3,7 @@ using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Migrations;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 
@@ -28,12 +29,15 @@ namespace TimeTrackingService.Services
             await _repository.AddDay(daysAccounting);
         }
 
-        public async Task AddRangeOfDays(List<DayAccountingModel> daysModel, Guid id)
+        public async Task AddRangeOfDays(List<CreateDayModel> daysModel)
         {
             var days = _mapper.Map<List<DayAccounting>>(daysModel);
             for (var i = 0; i < daysModel.Count; i++)
             {
-                days[i].UserId = id;
+                days[i].IsConfirmed = false;
+                days[i].Day = daysModel[i].Date.Day;
+                days[i].Month = daysModel[i].Date.Month;
+                days[i].Year = daysModel[i].Date.Year;
             }
             await _repository.AddRangeOfDays(days);
         }

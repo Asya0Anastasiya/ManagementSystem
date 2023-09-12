@@ -18,6 +18,7 @@ namespace TimeTrackingService.Migrations
                     Day = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
                     AccountingType = table.Column<int>(type: "int", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

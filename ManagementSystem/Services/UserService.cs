@@ -53,6 +53,11 @@ namespace UserServiceAPI.Services
             return _mapper.Map<List<UserInfoModel>>(users);
         }
 
+        public int GetUsersCount()
+        {
+            return _userRepository.GetUsersCount();
+        }
+
         public async Task<UserInfoModel> GetUserInfo(Guid id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);

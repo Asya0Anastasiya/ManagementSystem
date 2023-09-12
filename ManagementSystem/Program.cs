@@ -30,6 +30,7 @@ builder.Services.AddCors(option =>
         builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
+        builder.WithExposedHeaders("X-Pagination");
     });
 });
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer(

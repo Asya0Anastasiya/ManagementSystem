@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Services;
@@ -27,18 +28,25 @@ namespace TimeTrackingService.Controllers
 
         [HttpPost]
         [Route("addDays")]
-        public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<DayAccountingModel> daysAccounting, Guid id)
+        public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<CreateDayModel> daysAccounting)
         {
-            await _service.AddRangeOfDays(daysAccounting, id);
+            await _service.AddRangeOfDays(daysAccounting);
             return Ok();
         }
 
         [HttpGet]
         [Route("getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}")]
-        public async Task<List<DayAccountingModel>> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
             var pagination = new PaginationParameters(pageNumber, pageSize);
-            return await _service.GetUsersDays(parameters, pagination);
+            var days = await _service.GetUsersDays(parameters, pagination);
+            var metadata = new
+            {
+                pageSize,
+                pageNumber
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            return Ok(days);
         }
 
         [HttpDelete("removeDay")]

@@ -10,6 +10,8 @@ namespace UserServiceAPI.Interfaces.Repositories
 
         public Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
+        public int GetUsersCount();
+
         public Task<UserEntity> GetUserByEmailAsync(string email);
 
         public Task UpdateUserAsync(UserEntity userEntity);

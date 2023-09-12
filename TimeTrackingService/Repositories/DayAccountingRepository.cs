@@ -34,8 +34,9 @@ namespace TimeTrackingService.Repositories
             var days = await _timeTrackingContext.DaysAccounting.ToListAsync();
             FilteringHelper filteringHelper = new();
             days = filteringHelper.FilterDays(filtering, days);
+            return days;
             //AsNoTracking??
-            return PagedList<DayAccounting>.ToPagedItems(days, pagination.PageNumber, pagination.PageSize);
+            //return PagedList<DayAccounting>.ToPagedItems(days, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task RemoveDay(Guid id)

@@ -24,6 +24,9 @@ namespace TimeTrackingService.Models.Entities
         public int Year { get; set; } = 1;
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public AccountingTypes? AccountingType { get; set; }
 
         [Required]

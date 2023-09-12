@@ -25,6 +25,7 @@ builder.Services.AddCors(option =>
         builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
+        builder.WithExposedHeaders("X-Pagination");
     });
 });
 

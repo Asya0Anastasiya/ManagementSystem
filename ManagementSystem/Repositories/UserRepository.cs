@@ -39,6 +39,11 @@ namespace UserServiceAPI.Repositories
             return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
+        public int GetUsersCount()
+        {
+            return _context.Users.Count();
+        }
+
         public async Task UpdateUserAsync(UserEntity user)
         {
             _context.Users.Update(user);

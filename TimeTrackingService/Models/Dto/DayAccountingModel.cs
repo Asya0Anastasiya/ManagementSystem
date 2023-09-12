@@ -21,6 +21,9 @@ namespace TimeTrackingService.Models.Dto
         public int Year { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public AccountingTypes AccountingType { get; set; }
 
         [Required]

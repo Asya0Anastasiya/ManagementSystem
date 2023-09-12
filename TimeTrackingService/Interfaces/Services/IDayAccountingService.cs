@@ -9,7 +9,7 @@ namespace TimeTrackingService.Interfaces.Services
     {
         public Task AddDay(CreateDayModel dayModel);
 
-        public Task AddRangeOfDays(List<DayAccountingModel> days, Guid id);
+        public Task AddRangeOfDays(List<CreateDayModel> days);
 
         public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, PaginationParameters pagination);
 
