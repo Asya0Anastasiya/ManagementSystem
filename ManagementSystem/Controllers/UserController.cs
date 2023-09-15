@@ -25,7 +25,6 @@ namespace UserServiceAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpGet("getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}")]
         public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize) 
         {
@@ -43,9 +42,9 @@ namespace UserServiceAPI.Controllers
         }
 
         [HttpPut("changePassword")]
-        public async Task<IActionResult> ChangePasswordAsync(Guid id, string oldPassword, string newPassword)
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {
-            await _userService.ChangePassword(id, oldPassword, newPassword);
+            await _userService.ChangePassword(model.Id, model.OldPassword, model.NewPassword);
             return Ok();
         }
 
@@ -61,8 +60,7 @@ namespace UserServiceAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getUser/{id}/month/{month}")]
-        // получать месяц с UI
+        [Route("getUser/{id}")]
         public async Task<IActionResult> GetUserInfo([FromRoute] Guid id)
         {
             return Ok(await _userService.GetUserInfo(id));
@@ -72,15 +70,16 @@ namespace UserServiceAPI.Controllers
         [Route("removeUser/{id}")]
         public async Task<IActionResult> DeleteUserAsync(Guid id)
         {
+            // "наверное нам не надо полностью удалять пользователя".
+            // Помню, но это, наверное, потом надо добавить "активный чи не"
             await _userService.DeleteUserAsync(id);
             return Ok();
         }
 
         [HttpPut]
-        [Route("updateUser/{id}")]
-        public async Task<IActionResult> UpdateUserAsync([FromBody] UserInfoModel model)
+        [Route("updateUser")]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserModel model)
         {
-            // ne rabotajet, prichodit ne ta model
             await _userService.UpdateUserAsync(model);
             return Ok();
         }

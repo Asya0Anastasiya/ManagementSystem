@@ -103,20 +103,26 @@ namespace UserServiceAPI.Services
             }
             if (!BCrypt.Net.BCrypt.Verify(oldPassword, currentUser.Password))
             {
-                throw new InternalException("Wrong password!!!");
+                throw new InternalException("Wrong password");
             }
             currentUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             await _userRepository.UpdateUserAsync(currentUser);
         }
 
-        public async Task UpdateUserAsync(UserInfoModel model)
+        public async Task UpdateUserAsync(UpdateUserModel model)
         {
+            // добавила AsNoTracking, иначе выскакивала ошибка, что EF не может
+            // обновить сущность, так как две сущности с одинаковыми айди трекаются
             var user = await _userRepository.GetUserByIdAsync(model.Id);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
-            user = _mapper.Map<UserEntity>(model);
+            user.FirstName = model.FirstName.Trim(); 
+            user.LastName = model.LastName.Trim();
+            user.Email = model.Email.Trim();
+            user.PhoneNumber = model.PhoneNumber.Trim();
+            //user = _mapper.Map<UserEntity>(model);
             await _userRepository.UpdateUserAsync(user);
         }
 
@@ -145,10 +151,10 @@ namespace UserServiceAPI.Services
 
             var image = new Image
             {
-                User = user,
+                UserId = userId,
                 Data = memoryStream.ToArray()
             };
-
+            await _imageRepository.RemoveUserImageAsync(image.UserId);
             await _imageRepository.SetUserImageAsync(image);
         }
 

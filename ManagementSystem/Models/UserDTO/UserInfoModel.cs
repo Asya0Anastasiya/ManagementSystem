@@ -4,7 +4,6 @@ namespace UserServiceAPI.Models.UserDto
 {
     public class UserInfoModel
     {
-        // UserInfoModel SignUpModel не одно и то же ли???
         [Required]
         public Guid Id { get; set; }
 
@@ -16,6 +15,8 @@ namespace UserServiceAPI.Models.UserDto
 
         [Required]
         public string Email { get; set; }
+
+        public string PhoneNumber { get; set; }
 
         [Required]
         [MaxLength(20)]

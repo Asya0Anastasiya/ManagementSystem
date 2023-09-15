@@ -23,7 +23,7 @@ namespace UserServiceAPI.Interfaces.Services
 
         public Task DeleteUserAsync(Guid id);
 
-        public Task UpdateUserAsync(UserInfoModel user);
+        public Task UpdateUserAsync(UpdateUserModel user);
 
         public Task SetUserImageAsync(Guid userId, IFormFile file);
 

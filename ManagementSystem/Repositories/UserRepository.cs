@@ -32,10 +32,9 @@ namespace UserServiceAPI.Repositories
         public async Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters,
                                                           PaginationParameters pagination)
         {
-            var users = await _context.Users.ToListAsync();
+            var users = _context.Users.AsQueryable();
             FilteringHelper filteringHelper = new();
             users = filteringHelper.FilterUsers(parameters, users);
-            // в сервис? 
             return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
@@ -58,7 +57,8 @@ namespace UserServiceAPI.Repositories
 
         public async Task<UserEntity> GetUserByIdAsync(Guid id)
         {
-            return await _context.Users.FindAsync(id);
+            //return await _context.Users.FindAsync(id);
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
         }
     }
 }

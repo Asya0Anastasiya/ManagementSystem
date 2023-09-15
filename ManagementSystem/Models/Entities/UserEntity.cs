@@ -43,6 +43,7 @@ namespace UserServiceAPI.Models.Entities
         public string PhoneNumber { get; set; }
 
         [Required]
+        // !!!!!!!!!!!!!!!!
         [MaxLength(65)]
         public string Password { get; set; } = "";
     }

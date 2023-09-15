@@ -24,5 +24,16 @@ namespace UserServiceAPI.Repositories
         {
             return await _context.Images.FirstOrDefaultAsync(x => x.UserId == userId);
         }
+
+        public async Task RemoveUserImageAsync(Guid userId)
+        {
+            var image = await GetUserImageAsync(userId);
+
+            if (image != null)
+            {
+                _context.Images.Remove(await GetUserImageAsync(userId));
+                await _context.SaveChangesAsync();
+            }
+        }      
     }
 }

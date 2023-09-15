@@ -16,7 +16,7 @@ namespace UserServiceAPI.Models.Entities
         [Required]
         public Guid UserId { get; set; }
 
-        [Required]
-        public UserEntity User { get; set; }
+        //[Required]
+        //public UserEntity User { get; set; }
     }
 }
