@@ -31,12 +31,17 @@ namespace TimeTrackingService.Repositories
 
         public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination)
         {
-            var days = await _timeTrackingContext.DaysAccounting.ToListAsync();
+            var days = _timeTrackingContext.DaysAccounting.AsQueryable();
             FilteringHelper filteringHelper = new();
             days = filteringHelper.FilterDays(filtering, days);
-            return days;
+            return await days.ToListAsync();
             //AsNoTracking??
             //return PagedList<DayAccounting>.ToPagedItems(days, pagination.PageNumber, pagination.PageSize);
+        }
+
+        public async Task<int> GetUnconfirmedDaysCount(Guid id)
+        {
+            return await _timeTrackingContext.DaysAccounting.Where(x => x.UserId == id && x.IsConfirmed == false).CountAsync();
         }
 
         public async Task RemoveDay(Guid id)
@@ -51,9 +56,9 @@ namespace TimeTrackingService.Repositories
             await _timeTrackingContext.SaveChangesAsync();
         }
 
-        public async Task UpdateDay(DayAccounting daysAccounting)
+        public async Task ApproveDayAsync(DayAccounting dayAccounting)
         {
-            _timeTrackingContext.DaysAccounting.Update(daysAccounting);
+            _timeTrackingContext.DaysAccounting.Update(dayAccounting);
             await _timeTrackingContext.SaveChangesAsync();
         }
 
@@ -62,51 +67,52 @@ namespace TimeTrackingService.Repositories
             return await _timeTrackingContext.DaysAccounting.FindAsync(id);
         }
 
-        public int GetUsersWorkDaysCount(Guid id, int month, int year)
+        public async Task<int> GetUsersWorkDaysCount(Guid id, int month, int year)
         {
-            var days = _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
-                && x.AccountingType == AccountingTypes.Work);
-            return days.Count();
+                && x.AccountingType == AccountingTypes.Work).CountAsync();
+            return daysCount;
         }
 
-        public int GetUsersSickDaysCount(Guid id, int month, int year)
+        public async Task<int> GetUsersSickDaysCount(Guid id, int month, int year)
         {
-            var days = _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
-                && x.AccountingType == AccountingTypes.Sick);
-            return days.Count();
+                && x.AccountingType == AccountingTypes.Sick).CountAsync();
+            return daysCount;
         }
 
-        public int GetUsersHolidaysCount(Guid id, int month, int year)
+        public async Task<int> GetUsersHolidaysCount(Guid id, int month, int year)
         {
-            var days = _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
-                && x.AccountingType == AccountingTypes.Holiday);
-            return days.Count();
+                && x.AccountingType == AccountingTypes.Holiday).CountAsync();
+            return daysCount;
         }
 
-        public int GetPaidDaysCount(Guid id, int month, int year)
+        public async Task<int> GetPaidDaysCount(Guid id, int month, int year)
         {
-            return GetUsersWorkDaysCount(id, month, year) 
-                    + GetUsersSickDaysCount(id, month, year) 
-                    + GetUsersHolidaysCount(id, month, year);
+            var daysCount = await GetUsersWorkDaysCount(id, month, year) 
+                    + await GetUsersSickDaysCount(id, month, year) 
+                    + await GetUsersHolidaysCount(id, month, year);
+            return daysCount;
         }
 
-        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year)
+        public async Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year)
         {
             UsersDaysModel model = new UsersDaysModel
             {
-                WorkDaysCount = GetUsersWorkDaysCount(id, month, year),
-                SickDaysCount = GetUsersSickDaysCount(id, month, year),
-                HolidaysCount = GetUsersHolidaysCount(id, month, year),
-                PaidDaysCount = GetPaidDaysCount(id, month, year)
+                WorkDaysCount = await GetUsersWorkDaysCount(id, month, year),
+                SickDaysCount = await GetUsersSickDaysCount(id, month, year),
+                HolidaysCount = await GetUsersHolidaysCount(id, month, year),
+                PaidDaysCount = await GetPaidDaysCount(id, month, year)
             };
             return model;
         }

@@ -6,6 +6,10 @@ namespace UserServiceAPI.Helpers.Filtering
     {
         public IQueryable<UserEntity> FilterUsers(FilteringParameters parameters, IQueryable<UserEntity> users)
         {
+            if (parameters == null)
+            {
+                return users;
+            }
             if (parameters.FirstName != null)
             {
                 users = users.Where(x => x.FirstName.Contains(parameters.FirstName));
@@ -20,7 +24,7 @@ namespace UserServiceAPI.Helpers.Filtering
             }
             if (parameters.PhoneNumber != null)
             {
-                users = users.Where(x => x.FirstName.StartsWith(parameters.FirstName));
+                users = users.Where(x => x.PhoneNumber.StartsWith(parameters.PhoneNumber));
             }
             return users;
         }

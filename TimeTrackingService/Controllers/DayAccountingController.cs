@@ -4,7 +4,6 @@ using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
-using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Controllers
 {
@@ -49,6 +48,14 @@ namespace TimeTrackingService.Controllers
             return Ok(days);
         }
 
+        [HttpGet]
+        [Route("getUnconfirmedDaysCount/{id}")]
+        public async Task<IActionResult> GetUnconfirmedDaysCount(Guid id)
+        {
+            var count = await _service.GetUnconfirmedDaysCount(id);
+            return Ok(count);
+        }
+
         [HttpDelete("removeDay")]
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
@@ -63,50 +70,43 @@ namespace TimeTrackingService.Controllers
             return Ok();
         }
 
-        [HttpPut("updateDay")]
-        public async Task<IActionResult> UpdateDayAsync(DayAccounting day)
+        [HttpGet]
+        [Route("approveDay/{id}")]
+        public async Task<IActionResult> ApproveDayAsync(Guid id)
         {
-            await _service.UpdateDay(day);
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("approveDay")]
-        public async Task<IActionResult> ApproveDayAsync([FromBody] DayAccounting dayAccounting)
-        {
-            await _service.ApproveDay(dayAccounting.Id);
+            await _service.ApproveDayAsync(id);
             return Ok("Successfully approved");
         }
 
-        [HttpGet("workDaysCount")]
-        public int GetWorkDays(Guid id, int month, int year)
-        {
-            return _service.GetUsersWorkDaysCount(id, month, year);
-        }
+        //[HttpGet("workDaysCount")]
+        //public int GetWorkDays(Guid id, int month, int year)
+        //{
+        //    return _service.GetUsersWorkDaysCount(id, month, year);
+        //}
 
-        [HttpGet("sickDaysCount")]
-        public int GetSickDays(Guid id, int month, int year)
-        {
-            return _service.GetUsersSickDaysCount(id, month, year);
-        }
+        //[HttpGet("sickDaysCount")]
+        //public int GetSickDays(Guid id, int month, int year)
+        //{
+        //    return _service.GetUsersSickDaysCount(id, month, year);
+        //}
         
-        [HttpGet("holidaysCount")]
-        public int GetHoliday(Guid id, int month, int year)
-        {
-            return _service.GetUsersHolidaysCount(id, month, year);
-        }
+        //[HttpGet("holidaysCount")]
+        //public int GetHoliday(Guid id, int month, int year)
+        //{
+        //    return _service.GetUsersHolidaysCount(id, month, year);
+        //}
 
-        [HttpGet("paidDaysCount")]
-        public int GetPaidDaysCount(Guid id, int month, int year)
-        {
-            return _service.GetPaidDaysCount(id, month, year);
-        }
+        //[HttpGet("paidDaysCount")]
+        //public int GetPaidDaysCount(Guid id, int month, int year)
+        //{
+        //    return _service.GetPaidDaysCount(id, month, year);
+        //}
 
         [HttpGet]
         [Route("getUsersDaysInfo/{userId}/month/{month}/year/{year}")]
-        public UsersDaysModel GetUsersDaysInfo(Guid userId, int month, int year)
+        public async Task<UsersDaysModel> GetUsersDaysInfo(Guid userId, int month, int year)
         {
-            return _service.GetUsersDaysInfo(userId, month, year);
+            return await _service.GetUsersDaysInfo(userId, month, year);
         }
     }
 }

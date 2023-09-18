@@ -4,6 +4,7 @@ using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Mappers;
+using TimeTrackingService.Middleware;
 using TimeTrackingService.Repositories;
 using TimeTrackingService.Services;
 
@@ -48,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
 app.UseAuthorization();

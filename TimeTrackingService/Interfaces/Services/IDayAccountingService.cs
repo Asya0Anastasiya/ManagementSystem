@@ -13,22 +13,22 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, PaginationParameters pagination);
 
+        public Task<int> GetUnconfirmedDaysCount(Guid id);
+
         public Task RemoveDay(Guid id);
 
         public Task RemoveRangeOfDays(List<Guid> ids);
 
-        public Task UpdateDay(DayAccounting day);
+        public Task ApproveDayAsync(Guid id);
 
-        public Task ApproveDay(Guid id);
+        //public int GetUsersWorkDaysCount(Guid id, int month, int year);
 
-        public int GetUsersWorkDaysCount(Guid id, int month, int year);
+        //public int GetUsersSickDaysCount(Guid id, int month, int year);
 
-        public int GetUsersSickDaysCount(Guid id, int month, int year);
+        //public int GetUsersHolidaysCount(Guid id, int month, int year);
 
-        public int GetUsersHolidaysCount(Guid id, int month, int year);
+        //public int GetPaidDaysCount(Guid id, int month, int year);
 
-        public int GetPaidDaysCount(Guid id, int month, int year);
-
-        public UsersDaysModel GetUsersDaysInfo(Guid id, int month, int year);
+        public Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year);
     }
 }

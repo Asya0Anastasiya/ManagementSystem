@@ -46,8 +46,7 @@ namespace UserServiceAPI.Services
             await _userRepository.CreateUserAsync(user);
         }
 
-        public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters,
-                                                            PaginationParameters pagination)
+        public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination)
         {
             var users = await _userRepository.GetUsersAsync(parameters, pagination);
             return _mapper.Map<List<UserInfoModel>>(users);
