@@ -1,7 +1,7 @@
-﻿using UserServiceAPI.Data;
-using UserServiceAPI.Models.Entities;
+﻿using UserService.Data;
+using UserService.Models.Entities;
 
-namespace UserServiceAPI.Interfaces.Repositories
+namespace UserService.Interfaces.Repositories
 {
     public interface IImageRepository 
     {

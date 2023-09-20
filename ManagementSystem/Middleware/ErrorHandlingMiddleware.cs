@@ -1,7 +1,7 @@
-﻿using UserServiceAPI.Exceptions;
+﻿using UserService.Exceptions;
 using System.Net;
 
-namespace UserServiceAPI.Middleware
+namespace UserService.Middleware
 {
     public class ErrorHandlingMiddleware
     {

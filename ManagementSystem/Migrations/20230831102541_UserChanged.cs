@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UserServiceAPI.Migrations
+namespace UserService.Migrations
 {
     public partial class UserChanged : Migration
     {

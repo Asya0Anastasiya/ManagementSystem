@@ -1,8 +1,8 @@
 ﻿using TimeTrackingService.Models.Entities;
-using UserServiceAPI.Clients;
-using UserServiceAPI.Interfaces.Repositories;
+using UserService.Clients;
+using UserService.Interfaces.Repositories;
 
-namespace UserServiceAPI.Repositories
+namespace UserService.Repositories
 {
     public class DaysAccountingClientRepository : IDaysAccountingClientRepository
     {

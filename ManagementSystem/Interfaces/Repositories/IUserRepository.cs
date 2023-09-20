@@ -1,8 +1,8 @@
-﻿using UserServiceAPI.Helpers;
-using UserServiceAPI.Helpers.Pagination;
-using UserServiceAPI.Models.Entities;
+﻿using UserService.Helpers;
+using UserService.Helpers.Pagination;
+using UserService.Models.Entities;
 
-namespace UserServiceAPI.Interfaces.Repositories
+namespace UserService.Interfaces.Repositories
 {
     public interface IUserRepository
     {

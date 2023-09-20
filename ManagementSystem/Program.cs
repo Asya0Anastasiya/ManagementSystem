@@ -1,25 +1,23 @@
 using AutoMapper;
-using UserServiceAPI.Data;
-using UserServiceAPI.Interfaces.Repositories;
-using UserServiceAPI.Interfaces.Services;
-using UserServiceAPI.Mappers;
-using UserServiceAPI.Middleware;
-using UserServiceAPI.Repositories;
-using UserServiceAPI.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using UserService.Data;
+using UserService.Interfaces.Repositories;
+using UserService.Interfaces.Services;
+using UserService.Mappers;
+using UserService.Middleware;
+using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Refit;
+using UserService.Clients;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Refit;
-using UserServiceAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 string BaseUrl = "https://localhost:44367";
 builder.Services.AddScoped<IDayAccountingClient>(x => RestService.For<IDayAccountingClient>(BaseUrl));
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IDaysAccountingClientRepository, DaysAccountingClientRepository>();
@@ -61,32 +59,32 @@ var mappingConfig = new MapperConfiguration(x =>
 var mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateAudience = false,
-        ValidateIssuer = false,
-    };
-});
+//builder.Services.AddAuthentication(x =>
+//{
+//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(x =>
+//{
+//    x.RequireHttpsMetadata = false;
+//    x.SaveToken = true;
+//    x.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(
+//                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+//        ValidateAudience = false,
+//        ValidateIssuer = false,
+//    };
+//});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -97,7 +95,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

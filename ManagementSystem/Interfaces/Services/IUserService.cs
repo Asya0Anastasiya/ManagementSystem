@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using TimeTrackingService.Models.Entities;
-using UserServiceAPI.Helpers;
-using UserServiceAPI.Helpers.Filtering;
-using UserServiceAPI.Helpers.Pagination;
-using UserServiceAPI.Models.UserDto;
+using UserService.Helpers;
+using UserService.Helpers.Filtering;
+using UserService.Helpers.Pagination;
+using UserService.Models.UserDto;
 
-namespace UserServiceAPI.Interfaces.Services
+namespace UserService.Interfaces.Services
 {
     public interface IUserService
     {

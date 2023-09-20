@@ -1,4 +1,4 @@
-﻿namespace UserServiceAPI.Helpers.Pagination
+﻿namespace UserService.Helpers.Pagination
 {
     public class PaginationParameters
     {

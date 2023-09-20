@@ -1,6 +1,6 @@
-﻿using UserServiceAPI.Models.Entities;
+﻿using UserService.Models.Entities;
 
-namespace UserServiceAPI.Helpers.Filtering
+namespace UserService.Helpers.Filtering
 {
     public class FilteringHelper
     {

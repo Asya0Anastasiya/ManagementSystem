@@ -56,6 +56,7 @@ namespace TimeTrackingService.Controllers
             return Ok(count);
         }
 
+        // add to ocelot
         [HttpDelete("removeDay")]
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
@@ -63,6 +64,7 @@ namespace TimeTrackingService.Controllers
             return Ok();
         }
 
+        //add to ocelot
         [HttpDelete("removeDays")]
         public async Task<IActionResult> RemoveDaysRangeAsync(List<Guid> ids)
         {
@@ -77,30 +79,6 @@ namespace TimeTrackingService.Controllers
             await _service.ApproveDayAsync(id);
             return Ok("Successfully approved");
         }
-
-        //[HttpGet("workDaysCount")]
-        //public int GetWorkDays(Guid id, int month, int year)
-        //{
-        //    return _service.GetUsersWorkDaysCount(id, month, year);
-        //}
-
-        //[HttpGet("sickDaysCount")]
-        //public int GetSickDays(Guid id, int month, int year)
-        //{
-        //    return _service.GetUsersSickDaysCount(id, month, year);
-        //}
-        
-        //[HttpGet("holidaysCount")]
-        //public int GetHoliday(Guid id, int month, int year)
-        //{
-        //    return _service.GetUsersHolidaysCount(id, month, year);
-        //}
-
-        //[HttpGet("paidDaysCount")]
-        //public int GetPaidDaysCount(Guid id, int month, int year)
-        //{
-        //    return _service.GetPaidDaysCount(id, month, year);
-        //}
 
         [HttpGet]
         [Route("getUsersDaysInfo/{userId}/month/{month}/year/{year}")]

@@ -1,12 +1,12 @@
-﻿using UserServiceAPI.Data;
-using UserServiceAPI.Interfaces.Repositories;
-using UserServiceAPI.Models.Entities;
+﻿using UserService.Data;
+using UserService.Interfaces.Repositories;
+using UserService.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using UserServiceAPI.Helpers.Pagination;
-using UserServiceAPI.Helpers.Filtering;
-using UserServiceAPI.Helpers;
+using UserService.Helpers.Pagination;
+using UserService.Helpers.Filtering;
+using UserService.Helpers;
 
-namespace UserServiceAPI.Repositories
+namespace UserService.Repositories
 {
     public class UserRepository : IUserRepository
     {

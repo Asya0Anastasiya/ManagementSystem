@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using UserServiceAPI.Exceptions;
-using UserServiceAPI.Helpers;
-using UserServiceAPI.Helpers.Filtering;
-using UserServiceAPI.Helpers.Pagination;
-using UserServiceAPI.Interfaces.Repositories;
-using UserServiceAPI.Interfaces.Services;
-using UserServiceAPI.Models.Entities;
-using UserServiceAPI.Models.Enums;
-using UserServiceAPI.Models.UserDto;
+using UserService.Exceptions;
+using UserService.Helpers;
+using UserService.Helpers.Filtering;
+using UserService.Helpers.Pagination;
+using UserService.Interfaces.Repositories;
+using UserService.Interfaces.Services;
+using UserService.Models.Entities;
+using UserService.Models.Enums;
+using UserService.Models.UserDto;
 
-namespace UserServiceAPI.Services
+namespace UserService.Services
 {
     public class UserService : IUserService
     {

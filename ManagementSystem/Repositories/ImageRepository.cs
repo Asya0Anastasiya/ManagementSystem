@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserServiceAPI.Data;
-using UserServiceAPI.Interfaces.Repositories;
-using UserServiceAPI.Models.Entities;
+using UserService.Data;
+using UserService.Interfaces.Repositories;
+using UserService.Models.Entities;
 
-namespace UserServiceAPI.Repositories
+namespace UserService.Repositories
 {
     public class ImageRepository : IImageRepository
     {

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceAPI", "ManagementSystem\UserServiceAPI.csproj", "{54AB2939-1E27-4B9B-86D0-A795149985DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "ManagementSystem\UserService.csproj", "{54AB2939-1E27-4B9B-86D0-A795149985DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTrackingService", "TimeTrackingService\TimeTrackingService.csproj", "{F8CCC350-03F5-4BE9-8F77-CEC2664969DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcelotService", "OcelotService\OcelotService.csproj", "{7C32602A-6879-4EB0-AC47-B5CA56B77848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F8CCC350-03F5-4BE9-8F77-CEC2664969DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8CCC350-03F5-4BE9-8F77-CEC2664969DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8CCC350-03F5-4BE9-8F77-CEC2664969DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C32602A-6879-4EB0-AC47-B5CA56B77848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C32602A-6879-4EB0-AC47-B5CA56B77848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C32602A-6879-4EB0-AC47-B5CA56B77848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C32602A-6879-4EB0-AC47-B5CA56B77848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

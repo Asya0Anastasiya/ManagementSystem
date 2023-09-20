@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UserServiceAPI.Data;
+using UserService.Data;
 
 #nullable disable
 
-namespace UserServiceAPI.Migrations
+namespace UserService.Migrations
 {
     [DbContext(typeof(Context))]
     [Migration("20230830215831_UsersImages")]

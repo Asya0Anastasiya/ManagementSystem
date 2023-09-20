@@ -1,7 +1,7 @@
 ﻿using Refit;
 using TimeTrackingService.Models.Entities;
 
-namespace UserServiceAPI.Clients
+namespace UserService.Clients
 {
     public interface IDayAccountingClient
     {

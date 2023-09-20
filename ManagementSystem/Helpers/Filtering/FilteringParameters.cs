@@ -1,4 +1,4 @@
-﻿namespace UserServiceAPI.Helpers
+﻿namespace UserService.Helpers
 {
     public class FilteringParameters
     {

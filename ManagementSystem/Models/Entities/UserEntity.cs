@@ -1,8 +1,8 @@
-﻿using UserServiceAPI.Models.Enums;
+﻿using UserService.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UserServiceAPI.Models.Entities
+namespace UserService.Models.Entities
 {
     public class UserEntity
     {

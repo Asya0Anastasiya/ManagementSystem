@@ -1,12 +1,11 @@
-﻿using UserServiceAPI.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using UserService.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using UserServiceAPI.Models.UserDto;
-using UserServiceAPI.Helpers.Pagination;
-using UserServiceAPI.Helpers;
+using UserService.Models.UserDto;
+using UserService.Helpers.Pagination;
+using UserService.Helpers;
 using Newtonsoft.Json;
 
-namespace UserServiceAPI.Controllers
+namespace UserService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

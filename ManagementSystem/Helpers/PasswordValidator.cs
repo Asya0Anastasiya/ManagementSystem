@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using UserServiceAPI.Exceptions;
+using UserService.Exceptions;
 
-namespace UserServiceAPI.Helpers
+namespace UserService.Helpers
 {
     public class PasswordValidator
     {

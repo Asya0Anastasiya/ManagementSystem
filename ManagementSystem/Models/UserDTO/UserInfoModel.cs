@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserServiceAPI.Models.UserDto
+namespace UserService.Models.UserDto
 {
     public class UserInfoModel
     {

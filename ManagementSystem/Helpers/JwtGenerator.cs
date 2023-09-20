@@ -3,23 +3,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace UserServiceAPI.Helpers
+namespace UserService.Helpers
 {
     public class JwtGenerator
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
-        public JwtGenerator(IConfiguration _configuration)
+        public JwtGenerator(IConfiguration configuration)
         {
-                configuration = _configuration;
+                _configuration = configuration;
         }
         public string CreateJwt(string role, string email, Guid id)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Secrets:secretKey"]));
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Role, role),
+                new Claim("role", role),
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.NameIdentifier, id.ToString())
             });

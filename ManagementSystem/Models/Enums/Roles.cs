@@ -1,4 +1,4 @@
-﻿namespace UserServiceAPI.Models.Enums
+﻿namespace UserService.Models.Enums
 {
     public enum Roles
     {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using UserServiceAPI.Models.Entities;
-using UserServiceAPI.Models.UserDto;
+using UserService.Models.Entities;
+using UserService.Models.UserDto;
 
-namespace UserServiceAPI.Mappers
+namespace UserService.Mappers
 {
     public class AutoMappers : Profile
     {
