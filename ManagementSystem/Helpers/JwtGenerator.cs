@@ -19,7 +19,7 @@ namespace UserService.Helpers
             var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Secrets:secretKey"]));
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim("role", role),
+                new Claim("Role", role),
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.NameIdentifier, id.ToString())
             });

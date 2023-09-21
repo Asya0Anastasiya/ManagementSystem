@@ -34,7 +34,14 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/signin",
@@ -58,7 +65,10 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/getUser/{id}",
@@ -70,7 +80,11 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/removeUser/{id}",
@@ -82,7 +96,14 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/updateUser/{id}",
@@ -94,7 +115,11 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/setUserImage/{userId}",
@@ -106,7 +131,11 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/getUserImage/{userId}",
@@ -118,7 +147,11 @@
           "Host": "localhost",
           "Port": 44307
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/addDay",
@@ -130,7 +163,11 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/addDays",
@@ -142,7 +179,11 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
@@ -154,7 +195,11 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/getUnconfirmedDaysCount/{id}",
@@ -166,7 +211,14 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/approveDay/{id}",
@@ -178,7 +230,14 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
@@ -190,7 +249,11 @@
           "Host": "localhost",
           "Port": 44367
         }
-      ]
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ]
 }
