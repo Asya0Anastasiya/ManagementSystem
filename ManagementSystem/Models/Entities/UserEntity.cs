@@ -24,19 +24,13 @@ namespace UserService.Models.Entities
         public string Email { get; set; }
 
         [Required]
-        [MaxLength(30)]
-        public string Department { get; set; }
+        public PositionEntity Position { get; set; }
 
         [Required]
-        [MaxLength(30)]
-        public string Position { get; set; }
+        public Guid PositionId { get; set; }
 
         [Required]
-        [MaxLength(20)]
-        public string Level { get; set; }
-
-        [Required]
-        public Roles Role { get; set; } = Roles.Admin; 
+        public Roles Role { get; set; } = Roles.User; 
 
         [Phone]
         [MaxLength(15)]
@@ -46,5 +40,7 @@ namespace UserService.Models.Entities
         // !!!!!!!!!!!!!!!!
         [MaxLength(65)]
         public string Password { get; set; } = "";
+
+        public byte[] UserImage { get; set; }
     }
 }

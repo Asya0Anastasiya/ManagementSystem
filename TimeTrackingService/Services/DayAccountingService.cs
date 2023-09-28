@@ -5,6 +5,7 @@ using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Exceptions;
 
 namespace TimeTrackingService.Services
 {
@@ -20,6 +21,12 @@ namespace TimeTrackingService.Services
 
         public async Task AddDay(CreateDayModel dayModel)
         {
+            var day = await _repository.CheckDayForExistanceAsync(dayModel.Date, dayModel.UserId);
+
+            if (day != null)
+            {
+                throw new InternalException($"That day -- {dayModel.Date} -- already exist");
+            }
             var daysAccounting = _mapper.Map<DayAccounting>(dayModel);
             daysAccounting.IsConfirmed = false;
             daysAccounting.Day = dayModel.Date.Day;
@@ -28,15 +35,25 @@ namespace TimeTrackingService.Services
             await _repository.AddDay(daysAccounting);
         }
 
-        public async Task AddRangeOfDays(List<CreateDayModel> daysModel)
+        public async Task AddRangeOfDays(List<CreateDayModel> daysModels)
         {
-            var days = _mapper.Map<List<DayAccounting>>(daysModel);
-            for (var i = 0; i < daysModel.Count; i++)
+            foreach (var dayModel in daysModels)
+            {
+                var day = await _repository.CheckDayForExistanceAsync(dayModel.Date, dayModel.UserId);
+
+                if (day != null)
+                {
+                    throw new InternalException($"One of days -- {dayModel.Date} -- already exist");
+                }
+            }
+
+            var days = _mapper.Map<List<DayAccounting>>(daysModels);
+            for (var i = 0; i < daysModels.Count; i++)
             {
                 days[i].IsConfirmed = false;
-                days[i].Day = daysModel[i].Date.Day;
-                days[i].Month = daysModel[i].Date.Month;
-                days[i].Year = daysModel[i].Date.Year;
+                days[i].Day = daysModels[i].Date.Day;
+                days[i].Month = daysModels[i].Date.Month;
+                days[i].Year = daysModels[i].Date.Year;
             }
             await _repository.AddRangeOfDays(days);
         }
@@ -53,9 +70,14 @@ namespace TimeTrackingService.Services
             return await _repository.GetUnconfirmedDaysCount(id);
         }
 
-        public async Task RemoveDay(Guid id)
+        public async Task RemoveDayAsync(Guid id)
         {
-            await _repository.RemoveDay(id);
+            var day = await _repository.GetDayByIdAsync(id);
+            if (day == null)
+            {
+                throw new NotFoundException("This day not found");
+            }
+            await _repository.RemoveDayAsync(day);
         }
 
         public async Task RemoveRangeOfDays(List<Guid> ids)

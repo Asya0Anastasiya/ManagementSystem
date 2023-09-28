@@ -44,9 +44,9 @@ namespace TimeTrackingService.Repositories
             return await _timeTrackingContext.DaysAccounting.Where(x => x.UserId == id && x.IsConfirmed == false).CountAsync();
         }
 
-        public async Task RemoveDay(Guid id)
+        public async Task RemoveDayAsync(DayAccounting day)
         {
-            _timeTrackingContext.Remove(id);
+            _timeTrackingContext.DaysAccounting.Remove(day);
             await _timeTrackingContext.SaveChangesAsync();
         }
 
@@ -107,7 +107,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year)
         {
-            UsersDaysModel model = new UsersDaysModel
+            UsersDaysModel model = new()
             {
                 WorkDaysCount = await GetUsersWorkDaysCount(id, month, year),
                 SickDaysCount = await GetUsersSickDaysCount(id, month, year),
@@ -115,6 +115,12 @@ namespace TimeTrackingService.Repositories
                 PaidDaysCount = await GetPaidDaysCount(id, month, year)
             };
             return model;
+        }
+
+        public async Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId)
+        { 
+            return await _timeTrackingContext.DaysAccounting
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.Date.Date == date.Date);
         }
     }
 }

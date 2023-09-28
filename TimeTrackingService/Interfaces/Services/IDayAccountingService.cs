@@ -15,7 +15,7 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task<int> GetUnconfirmedDaysCount(Guid id);
 
-        public Task RemoveDay(Guid id);
+        public Task RemoveDayAsync(Guid id);
 
         public Task RemoveRangeOfDays(List<Guid> ids);
 

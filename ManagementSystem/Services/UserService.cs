@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using UserService.Exceptions;
 using UserService.Helpers;
-using UserService.Helpers.Filtering;
 using UserService.Helpers.Pagination;
 using UserService.Interfaces.Repositories;
 using UserService.Interfaces.Services;
@@ -15,21 +14,18 @@ namespace UserService.Services
     {
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepository;
-        private readonly IImageRepository _imageRepository;
         private readonly IDaysAccountingClientRepository _client;
         private readonly IMapper _mapper;
 
         public UserService( IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
-                          IDaysAccountingClientRepository client,
-                          IImageRepository imageRepository)
+                          IDaysAccountingClientRepository client)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
             _client = client;
-            _imageRepository = imageRepository;
         }
 
         public async Task Create(SignUpModel signUpModel)
@@ -148,13 +144,15 @@ namespace UserService.Services
 
             await file.CopyToAsync(memoryStream);
 
-            var image = new Image
-            {
-                UserId = userId,
-                Data = memoryStream.ToArray()
-            };
-            await _imageRepository.RemoveUserImageAsync(image.UserId);
-            await _imageRepository.SetUserImageAsync(image);
+            //var image = new Image
+            //{
+            //    UserId = userId,
+            //    Data = memoryStream.ToArray()
+            //};
+            //await _imageRepository.RemoveUserImageAsync(image.UserId);
+            //await _imageRepository.SetUserImageAsync(image);
+            user.UserImage = memoryStream.ToArray();
+            await _userRepository.UpdateUserAsync(user);
         }
 
         public async Task<byte[]> GetUserImageAsync(Guid userId)
@@ -167,14 +165,14 @@ namespace UserService.Services
             }
 
 
-            var image = await _imageRepository.GetUserImageAsync(userId);
+            //var image = await _imageRepository.GetUserImageAsync(userId);
 
-            if (image == null)
+            if (user.UserImage == null)
             {
                 throw new NotFoundException("Image not found");
             }
 
-            return image.Data;
+            return user.UserImage;
         }
     }
 }

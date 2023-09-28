@@ -5,6 +5,11 @@ using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
 
+// ничего, что микросервисы для юзеров и дней запускаются на iis сервере, а ocelot на kestrel?
+// Хотя у ocelot-a в настройках стоит InProgress hosting model (но на панели сверху запуск стоит не на iis).
+// Получается, в приоритете при определении сервера, на котором запустится приложение,
+// будет не то, что в настройках, а то, что возле зелёного треугольничка сверху?????????
+
 namespace TimeTrackingService.Controllers
 {
     [Route("api/[controller]")]
@@ -57,10 +62,10 @@ namespace TimeTrackingService.Controllers
         }
 
         // add to ocelot
-        [HttpDelete("removeDay")]
+        [HttpDelete("removeDay/{id}")]
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
-            await _service.RemoveDay(id);
+            await _service.RemoveDayAsync(id);
             return Ok();
         }
 

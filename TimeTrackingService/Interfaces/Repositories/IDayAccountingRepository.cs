@@ -17,7 +17,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task<DayAccounting> GetDayByIdAsync(Guid id);
 
-        public Task RemoveDay(Guid id);
+        public Task RemoveDayAsync(DayAccounting day);
 
         public Task RemoveRangeOfDays(List<Guid> ids);
 
@@ -32,5 +32,7 @@ namespace TimeTrackingService.Interfaces.Repositories
         public Task<int> GetPaidDaysCount(Guid id, int month, int year);
 
         public Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year);
+
+        public Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId);
     }
 }

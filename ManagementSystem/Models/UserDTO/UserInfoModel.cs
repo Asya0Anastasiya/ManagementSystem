@@ -19,15 +19,15 @@ namespace UserService.Models.UserDto
         public string PhoneNumber { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string Department { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string Position { get; set; }
 
         [Required]
-        [MaxLength(20)]
-        public string Level { get; set; }
+        [MaxLength(30)]
+        public string BranchOffice { get; set; }
     }
 }

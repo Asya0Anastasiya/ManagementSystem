@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using UserService.Models.Entities;
 
 namespace UserService.Models.UserDto
 {
@@ -20,19 +21,10 @@ namespace UserService.Models.UserDto
         public string Password { get; set; }
 
         [Required]
-        [MaxLength(30)]
-        public string Department { get; set; }
-
-        [Required]
-        [MaxLength(30)]
-        public string Position { get; set; }
-
-        [Required]
-        [MaxLength(20)]
-        public string Level { get; set; }
+        public Guid PositionId { get; set; }
 
         [Required]
         [MaxLength(15)]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

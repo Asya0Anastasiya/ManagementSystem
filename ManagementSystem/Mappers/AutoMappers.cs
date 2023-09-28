@@ -13,7 +13,10 @@ namespace UserService.Mappers
 
         private void Users()
         {
-            CreateMap<UserEntity, UserInfoModel>();
+            CreateMap<UserEntity, UserInfoModel>()
+                .ForMember(x => x.Position, opt => opt.MapFrom(src => src.Position.Name))
+                .ForMember(x => x.Department, opt => opt.MapFrom(src => src.Position.Department.Name))
+                .ForMember(x => x.BranchOffice, opt => opt.MapFrom(src => src.Position.Department.BranchOffice.Name));
 
             CreateMap<SignUpModel, UserEntity>();
 
