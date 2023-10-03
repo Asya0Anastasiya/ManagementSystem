@@ -10,7 +10,7 @@ namespace UserService.Interfaces.Repositories
 
         public Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
 
-        public int GetUsersCount();
+        public Task<int> GetUsersCountAsync();
 
         public Task<UserEntity> GetUserByEmailAsync(string email);
 
@@ -19,5 +19,6 @@ namespace UserService.Interfaces.Repositories
         public Task DeleteUserAsync(UserEntity userEntity);
 
         public Task<UserEntity> GetUserByIdAsync(Guid id);
+
     }
 }

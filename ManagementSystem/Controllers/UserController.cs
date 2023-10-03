@@ -25,9 +25,9 @@ namespace UserService.Controllers
         }
 
         [HttpGet("getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}")]
-        public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize) 
+        public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
-            var totalData = _userService.GetUsersCount();
+            var totalData = await _userService.GetUsersCountAsync();
             var pagination = new PaginationParameters(pageNumber, pageSize);
             var users = await _userService.GetUsersAsync(parameters, pagination);
             var metadata = new
@@ -97,7 +97,6 @@ namespace UserService.Controllers
         {
             byte[] imageData = await _userService.GetUserImageAsync(userId);
             return File(imageData, "image/png");
-            //return await _userService.GetUserImageAsync(userId);
         }
     }
 }

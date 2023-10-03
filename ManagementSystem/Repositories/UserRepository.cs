@@ -41,9 +41,9 @@ namespace UserService.Repositories
             return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
-        public int GetUsersCount()
+        public async Task<int> GetUsersCountAsync()
         {
-            return _context.Users.Count();
+            return await _context.Users.CountAsync();
         }
 
         public async Task UpdateUserAsync(UserEntity user)
@@ -60,8 +60,12 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByIdAsync(Guid id)
         {
-            //return await _context.Users.FindAsync(id);
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users
+                .Include(user => user.Position)
+                .ThenInclude(position => position.Department)
+                .ThenInclude(department => department.BranchOffice)
+                .AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            return user;
         }
 
         //public async Task SetUserImageAsync(Image image)

@@ -16,5 +16,8 @@ namespace TimeTrackingService.Models.Dto
 
         [Required]
         public Guid UserId { get; set; }
+
+        [Required]
+        public bool IsConfirmed { get; set; }
     }
 }

@@ -12,8 +12,8 @@
     "ManagementSystem": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      //"launchUrl": "swagger",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7214;http://localhost:5024",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

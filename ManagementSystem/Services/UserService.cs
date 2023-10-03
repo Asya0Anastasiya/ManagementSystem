@@ -48,9 +48,9 @@ namespace UserService.Services
             return _mapper.Map<List<UserInfoModel>>(users);
         }
 
-        public int GetUsersCount()
+        public async Task<int> GetUsersCountAsync()
         {
-            return _userRepository.GetUsersCount();
+            return await _userRepository.GetUsersCountAsync();
         }
 
         public async Task<UserInfoModel> GetUserInfo(Guid id)
@@ -143,14 +143,6 @@ namespace UserService.Services
             using var memoryStream = new MemoryStream();
 
             await file.CopyToAsync(memoryStream);
-
-            //var image = new Image
-            //{
-            //    UserId = userId,
-            //    Data = memoryStream.ToArray()
-            //};
-            //await _imageRepository.RemoveUserImageAsync(image.UserId);
-            //await _imageRepository.SetUserImageAsync(image);
             user.UserImage = memoryStream.ToArray();
             await _userRepository.UpdateUserAsync(user);
         }
@@ -158,14 +150,11 @@ namespace UserService.Services
         public async Task<byte[]> GetUserImageAsync(Guid userId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
-            
+
             if (user == null)
             {
                 throw new NotFoundException("User Not FFFound");
             }
-
-
-            //var image = await _imageRepository.GetUserImageAsync(userId);
 
             if (user.UserImage == null)
             {
