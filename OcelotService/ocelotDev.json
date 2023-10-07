@@ -1,6 +1,6 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
+    "BaseUrl": "https://localhost:44339"
   },
   "Secrets": {
     "secretKey": "Some secret xhxljhljfhljxlfjnlkfjn;lxfnl;fjc;lnjclfjn;lcfn;lkey"
@@ -10,11 +10,11 @@
       "UpstreamPathTemplate": "/getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/User/getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
       "AuthenticationOptions": {
@@ -25,11 +25,11 @@
       "UpstreamPathTemplate": "/create",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/User/create",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -44,11 +44,11 @@
       "UpstreamPathTemplate": "/signin",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/User/signin",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ]
     },
@@ -56,11 +56,11 @@
       "UpstreamPathTemplate": "/changePassword",
       "UpstreamHttpMethod": [ "Put" ],
       "DownstreamPathTemplate": "/api/User/changePassword",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
       "AuthenticationOptions": {
@@ -71,11 +71,11 @@
       "UpstreamPathTemplate": "/getUser/{id}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/User/getUser/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -87,11 +87,11 @@
       "UpstreamPathTemplate": "/removeUser/{id}",
       "UpstreamHttpMethod": [ "Delete" ],
       "DownstreamPathTemplate": "/api/User/removeUser/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -106,11 +106,11 @@
       "UpstreamPathTemplate": "/updateUser/{id}",
       "UpstreamHttpMethod": [ "Put" ],
       "DownstreamPathTemplate": "/api/User/updateUser/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -122,11 +122,11 @@
       "UpstreamPathTemplate": "/setUserImage/{userId}",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/User/setUserImage/{userId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -138,11 +138,11 @@
       "UpstreamPathTemplate": "/getUserImage/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/User/getUserImage/{userId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userservice",
-          "Port": 5001
+          "Host": "localhost",
+          "Port": 44307
         }
       ],
 
@@ -154,11 +154,11 @@
       "UpstreamPathTemplate": "/addDay",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/DayAccounting/addDay",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -170,11 +170,11 @@
       "UpstreamPathTemplate": "/addDays",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/DayAccounting/addDays",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -186,11 +186,11 @@
       "UpstreamPathTemplate": "/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -202,11 +202,11 @@
       "UpstreamPathTemplate": "/getUnconfirmedDaysCount/{id}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/DayAccounting/getUnconfirmedDaysCount/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -221,11 +221,11 @@
       "UpstreamPathTemplate": "/approveDay/{id}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/DayAccounting/approveDay/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -240,11 +240,11 @@
       "UpstreamPathTemplate": "/removeDay/{id}",
       "UpstreamHttpMethod": [ "Delete" ],
       "DownstreamPathTemplate": "/api/DayAccounting/removeDay/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 
@@ -259,11 +259,11 @@
       "UpstreamPathTemplate": "/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/DayAccounting/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "timetrackingservice",
-          "Port": 5002
+          "Host": "localhost",
+          "Port": 44367
         }
       ],
 

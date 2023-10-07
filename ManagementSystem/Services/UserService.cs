@@ -14,18 +14,15 @@ namespace UserService.Services
     {
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepository;
-        private readonly IDaysAccountingClientRepository _client;
         private readonly IMapper _mapper;
 
         public UserService( IConfiguration config,
                           IUserRepository userRepository,
-                          IMapper mapper,
-                          IDaysAccountingClientRepository client)
+                          IMapper mapper)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
-            _client = client;
         }
 
         public async Task Create(SignUpModel signUpModel)

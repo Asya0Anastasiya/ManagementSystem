@@ -15,5 +15,8 @@ namespace UserService.Models.Entities
         public string Name { get; set; }
 
         public DepartmentEntity Department { get; set; } = null!;
+
+        [Required]
+        public Guid DepartmentId { get; set; }
     }
 }

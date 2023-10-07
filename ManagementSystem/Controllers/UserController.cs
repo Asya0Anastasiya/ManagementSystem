@@ -12,6 +12,7 @@ namespace UserService.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -95,6 +96,7 @@ namespace UserService.Controllers
         [Route("getUserImage/{userId}")]
         public async Task<IActionResult> GetUserImageAsync(Guid userId)
         {
+            
             byte[] imageData = await _userService.GetUserImageAsync(userId);
             return File(imageData, "image/png");
         }

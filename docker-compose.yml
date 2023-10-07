@@ -1,0 +1,62 @@
+version: "3.4"
+
+services:
+  data:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+        - "1433:1433"
+    environment:
+    - ACCEPT_EULA=Y
+    - SA_PASSWORD=Str0ngPassw0rd
+    volumes:
+        - sqldata:/var/opt/mssql
+    networks:
+        - current-network
+
+  userservice:
+    container_name: userservice
+    image: asiyar/userservice
+    build:
+        context: ./ManagementSystem
+        dockerfile: ./Dockerfile
+    ports:
+        - "5001:5001"
+    restart: on-failure
+    networks:
+        - current-network
+    depends_on:
+        - data
+
+  timetrackingservice:
+    container_name: timetrackingservice
+    image: asiyar/timetrackingservice
+    build:
+        context: ./TimeTrackingService
+        dockerfile: ./Dockerfile
+    ports:
+        - "5002:5002"
+    restart: on-failure
+    networks:
+        - current-network
+    depends_on:
+        - data
+
+  ocelotservice:
+    container_name: ocelotservice
+    image: asiyar/ocelotservice
+    build:
+        context: ./OcelotService
+        dockerfile: ./Dockerfile
+    ports:
+        - "5000:5000"
+    restart: on-failure
+    networks:
+        - current-network
+
+
+networks:
+  current-network:
+
+volumes:
+  sqldata:

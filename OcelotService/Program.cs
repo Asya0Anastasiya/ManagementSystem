@@ -19,7 +19,7 @@ builder.Services.AddCors(option =>
         builder.WithExposedHeaders("X-Pagination");
     });
 });
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("ocelotDev.json", optional: false, reloadOnChange: true);
 builder.Services.AddOcelot(builder.Configuration);
 
 builder.Services.AddAuthentication(x =>

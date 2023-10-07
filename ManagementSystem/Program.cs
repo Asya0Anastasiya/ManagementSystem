@@ -6,20 +6,12 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Refit;
-using UserService.Clients;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-string BaseUrl = "https://localhost:44367";
-builder.Services.AddScoped<IDayAccountingClient>(x => RestService.For<IDayAccountingClient>(BaseUrl));
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IDaysAccountingClientRepository, DaysAccountingClientRepository>();
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>

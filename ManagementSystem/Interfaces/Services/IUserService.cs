@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using TimeTrackingService.Models.Entities;
-using UserService.Helpers;
-using UserService.Helpers.Filtering;
+﻿using UserService.Helpers;
 using UserService.Helpers.Pagination;
 using UserService.Models.UserDto;
 

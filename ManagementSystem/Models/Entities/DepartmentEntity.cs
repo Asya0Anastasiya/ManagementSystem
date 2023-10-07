@@ -17,5 +17,8 @@ namespace UserService.Models.Entities
         public ICollection<PositionEntity> Positions { get; set; }
 
         public BranchOfficeEntity BranchOffice { get; set; } = null!;
+
+        [Required]
+        public Guid BranchOfficeId { get; set; }
     }
 }

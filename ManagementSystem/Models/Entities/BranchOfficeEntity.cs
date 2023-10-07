@@ -18,5 +18,8 @@ namespace UserService.Models.Entities
 
         [Required]
         public AdressEntity Adress { get; set; }
+
+        [Required]
+        public Guid AdressId { get; set; }
     }
 }
