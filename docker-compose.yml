@@ -41,6 +41,19 @@ services:
         - current-network
     depends_on:
         - data
+  documentserviceapi:
+    container_name: documentserviceapi
+    image: asiyar/documentserviceapi
+    build:
+        context: ./DocumentServiceApi
+        dockerfile: ./Dockerfile
+    ports:
+    - "5003:5003"
+    restart: on-failure
+    networks: 
+        - current-network
+    depends_on:
+        - data
 
   ocelotservice:
     container_name: ocelotservice

@@ -16,6 +16,7 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
     {
+        // почему принимает запросы с хоста оцелота, даже если стоит .WithOrigins("не_хост_оцелота")???????????
         builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
