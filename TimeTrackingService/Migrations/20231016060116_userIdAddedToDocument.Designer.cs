@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeTrackingService.Data;
 
@@ -11,9 +12,10 @@ using TimeTrackingService.Data;
 namespace TimeTrackingService.Migrations
 {
     [DbContext(typeof(TimeTrackingContext))]
-    partial class TimeTrackingContextModelSnapshot : ModelSnapshot
+    [Migration("20231016060116_userIdAddedToDocument")]
+    partial class userIdAddedToDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +53,9 @@ namespace TimeTrackingService.Migrations
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("DocumentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Hours")
                         .HasColumnType("int");

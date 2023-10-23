@@ -278,7 +278,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "documentservice",
+          "Host": "documentserviceapi",
           "Port": 5003
         }
       ],
@@ -294,7 +294,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "documentservice",
+          "Host": "documentserviceapi",
           "Port": 5003
         }
       ],
@@ -310,7 +310,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "documentservice",
+          "Host": "documentserviceapi",
           "Port": 5003
         }
       ],
@@ -326,7 +326,23 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "documentservice",
+          "Host": "documentserviceapi",
+          "Port": 5003
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/attachDocument/{userId}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Document/attachDocument/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "documentserviceapi",
           "Port": 5003
         }
       ],

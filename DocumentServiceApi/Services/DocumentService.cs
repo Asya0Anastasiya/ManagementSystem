@@ -12,11 +12,13 @@ namespace DocumentServiceApi.Services
     {
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IMessageProducer _producer;
 
-        public DocumentService(IDocumentRepository repository, IMapper mapper)
+        public DocumentService(IDocumentRepository repository, IMapper mapper, IMessageProducer producer)
         {
             _repository = repository;
             _mapper = mapper;
+            _producer = producer;
         }
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
@@ -75,6 +77,27 @@ namespace DocumentServiceApi.Services
         public async Task<List<string>> GetUserDocumentsNames(Guid userId)
         {
             return await _repository.GetUserDocumentsNames(userId);
+        }
+
+        public async Task AttachDocument(string name, DateTime date, Guid userId)
+        {
+            var document = await _repository.GetUserDocumentByName(name, userId);
+
+            if (document == null)
+            {
+                throw new NotFoundException("There is no such document");
+            }
+
+            var attachDoc = new AttachDocumentModel()
+            {
+                Name = document.Name,
+                Type = document.Type,
+                UserId = userId,
+                SourceId = document.Id,
+                Date = date
+            };
+
+            _producer.SendMessage(attachDoc);
         }
     }
 }

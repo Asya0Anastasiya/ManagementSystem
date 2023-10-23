@@ -13,13 +13,13 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
+        builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
         builder.WithExposedHeaders("X-Pagination");
     });
 });
-builder.Configuration.AddJsonFile("ocelotDev.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 builder.Services.AddOcelot(builder.Configuration);
 
 builder.Services.AddAuthentication(x =>

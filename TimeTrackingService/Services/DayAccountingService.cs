@@ -96,25 +96,11 @@ namespace TimeTrackingService.Services
             await _repository.ApproveDayAsync(day);
         }
 
-        //public int GetUsersWorkDaysCount(Guid id, int month, int year)
-        //{
-        //    return _repository.GetUsersWorkDaysCount(id, month, year);
-        //}
-
-        //public int GetUsersSickDaysCount(Guid id, int month, int year)
-        //{
-        //    return _repository.GetUsersSickDaysCount(id, month, year);
-        //}
-
-        //public int GetUsersHolidaysCount(Guid id, int month, int year)
-        //{
-        //    return _repository.GetUsersHolidaysCount(id, month, year);
-        //}
-
-        //public int GetPaidDaysCount(Guid id, int month, int year)
-        //{
-        //    return _repository.GetPaidDaysCount(id, month, year);
-        //}
+        public async Task<DayAccounting> GetUserDay(Guid userId, DateTime date)
+        {
+            //if == null throw...
+            return await _repository.CheckDayForExistanceAsync(date, userId);
+        }
 
         public async Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year)
         {

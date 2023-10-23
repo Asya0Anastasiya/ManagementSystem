@@ -21,13 +21,7 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task ApproveDayAsync(Guid id);
 
-        //public int GetUsersWorkDaysCount(Guid id, int month, int year);
-
-        //public int GetUsersSickDaysCount(Guid id, int month, int year);
-
-        //public int GetUsersHolidaysCount(Guid id, int month, int year);
-
-        //public int GetPaidDaysCount(Guid id, int month, int year);
+        public Task<DayAccounting> GetUserDay(Guid userId, DateTime date);
 
         public Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year);
     }

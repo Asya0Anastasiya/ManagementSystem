@@ -14,6 +14,27 @@ services:
     networks:
         - current-network
 
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.8-management-alpine
+    hostname: rabbitmq
+    environment:
+        - RABBITMQ_DEFAULT_USER=asiya
+        - RABBITMQ_DEFAULT_PASS=password
+    ports:
+        - '4369:4369'
+        - '5671:5671'
+        - '25672:25672'
+        - '15671:15671'
+        # RabbitMQ instance
+        - '5672:5672'
+        # Web interface
+        - '15672:15672'
+    volumes:
+        - rabbitmq:/var/lib/rabbitmq/mnesia 
+    networks:
+        - current-network
+
   userservice:
     container_name: userservice
     image: asiyar/userservice
@@ -41,9 +62,12 @@ services:
         - current-network
     depends_on:
         - data
+        - rabbitmq
   documentserviceapi:
     container_name: documentserviceapi
     image: asiyar/documentserviceapi
+    environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=/app/application_default_credentials.json
     build:
         context: ./DocumentServiceApi
         dockerfile: ./Dockerfile
@@ -54,6 +78,11 @@ services:
         - current-network
     depends_on:
         - data
+        - rabbitmq
+    #volumes:
+        #- ./DocumentServiceApi/app/application_default_credentials.json:/app/application_default_credentials.json
+
+
 
   ocelotservice:
     container_name: ocelotservice
@@ -73,3 +102,4 @@ networks:
 
 volumes:
   sqldata:
+  rabbitmq:

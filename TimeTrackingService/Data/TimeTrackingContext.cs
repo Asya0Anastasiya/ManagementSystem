@@ -13,5 +13,6 @@ namespace TimeTrackingService.Data
 
         // https://signup.azure.com/screen
         public DbSet<DayAccounting> DaysAccounting { get; set;}
+        public DbSet<Document> Documents { get; set;}
     }
 }

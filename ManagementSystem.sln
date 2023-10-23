@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTrackingService", "Time
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotService", "OcelotService\OcelotService.csproj", "{7C32602A-6879-4EB0-AC47-B5CA56B77848}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentServiceApi", "DocumentServiceApi\DocumentServiceApi.csproj", "{13A96DCC-0095-4E0B-8E71-11132AFC135E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentServiceApi", "DocumentServiceApi\DocumentServiceApi.csproj", "{13A96DCC-0095-4E0B-8E71-11132AFC135E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CC0AD778-4F48-48F5-98C7-AA405EB0CD7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{13A96DCC-0095-4E0B-8E71-11132AFC135E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13A96DCC-0095-4E0B-8E71-11132AFC135E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13A96DCC-0095-4E0B-8E71-11132AFC135E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC0AD778-4F48-48F5-98C7-AA405EB0CD7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0AD778-4F48-48F5-98C7-AA405EB0CD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0AD778-4F48-48F5-98C7-AA405EB0CD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0AD778-4F48-48F5-98C7-AA405EB0CD7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

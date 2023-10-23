@@ -36,6 +36,12 @@ namespace DocumentServiceApi.Repositiries
         public async Task AddDocumentAsync(DocumentEntity documentEntity)
         {
             await _context.Documents.AddAsync(documentEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<DocumentEntity> GetUserDocumentByName(string name, Guid userId)
+        {
+            return await _context.Documents.FirstOrDefaultAsync(x => x.Name == name && x.UserId == userId);
         }
     }
 }

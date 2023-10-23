@@ -61,7 +61,7 @@ namespace UserService.Controllers
 
         [HttpGet]
         [Route("getUser/{id}")]
-        public async Task<IActionResult> GetUserInfo([FromRoute] Guid id)
+        public async Task<IActionResult> GetUserInfoAsync([FromRoute] Guid id)
         {
             return Ok(await _userService.GetUserInfo(id));
         }
@@ -73,6 +73,7 @@ namespace UserService.Controllers
             // "наверное нам не надо полностью удалять пользователя".
             // Помню, но это, наверное, потом надо добавить "активный чи не"
             await _userService.DeleteUserAsync(id);
+            // return 204?
             return Ok();
         }
 

@@ -9,6 +9,7 @@ namespace TimeTrackingService.Mappers
         public AutoMappers()
         {
             Days();
+            Documents();
         }
 
         private void Days()
@@ -18,6 +19,11 @@ namespace TimeTrackingService.Mappers
             CreateMap<DayAccounting, DayAccountingModel>();
 
             CreateMap<CreateDayModel, DayAccounting>();
+        }
+
+        private void Documents()
+        {
+            CreateMap<UpcomingDocumentModel, Document>();
         }
     }
 }

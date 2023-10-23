@@ -10,6 +10,7 @@ WORKDIR /app
 COPY --from=build /app ./
 
 ENV ASPNETCORE_URLS=http://+:5002
+#ENV GOOGLE_APPLICATION_CREDENTIALS=./application_default_credentials.json
 EXPOSE 5002
 
 ENTRYPOINT ["dotnet", "TimeTrackingService.dll"]

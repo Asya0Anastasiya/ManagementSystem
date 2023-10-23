@@ -15,7 +15,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDayAccountingRepository, DayAccountingRepository>();
 builder.Services.AddScoped<IDayAccountingService, DayAccountingService>();
-
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddSingleton<IConsumer, Consumer>();
+builder.Services.AddSingleton<IMessageReceiver, RabbitMQReceiver>();
+builder.Services.AddHostedService<Consumer>();
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>

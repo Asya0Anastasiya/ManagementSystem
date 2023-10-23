@@ -15,12 +15,15 @@ namespace TimeTrackingService.Models.Entities
         public string Name { get; set; }
 
         [Required]
+        public Guid UserId { get; set; }
+
+        [Required]
         [StringLength(20)]
         public string Type { get; set; }
 
         [Required]
         public Guid SourceId { get; set; }
 
-        public List<DayAccounting> DaysAccounting { get; set; }
+        public List<DayAccounting> DaysAccounting { get; set; } = new List<DayAccounting>();
     }
 }

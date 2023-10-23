@@ -35,8 +35,6 @@ namespace TimeTrackingService.Models.Entities
         [Required]
         public Guid UserId { get; set; }
 
-        public Guid DocumentId { get; set; }
-
-        public List<Document> Documents { get; set; }
+        public List<Document> Documents { get; set; } = new List<Document>();
     }
 }
