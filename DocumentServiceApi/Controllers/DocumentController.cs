@@ -47,13 +47,5 @@ namespace DocumentServiceApi.Controllers
         {
             return await _service.GetUserDocumentsNames(userId);
         }
-
-        [HttpPost]
-        [Route("attachDocument/{userId}")]
-        public async Task<IActionResult> AttachDocument([FromRoute] Guid userId, [FromBody] UpcomingDocumentModel upcomingDocumentModel)
-        {
-            await _service.AttachDocument(upcomingDocumentModel.Name, upcomingDocumentModel.Date, userId);
-            return Ok();
-        }
     }
 }

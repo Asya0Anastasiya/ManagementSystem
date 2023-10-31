@@ -4,7 +4,9 @@ using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Models.Dto;
 using DocumentServiceApi.Models.Entities;
+using DocumentServiceApi.Models.Enums;
 using Google.Cloud.Storage.V1;
+using System.Xml.Linq;
 
 namespace DocumentServiceApi.Services
 {
@@ -46,6 +48,7 @@ namespace DocumentServiceApi.Services
             {
                 throw new InternalException("Document with such name already exist... Please, rename your document");
             }
+
             using var memoryStream = new MemoryStream();
 
             await uploadDocument.File.CopyToAsync(memoryStream);
@@ -56,6 +59,7 @@ namespace DocumentServiceApi.Services
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));
+
             var doc = new DocumentEntity()
             {
                 Name = obj.Name,
@@ -66,6 +70,11 @@ namespace DocumentServiceApi.Services
             };
 
             await _repository.AddDocumentAsync(doc);
+
+            if (doc.Type == Types.TimeTracking)
+            {
+                await SendDocToTimeTrackService(doc.Name, null, doc.UserId);
+            }
         }
 
         public async Task<List<DocumentInfo>> GetUserDocuments(Guid userId)
@@ -79,7 +88,7 @@ namespace DocumentServiceApi.Services
             return await _repository.GetUserDocumentsNames(userId);
         }
 
-        public async Task AttachDocument(string name, DateTime date, Guid userId)
+        public async Task SendDocToTimeTrackService(string name, DateTime? date, Guid userId)
         {
             var document = await _repository.GetUserDocumentByName(name, userId);
 

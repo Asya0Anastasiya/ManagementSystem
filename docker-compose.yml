@@ -14,6 +14,7 @@ services:
     networks:
         - current-network
 
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.8-management-alpine
@@ -35,6 +36,7 @@ services:
     networks:
         - current-network
 
+
   userservice:
     container_name: userservice
     image: asiyar/userservice
@@ -48,6 +50,7 @@ services:
         - current-network
     depends_on:
         - data
+
 
   timetrackingservice:
     container_name: timetrackingservice
@@ -63,6 +66,8 @@ services:
     depends_on:
         - data
         - rabbitmq
+ 
+
   documentserviceapi:
     container_name: documentserviceapi
     image: asiyar/documentserviceapi

@@ -17,7 +17,7 @@ namespace TimeTrackingService.Services
             //    VirtualHost = "/"
             //};
 
-            ConnectionFactory factory = new() { HostName = "rabbitmq", Port = 5672 };
+            ConnectionFactory factory = new() { HostName = "localhost", Port = 5672 };
             factory.UserName = "asiya";
             factory.Password = "password";
 

@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /source
 COPY . .
 
-RUN dotnet restore "./UserService.csproj" --disable-parallel
+RUN dotnet restore "./UserService.csproj"
 
 RUN dotnet publish "./UserService.csproj" -c release -o /app --no-restore
 

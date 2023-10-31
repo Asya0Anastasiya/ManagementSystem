@@ -29,5 +29,16 @@ namespace TimeTrackingService.Repositories
                 .Where(x => x.UserId == userId && x.DaysAccounting.Any(day => day.Date.Date == date.Date))
                 .Select(x => x.Name).ToListAsync();
         }
+
+        public async Task<Document> GetUserDocByName(Guid userId, string docName)
+        {
+            return await _context.Documents.FirstOrDefaultAsync(x => x.UserId == userId && x.Name == docName);
+        }
+
+        public async Task UpdateDocument(Document document)
+        {
+            _context.Documents.Update(document);
+            await _context.SaveChangesAsync();
+        }
     }
 }

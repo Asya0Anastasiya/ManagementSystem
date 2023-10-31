@@ -13,7 +13,5 @@ namespace DocumentServiceApi.Interfaces.Services
         public Task<List<DocumentInfo>> GetUserDocuments(Guid userId);
 
         public Task<List<string>> GetUserDocumentsNames(Guid userId);
-
-        public Task AttachDocument(string name, DateTime date, Guid userId);
     }
 }

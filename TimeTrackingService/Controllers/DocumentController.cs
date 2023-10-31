@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Models.Dto;
 
 namespace TimeTrackingService.Controllers
 {
@@ -19,6 +20,14 @@ namespace TimeTrackingService.Controllers
         public async Task<List<string>> GetUsersDocumentsNames(Guid userId, [FromQuery] DateTime date)
         {
             return await _documentService.GetUsersDocumentsNames(userId, date);
+        }
+
+        [HttpPut]
+        [Route("attachDocument/{userId}")]
+        public async Task<IActionResult> AttachDocument([FromRoute] Guid userId, [FromBody] AttachDocModel attachDocModel)
+        {
+            await _documentService.AttachDocumentToDay(attachDocModel.Name, attachDocModel.Date, userId);
+            return Ok();
         }
     }
 }

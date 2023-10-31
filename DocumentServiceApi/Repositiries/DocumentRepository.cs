@@ -1,6 +1,7 @@
 ﻿using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Models.Entities;
+using DocumentServiceApi.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocumentServiceApi.Repositiries
@@ -29,7 +30,7 @@ namespace DocumentServiceApi.Repositiries
         public async Task<List<string>> GetUserDocumentsNames(Guid userId)
         {
             return await _context.Documents
-                .Where(x => x.UserId == userId && x.Type == "time_tracking")
+                .Where(x => x.UserId == userId && x.Type == Types.TimeTracking)
                 .Select(x => x.Name).ToListAsync();
         }
 

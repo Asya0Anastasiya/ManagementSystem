@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DocumentServiceApi.Models.Enums;
 
 namespace DocumentServiceApi.Models.Entities
 {
@@ -24,7 +25,7 @@ namespace DocumentServiceApi.Models.Entities
 
         [Required]
         [MaxLength(20)]
-        public string Type { get; set; }
+        public Types Type { get; set; }
 
         [Required]
         [MaxLength(60)]
