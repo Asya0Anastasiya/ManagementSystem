@@ -17,8 +17,6 @@ builder.Services.AddScoped<IDayAccountingRepository, DayAccountingRepository>();
 builder.Services.AddScoped<IDayAccountingService, DayAccountingService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-builder.Services.AddSingleton<IConsumer, Consumer>();
-builder.Services.AddSingleton<IMessageReceiver, RabbitMQReceiver>();
 builder.Services.AddHostedService<Consumer>();
 builder.Services.AddCors(option =>
 {
@@ -43,7 +41,6 @@ builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

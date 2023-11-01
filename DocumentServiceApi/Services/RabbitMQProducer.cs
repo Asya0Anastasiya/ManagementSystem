@@ -9,17 +9,13 @@ namespace DocumentServiceApi.Services
     {
         public void SendMessage<T>(T message)
         {
-            //var factory = new ConnectionFactory 
-            //{ 
-            //    HostName = "localhost",
-            //    UserName = "asiya",
-            //    Password = "password",
-            //    VirtualHost = "/"
-            //};
-
-            ConnectionFactory factory = new() { HostName = "localhost", Port = 5672 };
-            factory.UserName = "asiya";
-            factory.Password = "password";
+            ConnectionFactory factory = new()
+            {
+                HostName = "rabbitmq",
+                Port = 5672,
+                UserName = "asiya",
+                Password = "password"
+            };
 
 
             var connection = factory.CreateConnection();

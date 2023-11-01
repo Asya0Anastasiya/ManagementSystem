@@ -9,41 +9,30 @@ using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Services
 {
-    public class Consumer : BackgroundService, IConsumer
+    public class Consumer : BackgroundService
     {
-        private readonly IMessageReceiver _messageReceiver;
         private IServiceScopeFactory Services { get; }
         private readonly IMapper _mapper;
+        private readonly IConnection _connection;
 
-        public Consumer(IMessageReceiver messageReceiver, 
-                        IServiceScopeFactory services, IMapper mapper)
+        public Consumer(IServiceScopeFactory services, IMapper mapper)
         {
-            _messageReceiver = messageReceiver;
             Services = services;
             _mapper = mapper;
-        }
-
-        public void StartConsuming()
-        {
-            var channel = _messageReceiver.CreateModel();
-            channel.QueueDeclare("documents", durable: true, exclusive: false);
-            var consumer = new EventingBasicConsumer(channel);
-
-            consumer.Received += (model, ea) =>
+            ConnectionFactory factory = new()
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-
-                // Обработка полученного сообщения
-                Console.WriteLine("Получено сообщение: {0}", message);
+                HostName = "raabbitmq",
+                Port = 5672,
+                UserName = "asiya",
+                Password = "password"
             };
 
-            channel.BasicConsume(queue: "documents", autoAck: true, consumer: consumer);
+            _connection = factory.CreateConnection();
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var channel = _messageReceiver.CreateModel();
+            var channel = _connection.CreateModel();
             channel.QueueDeclare("documents", durable: true, exclusive: false);
             var consumer = new EventingBasicConsumer(channel);
 
@@ -58,7 +47,6 @@ namespace TimeTrackingService.Services
                     var timeTrackingService = scope.ServiceProvider.GetRequiredService<IDayAccountingService>();
                     var dayAcc = await timeTrackingService.GetUserDay(document.UserId, document.Date);
                     Document doc = _mapper.Map<Document>(document);
-                    //doc.DaysAccounting = new List<DayAccounting>();
                     doc.DaysAccounting.Add(dayAcc);
                     await documentService.AddDocumentAsync(doc);
                 }
