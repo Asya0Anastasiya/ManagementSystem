@@ -20,7 +20,7 @@ namespace TimeTrackingService.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<string>> GetDocumentsNamesAsync(Guid userId, DateTime date)
+        public async Task<List<string>> GetAttachedDocumentsNamesAsync(Guid userId, DateTime date)
         {
             return await _context.Documents
                 //.Include(document => document.DaysAccounting
@@ -28,6 +28,11 @@ namespace TimeTrackingService.Repositories
                 //.Where(x => x.UserId == userId)
                 .Where(x => x.UserId == userId && x.DaysAccounting.Any(day => day.Date.Date == date.Date))
                 .Select(x => x.Name).ToListAsync();
+        }
+
+        public async Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId)
+        {
+            return await _context.Documents.Where(x => x.UserId == userId).Select(x => x.Name).ToListAsync();
         }
 
         public async Task<Document> GetUserDocByName(Guid userId, string docName)

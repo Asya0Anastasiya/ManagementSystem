@@ -27,13 +27,6 @@ namespace DocumentServiceApi.Repositiries
             return await _context.Documents.Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<List<string>> GetUserDocumentsNames(Guid userId)
-        {
-            return await _context.Documents
-                .Where(x => x.UserId == userId && x.Type == Types.TimeTracking)
-                .Select(x => x.Name).ToListAsync();
-        }
-
         public async Task AddDocumentAsync(DocumentEntity documentEntity)
         {
             await _context.Documents.AddAsync(documentEntity);

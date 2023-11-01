@@ -40,12 +40,5 @@ namespace DocumentServiceApi.Controllers
         {
             return await _service.GetUserDocuments(userId);
         }
-
-        [HttpGet]
-        [Route("getUserDocumentsNames/{userId}")]
-        public async Task<List<string>> GetUserDocumentsNamesAsync(Guid userId)
-        {
-            return await _service.GetUserDocumentsNames(userId);
-        }
     }
 }

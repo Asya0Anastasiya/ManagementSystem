@@ -16,10 +16,11 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpGet]
-        [Route("getUsersTimeTrackingDocumentsNames/{userId}")]
-        public async Task<List<string>> GetUsersDocumentsNames(Guid userId, [FromQuery] DateTime date)
+        //change function name in frontend!!!!!!!!!!!!!!!
+        [Route("getAttachedUsersTimeTrackingDocumentsNames/{userId}")]
+        public async Task<List<string>> GetUsersDocumentsNamesForAdmin(Guid userId, [FromQuery] DateTime date)
         {
-            return await _documentService.GetUsersDocumentsNames(userId, date);
+            return await _documentService.GetAttachedUsersDocumentsNames(userId, date);
         }
 
         [HttpPut]
@@ -28,6 +29,13 @@ namespace TimeTrackingService.Controllers
         {
             await _documentService.AttachDocumentToDay(attachDocModel.Name, attachDocModel.Date, userId);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("getAllUsersTimeTrackingDocs/{userId}")]
+        public async Task<List<string>> GetAllUsersDocs(Guid userId)
+        {
+            return await _documentService.GetAllUsersTimeTrackDocsNames(userId);
         }
     }
 }

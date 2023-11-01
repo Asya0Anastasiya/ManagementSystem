@@ -44,14 +44,12 @@ namespace TimeTrackingService.Services
                 using (var scope = Services.CreateScope())
                 {
                     var documentService = scope.ServiceProvider.GetRequiredService<IDocumentService>();
-                    var timeTrackingService = scope.ServiceProvider.GetRequiredService<IDayAccountingService>();
-                    var dayAcc = await timeTrackingService.GetUserDay(document.UserId, document.Date);
+                    //var timeTrackingService = scope.ServiceProvider.GetRequiredService<IDayAccountingService>();
+                    //var dayAcc = await timeTrackingService.GetUserDay(document.UserId, document.Date);
                     Document doc = _mapper.Map<Document>(document);
-                    doc.DaysAccounting.Add(dayAcc);
+                    //doc.DaysAccounting.Add(dayAcc);
                     await documentService.AddDocumentAsync(doc);
                 }
-               
-                Console.WriteLine("Получено сообщение: {0}", message);
             };
 
             channel.BasicConsume(queue: "documents", autoAck: true, consumer: consumer);

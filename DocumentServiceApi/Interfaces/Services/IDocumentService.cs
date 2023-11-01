@@ -11,7 +11,5 @@ namespace DocumentServiceApi.Interfaces.Services
         public Task UploadDocumentAsync(UploadDocument uploadDocument);
 
         public Task<List<DocumentInfo>> GetUserDocuments(Guid userId);
-
-        public Task<List<string>> GetUserDocumentsNames(Guid userId);
     }
 }

@@ -17,12 +17,10 @@ namespace TimeTrackingService.Controllers
     public class DayAccountingController : ControllerBase
     {
         private readonly IDayAccountingService _service;
-        private readonly IConsumer _consumer;
 
-        public DayAccountingController(IDayAccountingService service, IConsumer consumer) 
+        public DayAccountingController(IDayAccountingService service) 
         { 
             _service = service;
-            _consumer = consumer;
         }
 
         [HttpPost]
@@ -93,13 +91,6 @@ namespace TimeTrackingService.Controllers
         public async Task<UsersDaysModel> GetUsersDaysInfo(Guid userId, int month, int year)
         {
             return await _service.GetUsersDaysInfo(userId, month, year);
-        }
-
-        [HttpGet("start-consumer")]
-        public IActionResult StartConsumer()
-        {
-            _consumer.StartConsuming();
-            return Ok();
         }
     }
 }

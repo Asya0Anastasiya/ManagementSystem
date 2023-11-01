@@ -83,11 +83,6 @@ namespace DocumentServiceApi.Services
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
-        public async Task<List<string>> GetUserDocumentsNames(Guid userId)
-        {
-            return await _repository.GetUserDocumentsNames(userId);
-        }
-
         public async Task SendDocToTimeTrackService(string name, DateTime? date, Guid userId)
         {
             var document = await _repository.GetUserDocumentByName(name, userId);

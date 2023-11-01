@@ -22,9 +22,9 @@ namespace TimeTrackingService.Services
             await _repository.AddDocumentAsync(document);
         }
 
-        public async Task<List<string>> GetUsersDocumentsNames(Guid userId, DateTime date)
+        public async Task<List<string>> GetAttachedUsersDocumentsNames(Guid userId, DateTime date)
         {
-            return await _repository.GetDocumentsNamesAsync(userId, date);
+            return await _repository.GetAttachedDocumentsNamesAsync(userId, date);
         }
 
         public async Task AttachDocumentToDay(string name, DateTime dateTime, Guid userId)
@@ -44,6 +44,11 @@ namespace TimeTrackingService.Services
             document.DaysAccounting.Add(day);
 
             await _repository.UpdateDocument(document);
+        }
+
+        public async Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId)
+        {
+            return await _repository.GetAllUsersTimeTrackDocsNames(userId);
         }
     }
 }
