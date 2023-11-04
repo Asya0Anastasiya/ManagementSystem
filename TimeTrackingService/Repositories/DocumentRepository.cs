@@ -32,6 +32,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId)
         {
+            //check type
             return await _context.Documents.Where(x => x.UserId == userId).Select(x => x.Name).ToListAsync();
         }
 

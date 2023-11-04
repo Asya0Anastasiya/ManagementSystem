@@ -21,7 +21,7 @@ namespace TimeTrackingService.Services
             _mapper = mapper;
             ConnectionFactory factory = new()
             {
-                HostName = "raabbitmq",
+                HostName = "localhost",
                 Port = 5672,
                 UserName = "asiya",
                 Password = "password"

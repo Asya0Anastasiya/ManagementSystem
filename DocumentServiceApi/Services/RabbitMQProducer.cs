@@ -11,7 +11,7 @@ namespace DocumentServiceApi.Services
         {
             ConnectionFactory factory = new()
             {
-                HostName = "rabbitmq",
+                HostName = "localhost",
                 Port = 5672,
                 UserName = "asiya",
                 Password = "password"

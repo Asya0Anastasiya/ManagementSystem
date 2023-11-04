@@ -183,22 +183,6 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/getUsersTimeTrackingDocumentsNames/{userId}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/Document/getUsersTimeTrackingDocumentsNames/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 44367
-        }
-      ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
       "UpstreamPathTemplate": "/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
@@ -274,7 +258,55 @@
     {
       "UpstreamPathTemplate": "/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
+      "DownstreamPathTemplate": "/api/DayAccounting/getAllUsersTimeTrackingDocs/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/attachDocument/{userId}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Document/attachDocument/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/getAllUsersTimeTrackingDocs/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/Document/getAllUsersTimeTrackingDocs/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/getAttachedUsersTimeTrackingDocumentsNames/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/Document/getAttachedUsersTimeTrackingDocumentsNames/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -339,22 +371,6 @@
       "UpstreamPathTemplate": "/getUserDocumentsNames/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/Document/getUserDocumentsNames/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 44304
-        }
-      ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/attachDocument/{userId}",
-      "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/Document/attachDocument/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
