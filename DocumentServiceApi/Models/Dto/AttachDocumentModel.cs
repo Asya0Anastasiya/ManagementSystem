@@ -12,6 +12,6 @@ namespace DocumentServiceApi.Models.Dto
 
         public Guid SourceId { get; set; }
 
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

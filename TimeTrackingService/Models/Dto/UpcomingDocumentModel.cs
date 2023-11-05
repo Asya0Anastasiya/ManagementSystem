@@ -1,4 +1,6 @@
 ﻿
+using TimeTrackingService.Models.Enums;
+
 namespace TimeTrackingService.Models.Dto
 {
     public class UpcomingDocumentModel
@@ -7,7 +9,7 @@ namespace TimeTrackingService.Models.Dto
 
         public Guid UserId { get; set; }
 
-        public string Type { get; set; }
+        public Types Type { get; set; }
 
         public Guid SourceId { get; set; }
 
