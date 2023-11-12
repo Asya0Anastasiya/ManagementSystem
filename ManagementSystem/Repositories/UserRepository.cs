@@ -25,25 +25,27 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByEmailAsync(string email)
         {
-            return await _context.Users
+            return await _context.Users.AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
         public async Task<List<UserEntity>> GetUsersAsync(FilteringParameters parameters,
                                                           PaginationParameters pagination)
         {
-            var users = _context.Users
+            var users = _context.Users.AsNoTracking()
                 .Include(user => user.Position)
                 .ThenInclude(position => position.Department)
                 .ThenInclude(department => department.BranchOffice).AsQueryable();
             FilteringHelper filteringHelper = new();
+
             users = filteringHelper.FilterUsers(parameters, users);
+
             return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task<int> GetUsersCountAsync()
         {
-            return await _context.Users.CountAsync();
+            return await _context.Users.AsNoTracking().CountAsync();
         }
 
         public async Task UpdateUserAsync(UserEntity user)
@@ -60,35 +62,21 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByIdAsync(Guid id)
         {
-            var user = await _context.Users
+            var user = await _context.Users.AsNoTracking()
                 .Include(user => user.Position)
                 .ThenInclude(position => position.Department)
                 .ThenInclude(department => department.BranchOffice)
                 .AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+
             return user;
         }
 
-        //public async Task SetUserImageAsync(Image image)
-        //{
-        //    await _context.Images.AddAsync(image);
-        //    await _context.SaveChangesAsync();
-        //}
-
         public async Task<byte[]> GetUserImageAsync(Guid userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _context.Users.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+
             return user.UserImage;
         }
-
-        //public async Task RemoveUserImageAsync(Guid userId)
-        //{
-        //    var image = await GetUserImageAsync(userId);
-
-        //    if (image != null)
-        //    {
-        //        _context.Images.Remove(await GetUserImageAsync(userId));
-        //        await _context.SaveChangesAsync();
-        //    }
-        //}
     }
 }

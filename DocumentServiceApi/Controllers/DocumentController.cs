@@ -1,9 +1,6 @@
 ﻿using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Models.Dto;
-using Google.Cloud.Storage.V1;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 
 namespace DocumentServiceApi.Controllers
 {

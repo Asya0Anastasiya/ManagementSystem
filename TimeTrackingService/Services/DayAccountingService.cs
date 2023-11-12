@@ -28,7 +28,6 @@ namespace TimeTrackingService.Services
                 throw new InternalException($"That day -- {dayModel.Date} -- already exist");
             }
             var daysAccounting = _mapper.Map<DayAccounting>(dayModel);
-            //daysAccounting.IsConfirmed = false;
             daysAccounting.Day = dayModel.Date.Day;
             daysAccounting.Month = dayModel.Date.Month;
             daysAccounting.Year = dayModel.Date.Year;
@@ -50,7 +49,6 @@ namespace TimeTrackingService.Services
             var days = _mapper.Map<List<DayAccounting>>(daysModels);
             for (var i = 0; i < daysModels.Count; i++)
             {
-                //days[i].IsConfirmed = false;
                 days[i].Day = daysModels[i].Date.Day;
                 days[i].Month = daysModels[i].Date.Month;
                 days[i].Year = daysModels[i].Date.Year;
@@ -58,9 +56,9 @@ namespace TimeTrackingService.Services
             await _repository.AddRangeOfDays(days);
         }
 
-        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters,
-                                                            PaginationParameters pagination)
+        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, int pageNumber, int pageSize)
         {
+            var pagination = new PaginationParameters(pageNumber, pageSize);
             var days = await _repository.GetUsersDays(parameters, pagination);
             return _mapper.Map<List<DayAccountingModel>>(days);
         }

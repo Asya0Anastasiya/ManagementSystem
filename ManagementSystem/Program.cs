@@ -22,27 +22,12 @@ builder.Services.AddCors(option =>
         .AllowAnyHeader();
         builder.WithExposedHeaders("X-Pagination");
     });
-});
-builder.Services.AddDbContext<Context>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection")));
+}); 
 
-//builder.Services
-//    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters()
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidAudience = builder.Configuration["Jwt:Audience"],
-//            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//            IssuerSigningKey = new SymmetricSecurityKey(
-//                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-//            )
-//        };
-//    });
+builder.Services.AddDbContext<Context>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var mappingConfig = new MapperConfiguration(x =>
 {
@@ -50,24 +35,6 @@ var mappingConfig = new MapperConfiguration(x =>
 });
 var mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
-
-//builder.Services.AddAuthentication(x =>
-//{
-//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(x =>
-//{
-//    x.RequireHttpsMetadata = false;
-//    x.SaveToken = true;
-//    x.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(
-//                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-//        ValidateAudience = false,
-//        ValidateIssuer = false,
-//    };
-//});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

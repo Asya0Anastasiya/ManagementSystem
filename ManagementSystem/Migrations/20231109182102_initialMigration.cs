@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace UserService.Migrations
 {
-    public partial class schemeChanged : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,7 @@ namespace UserService.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    BranchOfficeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BranchOfficeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +58,8 @@ namespace UserService.Migrations
                         name: "FK_Departments_Branches_BranchOfficeId",
                         column: x => x.BranchOfficeId,
                         principalTable: "Branches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,7 +68,7 @@ namespace UserService.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +77,8 @@ namespace UserService.Migrations
                         name: "FK_Positions_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,6 +105,31 @@ namespace UserService.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Adresses",
+                columns: new[] { "Id", "City", "Country", "HouseNumber", "Strit" },
+                values: new object[] { new Guid("74c7e715-7af4-41e4-a081-1588550cb9ef"), "Hrodna", "Belarus", "3", "Repina" });
+
+            migrationBuilder.InsertData(
+                table: "Branches",
+                columns: new[] { "Id", "AdressId", "Name" },
+                values: new object[] { new Guid("983662f2-fd59-4ce6-8241-dc7cb879d2dc"), new Guid("74c7e715-7af4-41e4-a081-1588550cb9ef"), "iTech-Art.Hrodno" });
+
+            migrationBuilder.InsertData(
+                table: "Departments",
+                columns: new[] { "Id", "BranchOfficeId", "Name" },
+                values: new object[] { new Guid("96b89eee-cc6d-41a9-bfe2-13d8cc7afb62"), new Guid("983662f2-fd59-4ce6-8241-dc7cb879d2dc"), "Back-end Development" });
+
+            migrationBuilder.InsertData(
+                table: "Positions",
+                columns: new[] { "Id", "DepartmentId", "Name" },
+                values: new object[] { new Guid("6ac1ec21-6231-4c69-a508-15c1e99ff235"), new Guid("96b89eee-cc6d-41a9-bfe2-13d8cc7afb62"), ".Net Developer" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "PositionId", "Role", "UserImage" },
+                values: new object[] { new Guid("c5842e31-2f98-409b-2cd6-08dbbf946b0b"), "Eva@gmail.com", "Eva", "Cassidy", "$2a$11$.hZl.BNBmGHlNvLcADCKyeswAYtHB3pE1kbM22ksSI3Q8eBYOrAh.", "+375295647467", new Guid("6ac1ec21-6231-4c69-a508-15c1e99ff235"), 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branches_AdressId",

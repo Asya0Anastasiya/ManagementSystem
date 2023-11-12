@@ -6,7 +6,6 @@ using DocumentServiceApi.Models.Dto;
 using DocumentServiceApi.Models.Entities;
 using DocumentServiceApi.Models.Enums;
 using Google.Cloud.Storage.V1;
-using System.Xml.Linq;
 
 namespace DocumentServiceApi.Services
 {
@@ -74,7 +73,7 @@ namespace DocumentServiceApi.Services
             if (doc.Type == Types.TimeTracking)
             {
                 DateTime date = new(1990, 1, 1);
-                await SendDocToTimeTrackService(doc.Name, date, doc.UserId);
+                await DocCreatedNotification(doc.Name, date, doc.UserId);
             }
         }
 
@@ -84,7 +83,7 @@ namespace DocumentServiceApi.Services
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
-        public async Task SendDocToTimeTrackService(string name, DateTime date, Guid userId)
+        public async Task DocCreatedNotification(string name, DateTime date, Guid userId)
         {
             var document = await _repository.GetUserDocumentByName(name, userId);
 

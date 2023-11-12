@@ -43,14 +43,8 @@ namespace TimeTrackingService.Controllers
         [Route("getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}")]
         public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
-            var pagination = new PaginationParameters(pageNumber, pageSize);
-            var days = await _service.GetUsersDays(parameters, pagination);
-            var metadata = new
-            {
-                pageSize,
-                pageNumber
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            var days = await _service.GetUsersDays(parameters, pageNumber, pageSize);
+            
             return Ok(days);
         }
 
@@ -62,7 +56,6 @@ namespace TimeTrackingService.Controllers
             return Ok(count);
         }
 
-        // add to ocelot
         [HttpDelete("removeDay/{id}")]
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {

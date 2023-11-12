@@ -19,29 +19,28 @@ namespace TimeTrackingService.Repositories
 
         public async Task AddDay(DayAccounting daysAccounting)
         {
-            _timeTrackingContext.Add(daysAccounting);
+            _timeTrackingContext.DaysAccounting.Add(daysAccounting);
             await _timeTrackingContext.SaveChangesAsync();
         }
 
         public async Task AddRangeOfDays(List<DayAccounting> daysAccounts)
         {
-            await _timeTrackingContext.AddRangeAsync(daysAccounts);
+            await _timeTrackingContext.DaysAccounting.AddRangeAsync(daysAccounts);
             await _timeTrackingContext.SaveChangesAsync();
         }
 
         public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination)
         {
-            var days = _timeTrackingContext.DaysAccounting.AsQueryable();
+            var days = _timeTrackingContext.DaysAccounting.AsNoTracking().AsQueryable();
             FilteringHelper filteringHelper = new();
             days = filteringHelper.FilterDays(filtering, days);
             return await days.ToListAsync();
-            //AsNoTracking??
-            //return PagedList<DayAccounting>.ToPagedItems(days, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task<int> GetUnconfirmedDaysCount(Guid id)
         {
-            return await _timeTrackingContext.DaysAccounting.Where(x => x.UserId == id && x.IsConfirmed == false).CountAsync();
+            return await _timeTrackingContext.DaysAccounting.AsNoTracking()
+                .Where(x => x.UserId == id && x.IsConfirmed == false).CountAsync();
         }
 
         public async Task RemoveDayAsync(DayAccounting day)
@@ -69,7 +68,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<int> GetUsersWorkDaysCount(Guid id, int month, int year)
         {
-            var daysCount = await _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting.AsNoTracking()
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
@@ -79,7 +78,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<int> GetUsersSickDaysCount(Guid id, int month, int year)
         {
-            var daysCount = await _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting.AsNoTracking()
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
@@ -89,7 +88,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<int> GetUsersHolidaysCount(Guid id, int month, int year)
         {
-            var daysCount = await _timeTrackingContext.DaysAccounting
+            var daysCount = await _timeTrackingContext.DaysAccounting.AsNoTracking()
                 .Where(x => x.UserId == id 
                 && x.Month == month
                 && x.Year == year
@@ -119,7 +118,7 @@ namespace TimeTrackingService.Repositories
 
         public async Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId)
         { 
-            return await _timeTrackingContext.DaysAccounting
+            return await _timeTrackingContext.DaysAccounting.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Date.Date == date.Date);
         }
     }

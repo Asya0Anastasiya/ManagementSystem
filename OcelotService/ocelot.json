@@ -272,6 +272,54 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/attachDocument/{userId}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Document/attachDocument/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "timetrackingservice",
+          "Port": 5002
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/getAllUsersTimeTrackingDocs/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/Document/getAllUsersTimeTrackingDocs/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "timetrackingservice",
+          "Port": 5002
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/getAttachedUsersTimeTrackingDocumentsNames/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/Document/getAttachedUsersTimeTrackingDocumentsNames/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "timetrackingservice",
+          "Port": 5002
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/downloadUserDocument/{fileName}/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/Document/downloadUserDocument/{fileName}/{userId}",
@@ -323,22 +371,6 @@
       "UpstreamPathTemplate": "/getUserDocumentsNames/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/Document/getUserDocumentsNames/{userId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "documentserviceapi",
-          "Port": 5003
-        }
-      ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/attachDocument/{userId}",
-      "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/Document/attachDocument/{userId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

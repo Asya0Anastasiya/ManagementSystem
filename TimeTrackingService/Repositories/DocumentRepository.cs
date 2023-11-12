@@ -22,23 +22,21 @@ namespace TimeTrackingService.Repositories
 
         public async Task<List<string>> GetAttachedDocumentsNamesAsync(Guid userId, DateTime date)
         {
-            return await _context.Documents
-                //.Include(document => document.DaysAccounting
-                    //.Where(day => day.Date.Date == date.Date))
-                //.Where(x => x.UserId == userId)
+            return await _context.Documents.AsNoTracking()
                 .Where(x => x.UserId == userId && x.DaysAccounting.Any(day => day.Date.Date == date.Date))
                 .Select(x => x.Name).ToListAsync();
         }
 
         public async Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId)
         {
-            //check type
-            return await _context.Documents.Where(x => x.UserId == userId).Select(x => x.Name).ToListAsync();
+            return await _context.Documents.AsNoTracking().Where(x => x.UserId == userId)
+                .Select(x => x.Name).ToListAsync();
         }
 
         public async Task<Document> GetUserDocByName(Guid userId, string docName)
         {
-            return await _context.Documents.FirstOrDefaultAsync(x => x.UserId == userId && x.Name == docName);
+            return await _context.Documents.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.Name == docName);
         }
 
         public async Task UpdateDocument(Document document)

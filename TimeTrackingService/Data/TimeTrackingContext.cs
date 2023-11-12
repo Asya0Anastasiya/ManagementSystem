@@ -7,12 +7,10 @@ namespace TimeTrackingService.Data
     {
         public TimeTrackingContext(DbContextOptions<TimeTrackingContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
-        // https://signup.azure.com/screen
-        public DbSet<DayAccounting> DaysAccounting { get; set;}
-        public DbSet<Document> Documents { get; set;}
+        public DbSet<DayAccounting> DaysAccounting { get; set; }
+        public DbSet<Document> Documents { get; set; }
     }
 }

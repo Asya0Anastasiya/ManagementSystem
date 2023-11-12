@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-builder.Services.AddScoped<IMessageProducer, RabbitMQProducer>();
+builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 builder.Services.AddCors(option =>

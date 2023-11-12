@@ -29,13 +29,10 @@ namespace UserService.Controllers
         public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
             var totalData = await _userService.GetUsersCountAsync();
-            var pagination = new PaginationParameters(pageNumber, pageSize);
-            var users = await _userService.GetUsersAsync(parameters, pagination);
+            var users = await _userService.GetUsersAsync(parameters, pageNumber, pageSize);
             var metadata = new
             {
                 totalData,
-                pageSize,
-                pageNumber
             };
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             return Ok(users);
@@ -70,8 +67,6 @@ namespace UserService.Controllers
         [Route("removeUser/{id}")]
         public async Task<IActionResult> DeleteUserAsync(Guid id)
         {
-            // "наверное нам не надо полностью удалять пользователя".
-            // Помню, но это, наверное, потом надо добавить "активный чи не"
             await _userService.DeleteUserAsync(id);
             // return 204?
             return Ok();

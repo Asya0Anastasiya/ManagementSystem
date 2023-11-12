@@ -16,11 +16,9 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpGet]
-        //change function name in frontend!!!!!!!!!!!!!!!
         [Route("getAttachedUsersTimeTrackingDocumentsNames/{userId}")]
         public async Task<List<string>> GetUsersDocumentsNamesForAdminAsync(Guid userId, [FromQuery] DateTime date)
         {
-            // if day != null
             return await _documentService.GetAttachedUsersDocumentsNames(userId, date);
         }
 

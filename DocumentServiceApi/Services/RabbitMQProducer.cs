@@ -1,4 +1,5 @@
 ﻿using DocumentServiceApi.Interfaces.Services;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
@@ -7,7 +8,9 @@ namespace DocumentServiceApi.Services
 {
     public class RabbitMQProducer : IMessageProducer
     {
-        public void SendMessage<T>(T message)
+        private readonly IConnection _connection;
+
+        public RabbitMQProducer() 
         {
             ConnectionFactory factory = new()
             {
@@ -15,12 +18,14 @@ namespace DocumentServiceApi.Services
                 Port = 5672,
                 UserName = "asiya",
                 Password = "password"
-            };
+            };  
 
+            _connection = factory.CreateConnection();
+        }
 
-            var connection = factory.CreateConnection();
-
-            using var channel = connection.CreateModel();
+        public void SendMessage<T>(T message)
+        {
+            using var channel = _connection.CreateModel();
 
             channel.QueueDeclare("documents", durable: true, exclusive: false);
 

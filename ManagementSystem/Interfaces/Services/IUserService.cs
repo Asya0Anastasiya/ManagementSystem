@@ -10,7 +10,7 @@ namespace UserService.Interfaces.Services
 
         public Task<string> Login(SignInModel signInModel);
 
-        public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, PaginationParameters pagination);
+        public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, int pageNumber, int pageSize);
 
         public Task<int> GetUsersCountAsync();
 

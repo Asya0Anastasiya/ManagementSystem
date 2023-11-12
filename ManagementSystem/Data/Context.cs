@@ -7,7 +7,6 @@ namespace UserService.Data
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -18,7 +17,6 @@ namespace UserService.Data
         public DbSet<AdressEntity> Adresses { get; set; }
 
 
-        // почему дебаггер сюда заходит и всё выполняет, даже если есть уже база, но после этого сущность не добавляет??????????????
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -57,7 +55,7 @@ namespace UserService.Data
                 Id = new Guid("c5842e31-2f98-409b-2cd6-08dbbf946b0b"),
                 FirstName = "Eva",
                 LastName = "Cassidy",
-                Email = "Ev@gmail.com",
+                Email = "Eva@gmail.com",
                 PositionId = new Guid("6ac1ec21-6231-4c69-a508-15c1e99ff235"),
                 Role = Models.Enums.Roles.Admin,
                 PhoneNumber = "+375295647467",

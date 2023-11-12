@@ -12,8 +12,8 @@ using UserService.Data;
 namespace UserService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230927081408_schemeChanged")]
-    partial class schemeChanged
+    [Migration("20231109182102_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,6 +53,16 @@ namespace UserService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Adresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("74c7e715-7af4-41e4-a081-1588550cb9ef"),
+                            City = "Hrodna",
+                            Country = "Belarus",
+                            HouseNumber = "3",
+                            Strit = "Repina"
+                        });
                 });
 
             modelBuilder.Entity("UserService.Models.Entities.BranchOfficeEntity", b =>
@@ -74,6 +84,14 @@ namespace UserService.Migrations
                     b.HasIndex("AdressId");
 
                     b.ToTable("Branches");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("983662f2-fd59-4ce6-8241-dc7cb879d2dc"),
+                            AdressId = new Guid("74c7e715-7af4-41e4-a081-1588550cb9ef"),
+                            Name = "iTech-Art.Hrodno"
+                        });
                 });
 
             modelBuilder.Entity("UserService.Models.Entities.DepartmentEntity", b =>
@@ -82,7 +100,7 @@ namespace UserService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BranchOfficeId")
+                    b.Property<Guid>("BranchOfficeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -95,6 +113,14 @@ namespace UserService.Migrations
                     b.HasIndex("BranchOfficeId");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("96b89eee-cc6d-41a9-bfe2-13d8cc7afb62"),
+                            BranchOfficeId = new Guid("983662f2-fd59-4ce6-8241-dc7cb879d2dc"),
+                            Name = "Back-end Development"
+                        });
                 });
 
             modelBuilder.Entity("UserService.Models.Entities.PositionEntity", b =>
@@ -103,7 +129,7 @@ namespace UserService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DepartmentId")
+                    b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -116,6 +142,14 @@ namespace UserService.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Positions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6ac1ec21-6231-4c69-a508-15c1e99ff235"),
+                            DepartmentId = new Guid("96b89eee-cc6d-41a9-bfe2-13d8cc7afb62"),
+                            Name = ".Net Developer"
+                        });
                 });
 
             modelBuilder.Entity("UserService.Models.Entities.UserEntity", b =>
@@ -162,6 +196,19 @@ namespace UserService.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c5842e31-2f98-409b-2cd6-08dbbf946b0b"),
+                            Email = "Eva@gmail.com",
+                            FirstName = "Eva",
+                            LastName = "Cassidy",
+                            Password = "$2a$11$.hZl.BNBmGHlNvLcADCKyeswAYtHB3pE1kbM22ksSI3Q8eBYOrAh.",
+                            PhoneNumber = "+375295647467",
+                            PositionId = new Guid("6ac1ec21-6231-4c69-a508-15c1e99ff235"),
+                            Role = 1
+                        });
                 });
 
             modelBuilder.Entity("UserService.Models.Entities.BranchOfficeEntity", b =>
@@ -179,7 +226,9 @@ namespace UserService.Migrations
                 {
                     b.HasOne("UserService.Models.Entities.BranchOfficeEntity", "BranchOffice")
                         .WithMany("Departments")
-                        .HasForeignKey("BranchOfficeId");
+                        .HasForeignKey("BranchOfficeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("BranchOffice");
                 });
@@ -188,7 +237,9 @@ namespace UserService.Migrations
                 {
                     b.HasOne("UserService.Models.Entities.DepartmentEntity", "Department")
                         .WithMany("Positions")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Department");
                 });
