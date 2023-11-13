@@ -60,7 +60,7 @@ namespace Tests.Controller
                 FirstName = null
             };
             var pp = new PaginationParameters(1, 5);
-            _mocService.Setup(_ => _.GetUsersAsync(fp, pp))
+            _mocService.Setup(_ => _.GetUsersAsync(fp, pp.PageNumber, pp.PageSize))
                 .ReturnsAsync(UserMockData.GetUsersInfoModel());
 
             // Act

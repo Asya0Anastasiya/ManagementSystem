@@ -5,6 +5,7 @@ using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Models.Dto;
 using DocumentServiceApi.Models.Entities;
 using DocumentServiceApi.Models.Enums;
+using DocumentServiceApi.Models.Messages;
 using Google.Cloud.Storage.V1;
 
 namespace DocumentServiceApi.Services
@@ -101,7 +102,12 @@ namespace DocumentServiceApi.Services
                 Date = date
             };
 
-            _producer.SendMessage(attachDoc);
+            var message = new TimeTrackDocumentUploadedMessage()
+            {
+                DocumentModel = attachDoc
+            };
+
+            _producer.SendMessage(message);
         }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using TimeTrackingService.Interfaces.Services;
-using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Enums;
+using TimeTrackingService.Models.Messages;
+using Document = TimeTrackingService.Models.Entities.Document;
 
 namespace TimeTrackingService.Services
 {
@@ -39,16 +42,29 @@ namespace TimeTrackingService.Services
             consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                UpcomingDocumentModel? document = JsonSerializer.Deserialize<UpcomingDocumentModel>(message);
-                using (var scope = Services.CreateScope())
+                var content = Encoding.UTF8.GetString(body);
+                var message = JsonSerializer.Deserialize<BaseMessage>(content);
+
+                try
                 {
-                    var documentService = scope.ServiceProvider.GetRequiredService<IDocumentService>();
-                    //var timeTrackingService = scope.ServiceProvider.GetRequiredService<IDayAccountingService>();
-                    //var dayAcc = await timeTrackingService.GetUserDay(document.UserId, document.Date);
-                    Document doc = _mapper.Map<Document>(document);
-                    //doc.DaysAccounting.Add(dayAcc);
-                    await documentService.AddDocumentAsync(doc);
+                    switch(message.MessageType)
+                    {
+                        case MessageTypes.TimeTrackDocumentUploaded:
+                            var documentUploadedMessage = JsonSerializer.Deserialize<TimeTrackDocumentUploadedMessage>(content);
+
+                            using (var scope = Services.CreateScope())
+                            {
+                                var documentService = scope.ServiceProvider.GetRequiredService<IDocumentService>();
+                                Document doc = _mapper.Map<Document>(documentUploadedMessage.DocumentModel);
+                                await documentService.AddDocumentAsync(doc);
+                            }
+
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    channel.BasicAck(ea.DeliveryTag, false);
                 }
             };
 
