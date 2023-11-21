@@ -4,7 +4,6 @@ namespace UserService.Models.UserDto
 {
     public class UpdateUserModel
     {
-        // убрать required, если модель не приходит с фронта
         [Required]
         public Guid Id { get; set; }
 

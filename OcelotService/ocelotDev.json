@@ -258,7 +258,7 @@
     {
       "UpstreamPathTemplate": "/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/DayAccounting/getAllUsersTimeTrackingDocs/{userId}",
+      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDaysInfo/{userId}/month/{month}/year/{year}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using TimeTrackingService.Interfaces.Services;
-using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Enums;
 using TimeTrackingService.Models.Messages;
 using Document = TimeTrackingService.Models.Entities.Document;

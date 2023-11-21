@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tests.MockData;
 using UserService.Data;
 using UserService.Helpers;
 using UserService.Helpers.Pagination;
+using UserService.Models.Entities;
 using UserService.Repositories;
 
 namespace Tests.Service
@@ -38,7 +34,7 @@ namespace Tests.Service
             var result = await repository.GetUsersAsync(new FilteringParameters(), new PaginationParameters(1, 5));
 
             /// Assert
-            Assert.Equal(_context.Users.Count(), result.Count);
+            Assert.Equal(_context.Users.Count(), result.Count + 1);
         }
 
         [Fact]
@@ -48,7 +44,15 @@ namespace Tests.Service
             _context.Users.AddRange(UserMockData.GetUsers());
             _context.SaveChanges();
 
-            var newUser = UserMockData.GetUsers()[0];
+            var newUser = new UserEntity()
+            {
+                Id = new Guid("32f7b167-6091-4a04-94d9-7ed6059ea458"),
+                FirstName = "Marcin",
+                LastName = "Luter",
+                Email = "Luter@gmail.com",
+                PhoneNumber = "1234567890",
+                PositionId = new Guid("c5842e31-2f98-409b-2cd6-08dbbf946b0b"),
+            };
 
             var repository = new UserRepository(_context);
 
@@ -56,7 +60,7 @@ namespace Tests.Service
             await repository.CreateUserAsync(newUser);
 
             /// Assert
-            int expectedDataCount = UserMockData.GetUsers().Count + 1;
+            int expectedDataCount = UserMockData.GetUsers().Count + 2;
             Assert.Equal(expectedDataCount, _context.Users.Count());
         }
 

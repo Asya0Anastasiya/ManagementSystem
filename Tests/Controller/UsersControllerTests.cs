@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tests.MockData;
 using UserService.Controllers;
 using UserService.Helpers;
 using UserService.Helpers.Pagination;
-using UserService.Interfaces.Repositories;
 using UserService.Interfaces.Services;
 using UserService.Models.UserDto;
 

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using UserService.Models.Entities;
 
 namespace UserService.Models.UserDto
 {

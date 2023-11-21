@@ -1,5 +1,4 @@
 ﻿using DocumentServiceApi.Interfaces.Services;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;

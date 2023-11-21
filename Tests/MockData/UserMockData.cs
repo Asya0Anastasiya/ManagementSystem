@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserService.Models.Entities;
+﻿using UserService.Models.Entities;
 using UserService.Models.UserDto;
 
 namespace Tests.MockData
@@ -34,7 +29,7 @@ namespace Tests.MockData
             {
                 new UserEntity()
                 {
-                    Id = new Guid("c5842e31-2f98-409b-2cd6-08dbbf946b0b"),
+                    Id = new Guid("ad229ca8-8e44-4124-9b05-124c020adda8"),
                     FirstName = "Rafael",
                     LastName = "Santi",
                     Email = "Santii@gmail.com",
