@@ -37,6 +37,9 @@ builder.Services.AddAuthentication(x =>
                 Encoding.UTF8.GetBytes(builder.Configuration["Secrets:secretKey"])),
         ValidateAudience = false,
         ValidateIssuer = false,
+        //ValidateLifetime = true,
+        //ValidIssuer = "https://localhost:44338",
+        //ValidAudience = "https://localhost:44338"
     };
 });
 

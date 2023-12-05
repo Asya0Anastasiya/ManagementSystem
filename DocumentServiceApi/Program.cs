@@ -3,6 +3,7 @@ using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Mappers;
+using DocumentServiceApi.Options;
 using DocumentServiceApi.Repositiries;
 using DocumentServiceApi.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddDbContext<DocumentContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.Configure<RabbitMqQueueOptions>(builder.Configuration.GetSection("RabbitMqQueue"));
 
 var mappingConfig = new MapperConfiguration(x =>
 {
