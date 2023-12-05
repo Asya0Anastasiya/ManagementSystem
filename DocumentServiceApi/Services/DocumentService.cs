@@ -15,12 +15,15 @@ namespace DocumentServiceApi.Services
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
         private readonly IMessageProducer _producer;
+        private readonly IConfiguration _configuration;
 
-        public DocumentService(IDocumentRepository repository, IMapper mapper, IMessageProducer producer)
+        public DocumentService(IDocumentRepository repository, IMapper mapper, 
+                                IMessageProducer producer, IConfiguration configuration)
         {
             _repository = repository;
             _mapper = mapper;
             _producer = producer;
+            _configuration = configuration;
         }
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
@@ -31,7 +34,7 @@ namespace DocumentServiceApi.Services
             }
             var client = StorageClient.Create();
             var stream = new MemoryStream();
-            var obj = await client.DownloadObjectAsync("test_bucket_asiyar", fileName, stream);
+            var obj = await client.DownloadObjectAsync(_configuration["Bucket:BucketName"], fileName, stream);
             stream.Position = 0;
             var document = new DocumentDto()
             {
@@ -55,7 +58,7 @@ namespace DocumentServiceApi.Services
 
             var client = StorageClient.Create();
             var obj = await client.UploadObjectAsync(
-                "test_bucket_asiyar",
+                _configuration["Bucket:BucketName"],
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));
