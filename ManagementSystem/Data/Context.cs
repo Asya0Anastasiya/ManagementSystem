@@ -15,6 +15,7 @@ namespace UserService.Data
         public DbSet<DepartmentEntity> Departments { get; set; }
         public DbSet<BranchOfficeEntity> Branches { get; set; }
         public DbSet<AdressEntity> Adresses { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

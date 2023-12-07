@@ -4,6 +4,8 @@ using UserService.Models.UserDto;
 using UserService.Helpers.Pagination;
 using UserService.Helpers;
 using Newtonsoft.Json;
+using UserService.Models.TokenDto;
+using UserService.Models.Entities;
 
 namespace UserService.Controllers
 {
@@ -49,10 +51,11 @@ namespace UserService.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> LoginAsync([FromBody] SignInModel signInModel)
         {
-            string token = await _userService.Login(signInModel);
+            Tokens tokens = await _userService.Login(signInModel);
             return Ok(new
             {
-                Token = token,
+                Token = tokens.Token,
+                RefreshToken = tokens.RefreshToken,
             });
         }
 
@@ -95,6 +98,12 @@ namespace UserService.Controllers
             
             byte[] imageData = await _userService.GetUserImageAsync(userId);
             return File(imageData, "image/png");
+        }
+
+        [HttpGet("refreshTokenVerification")]
+        public async Task<IActionResult> RefreshTokenVerification([FromHeader] string refreshToken)
+        {
+            return Ok(await _userService.RefreshTokenCheckAsync(refreshToken));
         }
     }
 }

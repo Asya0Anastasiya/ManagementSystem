@@ -20,5 +20,11 @@ namespace UserService.Interfaces.Repositories
 
         public Task<UserEntity> GetUserByIdAsync(Guid id);
 
+        public Task RemoveRefreshTokenAsync(Guid id);
+
+        public Task SetRefreshTokenAsync(RefreshToken refreshToken);
+
+        public Task<UserEntity> GetUserByRefreshTokenAsync(string refreshToken);
+
     }
 }

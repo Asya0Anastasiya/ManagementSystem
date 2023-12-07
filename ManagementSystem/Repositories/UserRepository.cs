@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using UserService.Helpers.Pagination;
 using UserService.Helpers.Filtering;
 using UserService.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace UserService.Repositories
 {
@@ -77,6 +78,32 @@ namespace UserService.Repositories
                 .FirstOrDefaultAsync(x => x.Id == userId);
 
             return user.UserImage;
+        }
+
+        public async Task RemoveRefreshTokenAsync(Guid id)
+        {
+            var token = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (token != null)
+            {
+                _context.RefreshTokens.Remove(token);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task SetRefreshTokenAsync(RefreshToken refreshToken)
+        {
+            await _context.RefreshTokens.AddAsync(refreshToken);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<UserEntity> GetUserByRefreshTokenAsync(string refreshToken)
+        {
+            return await _context.Users
+                .Include(x => x.RefreshToken)
+                .FirstOrDefaultAsync(x => x.RefreshToken.Token == refreshToken);
         }
     }
 }
