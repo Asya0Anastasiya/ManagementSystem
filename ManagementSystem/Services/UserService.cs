@@ -107,6 +107,13 @@ namespace UserService.Services
                 CreatedDateTime = DateTime.Now
             };
 
+            if (user.RefreshToken != null)
+            {
+                await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
+            }
+
+            await _userRepository.SetRefreshTokenAsync(refreshToken);
+
             return new Tokens
             {
                 Token = token,
@@ -206,7 +213,8 @@ namespace UserService.Services
 
             var refreshTokenExpiresDays = int.Parse(_config["RefreshTokenExpiresDays"]);
 
-            if (DateTime.Now - user.RefreshToken.CreatedDateTime > new TimeSpan(refreshTokenExpiresDays, 0, 0, 0))
+            //if (DateTime.Now - user.RefreshToken.CreatedDateTime > new TimeSpan(refreshTokenExpiresDays, 0, 0, 0))
+            if (DateTime.Now - user.RefreshToken.CreatedDateTime > new TimeSpan(0, 0, 5, 0))
             {
                 await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
 

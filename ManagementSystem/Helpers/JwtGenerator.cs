@@ -29,7 +29,7 @@ namespace UserService.Helpers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = credentials
             };
             var token = jwtHandler.CreateToken(tokenDescriptor);

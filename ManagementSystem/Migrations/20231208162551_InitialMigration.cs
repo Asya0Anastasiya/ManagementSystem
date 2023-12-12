@@ -76,11 +76,11 @@ namespace UserService.Migrations
 						REFERENCES Positions (Id)
 					);
 
-				CREATE TABLE RefreshToken (
+				CREATE TABLE RefreshTokens (
 					Id uniqueidentifier NOT NULL,
 					Token nvarchar NOT NULL,
 					UserId uniqueidentifier NOT NULL,
-					CreatedDateTime date NOT NULL,
+					CreatedDateTime datetime NOT NULL,
 					CONSTRAINT PK_RefreshToken PRIMARY KEY CLUSTERED 
 					(
 						Id ASC
