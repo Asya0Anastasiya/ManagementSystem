@@ -100,7 +100,7 @@ namespace UserService.Controllers
             return File(imageData, "image/png");
         }
 
-        [HttpGet("refreshTokenVerification")]
+        [HttpPost("refreshTokenVerification")]
         public async Task<IActionResult> RefreshTokenVerification([FromHeader] string refreshToken)
         {
             return Ok(await _userService.RefreshTokenCheckAsync(refreshToken));

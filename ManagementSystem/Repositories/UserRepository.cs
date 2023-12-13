@@ -26,7 +26,7 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.AsNoTracking()
+            return await _context.Users.Include(x => x.RefreshToken).AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
