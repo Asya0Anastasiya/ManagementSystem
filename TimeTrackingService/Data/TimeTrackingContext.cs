@@ -7,7 +7,7 @@ namespace TimeTrackingService.Data
     {
         public TimeTrackingContext(DbContextOptions<TimeTrackingContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<DayAccounting> DaysAccounting { get; set; }

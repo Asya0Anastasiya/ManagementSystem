@@ -17,9 +17,9 @@ namespace UserService.Models.Entities
         public ICollection<DepartmentEntity> Departments { get; set; }
 
         [Required]
-        public AdressEntity Adress { get; set; }
+        public AdressEntity Address { get; set; }
 
         [Required]
-        public Guid AdressId { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

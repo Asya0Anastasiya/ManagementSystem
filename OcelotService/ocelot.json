@@ -151,6 +151,22 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/refreshTokenVerification",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/User/refreshTokenVerification",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/addDay",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/DayAccounting/addDay",

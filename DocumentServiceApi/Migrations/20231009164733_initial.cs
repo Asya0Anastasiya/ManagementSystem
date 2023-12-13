@@ -9,24 +9,19 @@ namespace DocumentServiceApi.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Documents",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Documents", x => x.Id);
-                });
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Documents");
+            migrationBuilder.Sql(@"
+                CREATE TABLE Documents (
+                    Id uniqueidentifier NOT NULL,
+                    Name nvarchar(60) NOT NULL,
+                    UserId uniqueidentifier NOT NULL,
+	                ContentType nvarchar(20) NOT NULL,
+	                Size float NOT NULL CHECK(Size > 0 AND Size <= 20000),
+	                Type int NOT NULL CHECK(Type >=1 AND Type <= 5),
+	                CONSTRAINT PK_Documents PRIMARY KEY CLUSTERED 
+	                (
+		                Id ASC
+	                )
+                );");
         }
     }
 }
