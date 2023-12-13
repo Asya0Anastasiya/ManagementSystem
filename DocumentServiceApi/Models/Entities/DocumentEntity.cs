@@ -1,37 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using DocumentServiceApi.Models.Enums;
+﻿using DocumentServiceApi.Models.Enums;
+using Microsoft.EntityFrameworkCore;
+using DocumentServiceApi.FluentApi;
 
 namespace DocumentServiceApi.Models.Entities
 {
+    [EntityTypeConfiguration(typeof(DocumentConfiguration))]
     public class DocumentEntity
     {
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        [MaxLength(60)]
         public string Name { get; set; }
 
-        [Required]
-        [Range(0, 10000)]
         public double Size { get; set; }
 
-        [Required]
-        [MaxLength(20)]
         public string ContentType { get; set; }
 
-        [Required]
-        [MaxLength(20)]
         public Types Type { get; set; }
 
-        [Required]
-        [MaxLength(60)]
         public DateTime UploadDate { get; set; }
 
-        [Required]
         public Guid UserId { get; set; }
     }
 }
