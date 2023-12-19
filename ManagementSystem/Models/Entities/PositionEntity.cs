@@ -1,22 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using UserService.FluentApi;
 
 namespace UserService.Models.Entities
 {
+    [EntityTypeConfiguration(typeof(PositionConfiguration))]
     public class PositionEntity
     {
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        [MaxLength(30)]
         public string Name { get; set; }
 
         public DepartmentEntity Department { get; set; } = null!;
 
-        [Required]
         public Guid DepartmentId { get; set; }
     }
 }
