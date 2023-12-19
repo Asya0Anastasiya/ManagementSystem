@@ -26,5 +26,6 @@ namespace UserService.Models.Entities
         public string Password { get; set; } = "";
 
         public byte[] UserImage { get; set; }
+
     }
 }
