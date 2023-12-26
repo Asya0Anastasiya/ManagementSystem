@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TimeTrackingService.Interfaces.Services;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TimeTrackingService.MediatR.Commands;
+using TimeTrackingService.MediatR.Queries;
 using TimeTrackingService.Models.Dto;
 
 namespace TimeTrackingService.Controllers
@@ -8,25 +10,25 @@ namespace TimeTrackingService.Controllers
     [ApiController]
     public class DocumentController : ControllerBase
     {
-        private readonly IDocumentService _documentService;
+        private readonly IMediator _mediator;
 
-        public DocumentController(IDocumentService documentService)
+        public DocumentController(IMediator mediator)
         {
-            _documentService = documentService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("getAttachedUsersTimeTrackingDocumentsNames/{userId}")]
         public async Task<List<string>> GetUsersDocumentsNamesForAdminAsync(Guid userId, [FromQuery] DateTime date)
         {
-            return await _documentService.GetAttachedUsersDocumentsNames(userId, date);
+            return await _mediator.Send(new GetUsersDocumentsNamesForAdminQuery(userId, date));
         }
 
         [HttpPost]
         [Route("attachDocument/{userId}")]
         public async Task<IActionResult> AttachDocumentAsync([FromRoute] Guid userId, [FromBody] AttachDocModel attachDocModel)
         {
-            await _documentService.AttachDocumentToDay(attachDocModel.Name, attachDocModel.Date, userId);
+            await _mediator.Send(new AttachDocumentCommand(userId, attachDocModel));
             return Ok();
         }
 
@@ -34,7 +36,7 @@ namespace TimeTrackingService.Controllers
         [Route("getAllUsersTimeTrackingDocs/{userId}")]
         public async Task<List<string>> GetAllUsersTimeTrackDocsNamesAsync(Guid userId)
         {
-            return await _documentService.GetAllUsersTimeTrackDocsNames(userId);
+            return await _mediator.Send(new GetAllUsersTimeTrackDocsNamesQuery(userId));
         }
     }
 }

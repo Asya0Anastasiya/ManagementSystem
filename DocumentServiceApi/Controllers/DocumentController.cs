@@ -1,5 +1,7 @@
-﻿using DocumentServiceApi.Interfaces.Services;
+﻿using DocumentServiceApi.MediatR.Commands;
+using DocumentServiceApi.MediatR.Queries;
 using DocumentServiceApi.Models.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentServiceApi.Controllers
@@ -8,18 +10,18 @@ namespace DocumentServiceApi.Controllers
     [ApiController]
     public class DocumentController : ControllerBase
     {
-        private readonly IDocumentService _service;
+        private readonly IMediator _mediator;
 
-        public DocumentController(IDocumentService service)
+        public DocumentController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("downloadUserDocument/{fileName}/{userId}")]
         public async Task<IActionResult> DownloadDocumentAsync([FromRoute] string fileName, Guid userId)
         {
-            var obj = await _service.DownloadDocumentAsync(fileName, userId);
+            var obj = await _mediator.Send(new DownloadDocumentQuery(userId, fileName));
             return File(obj.Stream, obj.ContentType, obj.Name);
         }
 
@@ -27,7 +29,7 @@ namespace DocumentServiceApi.Controllers
         [Route("uploadUserDocument")]
         public async Task<IActionResult> UploadDocumentAsync([FromForm] UploadDocument uploadDocument)
         {
-            await _service.UploadDocumentAsync(uploadDocument);
+            await _mediator.Send(new UploadDocumentCommand(uploadDocument));
             return Ok();
         }
 
@@ -35,7 +37,7 @@ namespace DocumentServiceApi.Controllers
         [Route("getUserDocuments/{userId}")]
         public async Task<List<DocumentInfo>> GetUserDocumentsAsync(Guid userId)
         {
-            return await _service.GetUserDocuments(userId);
+            return await _mediator.Send(new GetUserDocumentsQuery(userId));
         }
     }
 }
