@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserService.Models.Entities
 {
-    public class AdressEntity
+    public class AddressEntity
     {
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

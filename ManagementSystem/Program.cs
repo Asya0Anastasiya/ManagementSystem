@@ -6,9 +6,21 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .AddCheck<ApiHealthCheck>(nameof(ApiHealthCheck));
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage();
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -59,6 +71,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
+
 app.Run();
-
-
