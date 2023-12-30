@@ -5,7 +5,7 @@ namespace DocumentServiceApi.Interfaces.Repositories
 {
     public interface IDocumentRepository
     {
-        public Task<bool> IsDocumestExist(string fileName, Guid userId);
+        public Task<bool> IsDocumentExist(string fileName, Guid userId);
 
         public Task<List<DocumentEntity>> GetUserDocuments(Guid userId);
 

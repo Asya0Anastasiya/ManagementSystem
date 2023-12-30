@@ -20,7 +20,7 @@ namespace TimeTrackingService.Models.Entities
 
         [Required]
         [StringLength(20)]
-        public Types Type { get; set; }
+        public DocumentTypes Type { get; set; }
 
         [Required]
         public Guid SourceId { get; set; }

@@ -6,6 +6,7 @@ using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Enums;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Repositories
 {
@@ -32,8 +33,7 @@ namespace TimeTrackingService.Repositories
         public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination)
         {
             var days = _timeTrackingContext.DaysAccounting.AsNoTracking().AsQueryable();
-            FilteringHelper filteringHelper = new();
-            days = filteringHelper.FilterDays(filtering, days);
+            days = FilteringHelper.FilterDays(filtering, days);
             return await days.ToListAsync();
         }
 
@@ -96,27 +96,7 @@ namespace TimeTrackingService.Repositories
             return daysCount;
         }
 
-        public async Task<int> GetPaidDaysCount(Guid id, int month, int year)
-        {
-            var daysCount = await GetUsersWorkDaysCount(id, month, year) 
-                    + await GetUsersSickDaysCount(id, month, year) 
-                    + await GetUsersHolidaysCount(id, month, year);
-            return daysCount;
-        }
-
-        public async Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year)
-        {
-            UsersDaysModel model = new()
-            {
-                WorkDaysCount = await GetUsersWorkDaysCount(id, month, year),
-                SickDaysCount = await GetUsersSickDaysCount(id, month, year),
-                HolidaysCount = await GetUsersHolidaysCount(id, month, year),
-                PaidDaysCount = await GetPaidDaysCount(id, month, year)
-            };
-            return model;
-        }
-
-        public async Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId)
+        public async Task<DayAccounting> CheckDayForExistenceAsync(DateTime date, Guid userId)
         { 
             return await _timeTrackingContext.DaysAccounting.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Date.Date == date.Date);

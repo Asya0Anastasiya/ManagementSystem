@@ -9,12 +9,12 @@ namespace UserService.Helpers
         {
             if (password.Length < 8)
             {
-                throw new InternalException("Password should contains of 8 chars at least");
+                throw new InternalException("Password must contain at least 8 chars");
             }
 
             if (!(Regex.IsMatch(password, "[a-z, A-Z, 0-9, !,@,#,$,%,^,&,*,(,),_,=,+,{,}]")))
             {
-                throw new InternalException("Password should be Alphanumeric with special chars");
+                throw new InternalException("Password must be Alphanumeric with special chars");
             }
         }
     }

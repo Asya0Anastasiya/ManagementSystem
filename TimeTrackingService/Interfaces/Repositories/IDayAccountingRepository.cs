@@ -1,7 +1,7 @@
-﻿using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Helpers.Pagination;
+﻿using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Interfaces.Repositories
 {
@@ -29,10 +29,6 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task<int> GetUsersHolidaysCount(Guid id, int month, int year);
 
-        public Task<int> GetPaidDaysCount(Guid id, int month, int year);
-
-        public Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year);
-
-        public Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId);
+        public Task<DayAccounting> CheckDayForExistenceAsync(DateTime date, Guid userId);
     }
 }

@@ -36,9 +36,10 @@ namespace TimeTrackingService.Services
             }
 
             var day = await _dayAccountingRepository.CheckDayForExistanceAsync(dateTime, userId);
+
             if (day == null )
             {
-                throw new NotFoundException("No such day");
+                throw new NotFoundException("Day not found");
             }
 
             document.DaysAccounting.Add(day);

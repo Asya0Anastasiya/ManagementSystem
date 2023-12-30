@@ -15,17 +15,10 @@ namespace DocumentServiceApi.Repositiries
             _context = context;
         }
 
-        public async Task<bool> IsDocumestExist(string fileName, Guid userId)
+        public async Task<bool> IsDocumentExist(string fileName, Guid userId)
         {
-            var existance = await _context.Documents.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Name == fileName && x.UserId == userId);
-
-            if (existance == null)
-            {
-                return false;
-            }
-
-            return true;
+            return await _context.Documents.AsNoTracking()
+                .AnyAsync(x => x.Name == fileName && x.UserId == userId);
         }
 
         public async Task<List<DocumentEntity>> GetUserDocuments(Guid userId)

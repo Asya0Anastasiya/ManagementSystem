@@ -25,26 +25,32 @@ namespace DocumentServiceApi.Services
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
         {
-            if (!(await _repository.IsDocumestExist(fileName, userId)))
+            if (!(await _repository.IsDocumentExist(fileName, userId)))
             {
                 throw new NotFoundException("Document not found or you do not have permissions to download it...");
             }
+
             var client = StorageClient.Create();
+
             var stream = new MemoryStream();
+
             var obj = await client.DownloadObjectAsync("test_bucket_asiyar", fileName, stream);
+
             stream.Position = 0;
+
             var document = new DocumentDto()
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
                 Stream = stream
             };
+
             return document;
         }
 
         public async Task UploadDocumentAsync(UploadDocument uploadDocument)
         {
-            if (await _repository.IsDocumestExist(uploadDocument.File.Name, uploadDocument.UserId))
+            if (await _repository.IsDocumentExist(uploadDocument.File.Name, uploadDocument.UserId))
             {
                 throw new InternalException("Document with such name already exist... Please, rename your document");
             }
@@ -54,13 +60,14 @@ namespace DocumentServiceApi.Services
             await uploadDocument.File.CopyToAsync(memoryStream);
 
             var client = StorageClient.Create();
+
             var obj = await client.UploadObjectAsync(
                 "test_bucket_asiyar",
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));
 
-            var doc = new DocumentEntity()
+            var document = new DocumentEntity()
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
@@ -69,24 +76,24 @@ namespace DocumentServiceApi.Services
                 UserId = uploadDocument.UserId
             };
 
-            await _repository.AddDocumentAsync(doc);
+            await _repository.AddDocumentAsync(document);
 
-            if (doc.Type == Types.TimeTracking)
+            if (document.Type == Types.TimeTracking)
             {
-                DateTime date = new(1990, 1, 1);
-                await DocCreatedNotification(doc.Name, date, doc.UserId);
+                await DocCreatedNotification(document);
             }
         }
 
         public async Task<List<DocumentInfo>> GetUserDocuments(Guid userId)
         {
             var documents = await _repository.GetUserDocuments(userId);
+
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
-        public async Task DocCreatedNotification(string name, DateTime date, Guid userId)
+        private async Task DocCreatedNotification(DocumentEntity documentEntity)
         {
-            var document = await _repository.GetUserDocumentByName(name, userId);
+            var document = await _repository.GetUserDocumentByName(documentEntity.Name, documentEntity.UserId);
 
             if (document == null)
             {
@@ -97,9 +104,8 @@ namespace DocumentServiceApi.Services
             {
                 Name = document.Name,
                 Type = document.Type,
-                UserId = userId,
+                UserId = documentEntity.UserId,
                 SourceId = document.Id,
-                Date = date
             };
 
             var message = new TimeTrackDocumentUploadedMessage()

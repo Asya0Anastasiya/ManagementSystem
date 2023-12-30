@@ -1,6 +1,6 @@
-﻿using UserService.Helpers;
-using UserService.Helpers.Pagination;
+﻿using UserService.Helpers.Pagination;
 using UserService.Models.Entities;
+using UserService.Models.Params;
 
 namespace UserService.Interfaces.Repositories
 {

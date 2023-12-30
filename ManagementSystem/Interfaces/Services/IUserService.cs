@@ -1,5 +1,5 @@
-﻿using UserService.Helpers;
-using UserService.Helpers.Pagination;
+﻿using UserService.Helpers.Pagination;
+using UserService.Models.Params;
 using UserService.Models.UserDto;
 
 namespace UserService.Interfaces.Services

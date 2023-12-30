@@ -6,6 +6,7 @@ using UserService.Interfaces.Repositories;
 using UserService.Interfaces.Services;
 using UserService.Models.Entities;
 using UserService.Models.Enums;
+using UserService.Models.Params;
 using UserService.Models.UserDto;
 
 namespace UserService.Services
@@ -24,6 +25,8 @@ namespace UserService.Services
             _userRepository = userRepository;
             _mapper = mapper;
         }
+
+        private const int MaxFileSize = 10_485_760;
 
         public async Task Create(SignUpModel signUpModel)
         {
@@ -65,52 +68,62 @@ namespace UserService.Services
         public async Task DeleteUserAsync(Guid id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
+
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
+
             await _userRepository.DeleteUserAsync(user);
         }
 
         public async Task<string> Login(SignInModel signInModel)
         {
             var user = await _userRepository.GetUserByEmailAsync(signInModel.Email);
+
             if (user == null)
             {
                 throw new NotFoundException("Such user does not exist");
             }
+
             if (!BCrypt.Net.BCrypt.Verify(signInModel.Password, user.Password))
             {
                 throw new InternalException("Wrong password");
             }
+
             var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id);
+
             return token;
         }
 
         public async Task ChangePassword(Guid id, string oldPassword, string newPassword)
         {
             var currentUser = await _userRepository.GetUserByIdAsync(id);
+
             if (currentUser == null)
             {
                 throw new NotFoundException("User not found");
             }
+
             if (!BCrypt.Net.BCrypt.Verify(oldPassword, currentUser.Password))
             {
                 throw new InternalException("Wrong password");
             }
+
             currentUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
             await _userRepository.UpdateUserAsync(currentUser);
         }
 
         public async Task UpdateUserAsync(UpdateUserModel model)
         {
-            // добавила AsNoTracking, иначе выскакивала ошибка, что EF не может
-            // обновить сущность, так как две сущности с одинаковыми айди трекаются
             var user = await _userRepository.GetUserByIdAsync(model.Id);
+
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
+
             user.FirstName = model.FirstName.Trim(); 
             user.LastName = model.LastName.Trim();
             user.Email = model.Email.Trim();
@@ -128,7 +141,7 @@ namespace UserService.Services
                 throw new NotFoundException("User Not Found");
             }
 
-            if (file.Length > 5242880 * 2)
+            if (file.Length > MaxFileSize)
             {
                 throw new InternalException("File is more then 10mb.");
             }
@@ -151,7 +164,7 @@ namespace UserService.Services
 
             if (user == null)
             {
-                throw new NotFoundException("User Not FFFound");
+                throw new NotFoundException("User Not found");
             }
 
             if (user.UserImage == null)

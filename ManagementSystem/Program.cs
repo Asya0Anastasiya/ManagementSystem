@@ -9,14 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
     {
-        // почему принимает запросы с хоста оцелота, даже если стоит .WithOrigins("не_хост_оцелота")???????????
         builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
@@ -40,9 +38,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -54,11 +50,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
-//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
-

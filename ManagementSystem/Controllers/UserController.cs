@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using UserService.Models.UserDto;
 using UserService.Helpers.Pagination;
-using UserService.Helpers;
 using Newtonsoft.Json;
+using UserService.Models.Params;
 
 namespace UserService.Controllers
 {
@@ -41,7 +41,7 @@ namespace UserService.Controllers
         [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {
-            await _userService.ChangePassword(model.Id, model.OldPassword, model.NewPassword);
+            await _userService.ChangePassword(model.UserId, model.OldPassword, model.NewPassword);
             return Ok();
         }
 
@@ -93,7 +93,7 @@ namespace UserService.Controllers
         public async Task<IActionResult> GetUserImageAsync(Guid userId)
         {
             
-            byte[] imageData = await _userService.GetUserImageAsync(userId);
+            var imageData = await _userService.GetUserImageAsync(userId);
             return File(imageData, "image/png");
         }
     }

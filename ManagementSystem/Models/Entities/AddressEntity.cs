@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserService.Models.Entities
 {
-    public class AdressEntity
+    public class AddressEntity
     {
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,10 +20,10 @@ namespace UserService.Models.Entities
 
         [Required]
         [MaxLength(35)]
-        public string Strit { get; set; }
+        public string Street { get; set; }
 
         [Required]
         [MaxLength(10)]
-        public string HouseNumber { get; set; }
+        public string Building { get; set; }
     }
 }

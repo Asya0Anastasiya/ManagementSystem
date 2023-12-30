@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
-
-// ничего, что микросервисы для юзеров и дней запускаются на iis сервере, а ocelot на kestrel?
-// Хотя у ocelot-a в настройках стоит InProgress hosting model (но на панели сверху запуск стоит не на iis).
-// Получается, в приоритете при определении сервера, на котором запустится приложение,
-// будет не то, что в настройках, а то, что возле зелёного треугольничка сверху?????????
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Controllers
 {
@@ -28,6 +21,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostDayAsync(CreateDayModel dayModel)
         {
             await _service.AddDay(dayModel);
+
             return Ok();
         }
 
@@ -36,6 +30,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<CreateDayModel> daysAccounting)
         {
             await _service.AddRangeOfDays(daysAccounting);
+
             return Ok();
         }
 
@@ -49,10 +44,11 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpGet]
-        [Route("getUnconfirmedDaysCount/{id}")]
-        public async Task<IActionResult> GetUnconfirmedDaysCount(Guid id)
+        [Route("getUnconfirmedDaysCount/{userId}")]
+        public async Task<IActionResult> GetUnconfirmedDaysCount(Guid userId)
         {
-            var count = await _service.GetUnconfirmedDaysCount(id);
+            var count = await _service.GetUnconfirmedDaysCount(userId);
+
             return Ok(count);
         }
 
@@ -60,6 +56,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
             await _service.RemoveDayAsync(id);
+
             return Ok();
         }
 
@@ -68,6 +65,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> RemoveDaysRangeAsync(List<Guid> ids)
         {
             await _service.RemoveRangeOfDays(ids);
+
             return Ok();
         }
 
@@ -76,6 +74,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> ApproveDayAsync(Guid id)
         {
             await _service.ApproveDayAsync(id);
+
             return Ok("Successfully approved");
         }
 

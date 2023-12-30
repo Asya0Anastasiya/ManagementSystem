@@ -1,6 +1,6 @@
-﻿using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Models.Dto;
+﻿using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Interfaces.Services
 {
