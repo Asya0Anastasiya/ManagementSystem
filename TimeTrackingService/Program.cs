@@ -1,4 +1,5 @@
 using AutoMapper;
+using HealthChecks.UI.Client;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
@@ -9,6 +10,17 @@ using TimeTrackingService.Repositories;
 using TimeTrackingService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    //.AddRabbitMQ()
+    .AddCheck<ApiHealthCheck>(nameof(ApiHealthCheck));
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -53,5 +65,12 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();

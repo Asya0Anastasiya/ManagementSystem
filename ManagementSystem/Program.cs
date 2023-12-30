@@ -12,6 +12,8 @@ using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddHealthChecks()
     .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
     .AddCheck<ApiHealthCheck>(nameof(ApiHealthCheck));

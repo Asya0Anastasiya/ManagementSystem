@@ -1,30 +1,59 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using UserService.Helpers.Pagination;
-using UserService.Interfaces.Repositories;
 
 namespace UserService.Services
 {
+    //public class ApiHealthCheck : IHealthCheck
+    //{
+    //    private readonly IUserRepository _userRepository;
+
+    //    public ApiHealthCheck(IUserRepository userRepository)
+    //    {
+    //        _userRepository = userRepository;
+    //    }
+
+    //    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, 
+    //                                                CancellationToken cancellationToken = default)
+    //    {
+    //        try
+    //        {
+    //            await _userRepository.GetUsersAsync(null, new PaginationParameters(1, 1));
+    //            return await Task.FromResult(new HealthCheckResult(
+    //                  status: HealthStatus.Healthy,
+    //                  description: "The API is up and running."));
+    //        }
+    //        catch (Exception)
+    //        {
+    //            return await Task.FromResult(new HealthCheckResult(
+    //              status: HealthStatus.Unhealthy,
+    //              description: "The API is down."));
+    //        }
+    //    }
+    //}
+
     public class ApiHealthCheck : IHealthCheck
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public ApiHealthCheck(IUserRepository userRepository)
+        public ApiHealthCheck(IHttpClientFactory httpClientFactory)
         {
-            _userRepository = userRepository;
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, 
-                                                    CancellationToken cancellationToken = default)
+        public async Task<HealthCheckResult> CheckHealthAsync
+        (HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
-            try
+            using (var httpClient = _httpClientFactory.CreateClient())
             {
-                await _userRepository.GetUsersAsync(null, new PaginationParameters(1, 1));
-                return await Task.FromResult(new HealthCheckResult(
+                var response = await httpClient.GetAsync("https://localhost:44307/api/User/getUsers/pageNumber/1/pageSize/1");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Task.FromResult(new HealthCheckResult(
                       status: HealthStatus.Healthy,
                       description: "The API is up and running."));
-            }
-            catch (Exception)
-            {
+                }
+
                 return await Task.FromResult(new HealthCheckResult(
                   status: HealthStatus.Unhealthy,
                   description: "The API is down."));

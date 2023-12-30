@@ -5,9 +5,20 @@ using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Mappers;
 using DocumentServiceApi.Repositiries;
 using DocumentServiceApi.Services;
+using HealthChecks.UI.Client;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //.AddRabbitMQ()
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage();
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
@@ -53,5 +64,12 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();
