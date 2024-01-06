@@ -6,12 +6,19 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Host.UseSerilog();
+
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
@@ -52,6 +59,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
 //app.UseAuthentication();

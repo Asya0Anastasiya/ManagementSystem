@@ -6,10 +6,12 @@ namespace UserService.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ErrorHandlingMiddleware> _logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -37,6 +39,7 @@ namespace UserService.Middleware
                 }
 
                 await context.Response.WriteAsync(e.Message);
+                _logger.LogInformation(e.Message);
             }
             catch (Exception e)
             {
