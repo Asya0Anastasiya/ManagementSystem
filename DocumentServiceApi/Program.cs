@@ -3,11 +3,15 @@ using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Mappers;
+using DocumentServiceApi.Models.Validators;
 using DocumentServiceApi.Repositiries;
 using DocumentServiceApi.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
