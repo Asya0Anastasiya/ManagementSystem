@@ -34,7 +34,6 @@ builder.Services.AddDbContext<TimeTrackingContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
-builder.Services.Configure<RabbitMqQueueOptions>(builder.Configuration.GetSection("RabbitMqQueue"));
 
 var mappingConfig = new MapperConfiguration(x =>
 {

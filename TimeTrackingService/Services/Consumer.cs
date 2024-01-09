@@ -18,16 +18,13 @@ namespace TimeTrackingService.Services
         private readonly IMapper _mapper;
         private readonly IConnection _connection;
         private readonly RabbitMqOptions _rabbitMqOptions;
-        private readonly RabbitMqQueueOptions _rabbitMqQueueOptions;
 
         public Consumer(IServiceScopeFactory services, IMapper mapper, 
-                                IOptions<RabbitMqOptions> rabbitMqOptions,
-                                IOptions<RabbitMqQueueOptions> rabbitMqQueueOptions)
+                                IOptions<RabbitMqOptions> rabbitMqOptions)
         {
             Services = services;
             _mapper = mapper;
             _rabbitMqOptions = rabbitMqOptions.Value;
-            _rabbitMqQueueOptions = rabbitMqQueueOptions.Value;
 
             ConnectionFactory factory = new()
             {
@@ -43,7 +40,7 @@ namespace TimeTrackingService.Services
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var channel = _connection.CreateModel();
-            channel.QueueDeclare(_rabbitMqQueueOptions.QueueName, durable: true, exclusive: false);
+            channel.QueueDeclare(_rabbitMqOptions.QueueName, durable: true, exclusive: false);
             var consumer = new EventingBasicConsumer(channel);
 
             consumer.Received += async (model, ea) =>
@@ -75,7 +72,7 @@ namespace TimeTrackingService.Services
                 }
             };
 
-            channel.BasicConsume(queue: _rabbitMqQueueOptions.QueueName, autoAck: true, consumer: consumer);
+            channel.BasicConsume(queue: _rabbitMqOptions.QueueName, autoAck: true, consumer: consumer);
             return Task.CompletedTask;
         }
     }

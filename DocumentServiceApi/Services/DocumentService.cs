@@ -6,6 +6,7 @@ using DocumentServiceApi.Models.Dto;
 using DocumentServiceApi.Models.Entities;
 using DocumentServiceApi.Models.Enums;
 using DocumentServiceApi.Models.Messages;
+using DocumentServiceApi.Options;
 using Google.Cloud.Storage.V1;
 
 namespace DocumentServiceApi.Services
@@ -15,15 +16,15 @@ namespace DocumentServiceApi.Services
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
         private readonly IMessageProducer _producer;
-        private readonly IConfiguration _configuration;
+        private readonly BucketOptions _bucketOptions;
 
         public DocumentService(IDocumentRepository repository, IMapper mapper, 
-                                IMessageProducer producer, IConfiguration configuration)
+                                IMessageProducer producer, BucketOptions bucketOptions)
         {
             _repository = repository;
             _mapper = mapper;
             _producer = producer;
-            _configuration = configuration;
+            _bucketOptions = bucketOptions;
         }
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
@@ -34,7 +35,7 @@ namespace DocumentServiceApi.Services
             }
             var client = StorageClient.Create();
             var stream = new MemoryStream();
-            var obj = await client.DownloadObjectAsync(_configuration["Bucket:BucketName"], fileName, stream);
+            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, fileName, stream);
             stream.Position = 0;
             var document = new DocumentDto()
             {
@@ -58,7 +59,7 @@ namespace DocumentServiceApi.Services
 
             var client = StorageClient.Create();
             var obj = await client.UploadObjectAsync(
-                _configuration["Bucket:BucketName"],
+                _bucketOptions.BucketName,
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));

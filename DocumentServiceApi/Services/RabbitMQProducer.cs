@@ -11,13 +11,10 @@ namespace DocumentServiceApi.Services
     {
         private readonly IConnection _connection;
         private readonly RabbitMqOptions _rabbitMqOptions;
-        private readonly RabbitMqQueueOptions _rabbitMqQueueOptions;
 
-        public RabbitMQProducer(IOptions<RabbitMqOptions> rabbitMqOptions, 
-                                IOptions<RabbitMqQueueOptions>  rabbitMqQueueOptions) 
+        public RabbitMQProducer(IOptions<RabbitMqOptions> rabbitMqOptions) 
         {
             _rabbitMqOptions = rabbitMqOptions.Value;
-            _rabbitMqQueueOptions = rabbitMqQueueOptions.Value;
 
             ConnectionFactory factory = new()
             {
@@ -34,12 +31,12 @@ namespace DocumentServiceApi.Services
         {
             using var channel = _connection.CreateModel();
 
-            channel.QueueDeclare(_rabbitMqQueueOptions.QueueName, durable: true, exclusive: false);
+            channel.QueueDeclare(_rabbitMqOptions.QueueName, durable: true, exclusive: false);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
 
-            channel.BasicPublish(exchange: "", routingKey: _rabbitMqQueueOptions.QueueName, body: body);
+            channel.BasicPublish(exchange: "", routingKey: _rabbitMqOptions.QueueName, body: body);
         }
     }
 }
