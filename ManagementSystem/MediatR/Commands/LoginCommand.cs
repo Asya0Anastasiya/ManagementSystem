@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
+using UserService.Interfaces.Services;
 using UserService.Models.UserDto;
 
 namespace UserService.MediatR.Commands
@@ -10,6 +12,31 @@ namespace UserService.MediatR.Commands
         public LoginCommand(SignInModel signInModel)
         {
             SignInModel = signInModel;
+        }
+    }
+
+    public class LoginCommandValidator : AbstractValidator<SignInModel>
+    {
+        public LoginCommandValidator()
+        {
+            RuleFor(model => model.Email).NotEmpty().EmailAddress().MaximumLength(50);
+
+            RuleFor(model => model.Password).NotEmpty().MaximumLength(25);
+        }
+    }
+
+    public class LoginHandler : IRequestHandler<LoginCommand, string>
+    {
+        private readonly IUserService _userService;
+
+        public LoginHandler(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+        {
+            return await _userService.Login(request.SignInModel);
         }
     }
 }

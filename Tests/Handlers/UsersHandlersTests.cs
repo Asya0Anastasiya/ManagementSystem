@@ -1,15 +1,7 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserService.Interfaces.Services;
 using UserService.MediatR.Commands;
-using UserService.MediatR.Handlers;
-using UserService.MediatR.Queries;
 using UserService.Models.UserDto;
-using Xunit;
 
 namespace Tests.Handlers
 {
@@ -20,15 +12,6 @@ namespace Tests.Handlers
         public UsersHandlersTests()
         {
             _userService = new Mock<IUserService>();
-        }
-
-        [Fact]
-        public async Task GetUsersCountHandler_ReturnsInt()
-        {
-            GetUsersCountHandler _getUsersCountHandler = new(_userService.Object);
-            var result = await _getUsersCountHandler.Handle(new GetUsersCountQuery(), CancellationToken.None);
-
-            Assert.IsType<int>(result);
         }
 
         [Fact]

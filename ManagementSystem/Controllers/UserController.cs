@@ -29,13 +29,7 @@ namespace UserService.Controllers
         [HttpGet("getUsers/pageNumber/{pageNumber}/pageSize/{pageSize}")]
         public async Task<IActionResult> GetUsersAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
         {
-            var totalData = await _mediator.Send(new GetUsersCountQuery());
             var result = await _mediator.Send(new GetUserInfoListQuery(parameters, pageNumber, pageSize));
-            var metadata = new
-            {
-                totalData,
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             return Ok(result);
         }
 
