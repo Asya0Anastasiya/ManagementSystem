@@ -80,9 +80,9 @@ namespace UserService.Repositories
             return user.UserImage;
         }
 
-        public async Task RemoveRefreshTokenAsync(Guid id)
+        public async Task RemoveRefreshTokenAsync(UserEntity user)
         {
-            var token = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Id == id);
+            var token = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Id == user.RefreshToken.Id);
 
             if (token != null)
             {
@@ -92,7 +92,7 @@ namespace UserService.Repositories
             }
         }
 
-        public async Task SetRefreshTokenAsync(RefreshToken refreshToken)
+        public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
         {
             await _context.RefreshTokens.AddAsync(refreshToken);
 

@@ -103,7 +103,7 @@ namespace UserService.Controllers
         [HttpPost("refreshTokenVerification")]
         public async Task<IActionResult> RefreshTokenVerification([FromHeader] string refreshToken)
         {
-            return Ok(await _userService.RefreshTokenCheckAsync(refreshToken));
+            return Ok(await _userService.ValidateRefreshTokenAsync(refreshToken));
         }
     }
 }

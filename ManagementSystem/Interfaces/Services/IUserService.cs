@@ -28,6 +28,6 @@ namespace UserService.Interfaces.Services
 
         public Task<byte[]> GetUserImageAsync(Guid userId);
 
-        public Task<Tokens> RefreshTokenCheckAsync(string refreshToken);
+        public Task<Tokens> ValidateRefreshTokenAsync(string refreshToken);
     }
 }

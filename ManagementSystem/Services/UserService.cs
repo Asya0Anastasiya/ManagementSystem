@@ -14,16 +14,19 @@ namespace UserService.Services
     public class UserService : IUserService
     {
         private readonly IConfiguration _config;
+        private readonly RefreshTokenOptions _refreshTokenOptions;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserService( IConfiguration config,
+        public UserService(IConfiguration config,
                           IUserRepository userRepository,
-                          IMapper mapper)
+                          IMapper mapper,
+                          RefreshTokenOptions refreshTokenOptions)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
+            _refreshTokenOptions = refreshTokenOptions;
         }
 
         public async Task Create(SignUpModel signUpModel)
@@ -112,7 +115,7 @@ namespace UserService.Services
                 await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
             }
 
-            await _userRepository.SetRefreshTokenAsync(refreshToken);
+            await _userRepository.AddRefreshTokenAsync(refreshToken);
 
             return new Tokens
             {
@@ -202,7 +205,7 @@ namespace UserService.Services
             return user.UserImage;
         }
 
-        public async Task<Tokens> RefreshTokenCheckAsync(string refreshToken)
+        public async Task<Tokens> ValidateRefreshTokenAsync(string refreshToken)
         {
             var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
 
@@ -211,12 +214,14 @@ namespace UserService.Services
                 throw new InternalException("Invalid refresh token.");
             }
 
-            var refreshTokenExpiresDays = int.Parse(_config["RefreshTokenExpiresDays"]);
+            var refreshTokenExpires = new TimeSpan(_refreshTokenOptions.RefreshTokenExpiresDays, 
+                                                    _refreshTokenOptions.RefreshTokenExpiresHours, 
+                                                    _refreshTokenOptions.RefreshTokenExpiresMinutes, 
+                                                    _refreshTokenOptions.RefreshTokenExpiresSeconds);
 
-            //if (DateTime.Now - user.RefreshToken.CreatedDateTime > new TimeSpan(refreshTokenExpiresDays, 0, 0, 0))
-            if (DateTime.Now - user.RefreshToken.CreatedDateTime > new TimeSpan(0, 0, 5, 0))
+            if (DateTime.Now - user.RefreshToken.CreatedDateTime > refreshTokenExpires)
             {
-                await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
+                await _userRepository.RemoveRefreshTokenAsync(user);
 
                 throw new InternalException("Invalid refresh token.");
             }
@@ -228,7 +233,7 @@ namespace UserService.Services
                 CreatedDateTime = DateTime.Now
             };
 
-            await _userRepository.SetRefreshTokenAsync(newRefreshToken);
+            await _userRepository.AddRefreshTokenAsync(newRefreshToken);
 
             var newJwtToken = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id);
 
