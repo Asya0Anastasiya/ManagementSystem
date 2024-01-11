@@ -15,19 +15,19 @@ namespace UserService.MediatR.Commands
         }
     }
 
-    public class UpdateUserCommandValidator : AbstractValidator<UpdateUserModel>
+    public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         public UpdateUserCommandValidator()
         {
-            RuleFor(model => model.Id).NotEmpty();
+            RuleFor(model => model.UpdateUserModel.Id).NotEmpty();
 
-            RuleFor(model => model.FirstName).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.UpdateUserModel.FirstName).NotEmpty().MaximumLength(50);
 
-            RuleFor(model => model.LastName).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.UpdateUserModel.LastName).NotEmpty().MaximumLength(50);
 
-            RuleFor(model => model.Email).NotEmpty().MaximumLength(50).EmailAddress();
+            RuleFor(model => model.UpdateUserModel.Email).NotEmpty().MaximumLength(50).EmailAddress();
 
-            RuleFor(model => model.PhoneNumber).NotEmpty().MaximumLength(20);
+            RuleFor(model => model.UpdateUserModel.PhoneNumber).NotEmpty().MaximumLength(20);
         }
     }
 

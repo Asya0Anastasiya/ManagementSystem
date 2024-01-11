@@ -15,13 +15,13 @@ namespace UserService.MediatR.Commands
         }
     }
 
-    public class LoginCommandValidator : AbstractValidator<SignInModel>
+    public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
         public LoginCommandValidator()
         {
-            RuleFor(model => model.Email).NotEmpty().EmailAddress().MaximumLength(50);
+            RuleFor(model => model.SignInModel.Email).NotEmpty().EmailAddress().MaximumLength(50);
 
-            RuleFor(model => model.Password).NotEmpty().MaximumLength(25);
+            RuleFor(model => model.SignInModel.Password).NotEmpty().MaximumLength(25);
         }
     }
 

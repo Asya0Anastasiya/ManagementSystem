@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using UserService.Interfaces.Services;
 
 namespace UserService.MediatR.Commands
@@ -13,6 +14,16 @@ namespace UserService.MediatR.Commands
         {
             UserId = userId;
             File = file;
+        }
+    }
+
+    public class SetUserImageCommandValidator : AbstractValidator<SetUserImageCommand>
+    {
+        public SetUserImageCommandValidator()
+        {
+            RuleFor(model => model.UserId).NotEmpty();
+
+            RuleFor(model => model.File).NotEmpty();
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TimeTrackingService.Interfaces.Services;
 
 namespace TimeTrackingService.MediatR.Queries
 {
@@ -9,6 +10,21 @@ namespace TimeTrackingService.MediatR.Queries
         public GetAllUsersTimeTrackDocsNamesQuery(Guid userId)
         {
             UserId = userId;
+        }
+    }
+
+    public class GetAllUsersTimeTrackDocsNamesHandler : IRequestHandler<GetAllUsersTimeTrackDocsNamesQuery, List<string>>
+    {
+        private readonly IDocumentService _documentService;
+
+        public GetAllUsersTimeTrackDocsNamesHandler(IDocumentService documentService)
+        {
+            _documentService = documentService;
+        }
+
+        public async Task<List<string>> Handle(GetAllUsersTimeTrackDocsNamesQuery request, CancellationToken cancellationToken)
+        {
+            return await _documentService.GetAllUsersTimeTrackDocsNames(request.UserId);
         }
     }
 }

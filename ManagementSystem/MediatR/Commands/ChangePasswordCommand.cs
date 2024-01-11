@@ -15,15 +15,15 @@ namespace UserService.MediatR.Commands
         }
     }
 
-    public class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordModel>
+    public class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCommand>
     {
         public ChangePasswordCommandValidator()
         {
-            RuleFor(model => model.Id).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.Id).NotEmpty();
 
-            RuleFor(model => model.OldPassword).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.OldPassword).NotEmpty();
 
-            RuleFor(model => model.NewPassword).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.NewPassword).NotEmpty();
         }
     }
 

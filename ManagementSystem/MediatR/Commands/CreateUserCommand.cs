@@ -15,21 +15,21 @@ namespace UserService.MediatR.Commands
         }
     }
 
-    public class CreateUserCommandValidator : AbstractValidator<SignUpModel>
+    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         public CreateUserCommandValidator()
         {
-            RuleFor(model => model.Firstname).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.SignUpModel.Firstname).NotEmpty().MaximumLength(50);
 
-            RuleFor(model => model.Lastname).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.SignUpModel.Lastname).NotEmpty().MaximumLength(50);
 
-            RuleFor(model => model.Email).NotEmpty().MaximumLength(50).EmailAddress();
+            RuleFor(model => model.SignUpModel.Email).NotEmpty().MaximumLength(50).EmailAddress();
 
-            RuleFor(model => model.Password).NotEmpty().MaximumLength(25);
+            RuleFor(model => model.SignUpModel.Password).NotEmpty().MaximumLength(25);
 
-            RuleFor(model => model.PositionId).NotEmpty();
+            RuleFor(model => model.SignUpModel.PositionId).NotEmpty();
 
-            RuleFor(model => model.PhoneNumber).NotEmpty().MaximumLength(15);
+            RuleFor(model => model.SignUpModel.PhoneNumber).NotEmpty().MaximumLength(15);
         }
     }
 
