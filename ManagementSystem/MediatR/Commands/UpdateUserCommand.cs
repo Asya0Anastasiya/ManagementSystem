@@ -19,15 +19,30 @@ namespace UserService.MediatR.Commands
     {
         public UpdateUserCommandValidator()
         {
-            RuleFor(model => model.UpdateUserModel.Id).NotEmpty();
+            RuleFor(model => model.UpdateUserModel.Id)
+                .NotEmpty()
+                .WithMessage("Invalid user Id");
 
-            RuleFor(model => model.UpdateUserModel.FirstName).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.UpdateUserModel.FirstName)
+                .NotEmpty()
+                .MaximumLength(50)
+                .WithMessage("Firstname can not be empty or contain more than 50 characters");
 
-            RuleFor(model => model.UpdateUserModel.LastName).NotEmpty().MaximumLength(50);
+            RuleFor(model => model.UpdateUserModel.LastName)
+                .NotEmpty()
+                .MaximumLength(50)
+                .WithMessage("Lastname can not be empty or contain more than 50 characters");
 
-            RuleFor(model => model.UpdateUserModel.Email).NotEmpty().MaximumLength(50).EmailAddress();
+            RuleFor(model => model.UpdateUserModel.Email)
+                .NotEmpty()
+                .MaximumLength(50)
+                .EmailAddress()
+                .WithMessage("Email can not be empty or contain more than 50 characters");
 
-            RuleFor(model => model.UpdateUserModel.PhoneNumber).NotEmpty().MaximumLength(20);
+            RuleFor(model => model.UpdateUserModel.PhoneNumber)
+                .NotEmpty()
+                .MaximumLength(20)
+                .WithMessage("Phone number can not be empty or contain more than 50 characters");
         }
     }
 
@@ -43,8 +58,6 @@ namespace UserService.MediatR.Commands
         public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             await _userService.UpdateUserAsync(request.UpdateUserModel);
-
-            return;
         }
     }
 }

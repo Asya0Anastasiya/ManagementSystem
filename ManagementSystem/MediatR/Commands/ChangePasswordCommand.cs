@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using UserService.Helpers;
 using UserService.Interfaces.Services;
 using UserService.Models.UserDto;
 
@@ -19,11 +20,16 @@ namespace UserService.MediatR.Commands
     {
         public ChangePasswordCommandValidator()
         {
-            RuleFor(model => model.ChangePasswordModel.Id).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.Id)
+                .NotEmpty()
+                .WithMessage("Invalid user Id");
 
-            RuleFor(model => model.ChangePasswordModel.OldPassword).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.OldPassword)
+                .NotEmpty();
 
-            RuleFor(model => model.ChangePasswordModel.NewPassword).NotEmpty();
+            RuleFor(model => model.ChangePasswordModel.NewPassword)
+                .NotEmpty()
+                .PasswordValidator();
         }
     }
 
@@ -41,7 +47,6 @@ namespace UserService.MediatR.Commands
             await _userService.ChangePassword(request.ChangePasswordModel.Id,
                                             request.ChangePasswordModel.OldPassword,
                                             request.ChangePasswordModel.NewPassword);
-            return;
         }
     }
 }

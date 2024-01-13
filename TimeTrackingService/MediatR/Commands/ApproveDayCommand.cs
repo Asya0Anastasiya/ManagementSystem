@@ -25,8 +25,6 @@ namespace TimeTrackingService.MediatR.Commands
         public async Task Handle(ApproveDayCommand request, CancellationToken cancellationToken)
         {
             await _service.ApproveDayAsync(request.Id);
-
-            return;
         }
     }
 }

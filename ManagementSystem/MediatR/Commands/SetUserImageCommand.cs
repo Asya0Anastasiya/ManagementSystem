@@ -21,9 +21,13 @@ namespace UserService.MediatR.Commands
     {
         public SetUserImageCommandValidator()
         {
-            RuleFor(model => model.UserId).NotEmpty();
+            RuleFor(model => model.UserId)
+                .NotEmpty()
+                .WithMessage("Invalid user Id");
 
-            RuleFor(model => model.File).NotEmpty();
+            RuleFor(model => model.File)
+                .NotEmpty()
+                .WithMessage("Invalid file");
         }
     }
 
@@ -39,8 +43,6 @@ namespace UserService.MediatR.Commands
         public async Task Handle(SetUserImageCommand request, CancellationToken cancellationToken)
         {
             await _userService.SetUserImageAsync(request.UserId, request.File);
-
-            return;
         }
     }
 }

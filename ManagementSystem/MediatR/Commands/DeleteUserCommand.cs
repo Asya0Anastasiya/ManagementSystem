@@ -25,8 +25,6 @@ namespace UserService.MediatR.Commands
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             await _userService.DeleteUserAsync(request.Id);
-
-            return;
         }
     }
 }

@@ -25,8 +25,6 @@ namespace TimeTrackingService.MediatR.Commands
         public async Task Handle(RemoveDaysRangeCommand request, CancellationToken cancellationToken)
         {
             await _service.RemoveRangeOfDays(request.Ids);
-
-            return;
         }
     }
 }

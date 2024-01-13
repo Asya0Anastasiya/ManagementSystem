@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(typeof(Program).Assembly)
-    .AddOpenBehavior(typeof(ValidationBehavior<,>))
+    //.AddOpenBehavior(typeof(ValidationBehavior<,>))
     );
 
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+//builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();

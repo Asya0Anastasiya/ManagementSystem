@@ -21,9 +21,11 @@ namespace TimeTrackingService.MediatR.Commands
     {
         public AttachDocumentCommandValidator()
         {
-            RuleFor(model => model.AttachDocModel.Name).NotEmpty();
+            RuleFor(model => model.AttachDocModel.Name)
+                .NotEmpty();
 
-            RuleFor(model => model.AttachDocModel.Date).NotEmpty();
+            RuleFor(model => model.AttachDocModel.Date)
+                .NotEmpty();
         }
     }
 

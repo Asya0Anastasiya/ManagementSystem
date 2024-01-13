@@ -19,9 +19,16 @@ namespace UserService.MediatR.Commands
     {
         public LoginCommandValidator()
         {
-            RuleFor(model => model.SignInModel.Email).NotEmpty().EmailAddress().MaximumLength(50);
+            RuleFor(model => model.SignInModel.Email)
+                .NotEmpty()
+                .EmailAddress()
+                .MaximumLength(50)
+                .WithMessage("Email can not be empty or contain more than 50 characters");
 
-            RuleFor(model => model.SignInModel.Password).NotEmpty().MaximumLength(25);
+            RuleFor(model => model.SignInModel.Password)
+                .NotEmpty()
+                .MaximumLength(25)
+                .WithMessage("Password can not be empty or contain more than 25 characters");
         }
     }
 

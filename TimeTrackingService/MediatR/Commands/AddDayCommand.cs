@@ -19,15 +19,25 @@ namespace TimeTrackingService.MediatR.Commands
     {
         public AddDayCommandValidator()
         {
-            RuleFor(model => model.CreateDayModel.Hours).NotEmpty();
+            RuleFor(model => model.CreateDayModel.Hours)
+                .NotEmpty()
+                .InclusiveBetween(1, 12)
+                .WithMessage("Incorrect number of hours");
 
-            RuleFor(model => model.CreateDayModel.Date).NotEmpty();
+            RuleFor(model => model.CreateDayModel.Date)
+                .NotEmpty()
+                .WithMessage("invalid date");
 
-            RuleFor(model => model.CreateDayModel.AccountingType).NotEmpty();
+            RuleFor(model => model.CreateDayModel.AccountingType)
+                .NotEmpty()
+                .WithMessage("Invalid accounting type");
 
-            RuleFor(model => model.CreateDayModel.UserId).NotEmpty();
+            RuleFor(model => model.CreateDayModel.UserId)
+                .NotEmpty()
+                .WithMessage("Invalid user Id");
 
-            RuleFor(model => model.CreateDayModel.IsConfirmed).NotEmpty();
+            RuleFor(model => model.CreateDayModel.IsConfirmed)
+                .NotEmpty();
         }
     }
 

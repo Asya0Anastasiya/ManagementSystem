@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TimeTrackingService.Models.Enums;
-
-namespace TimeTrackingService.Models.Dto
+﻿namespace TimeTrackingService.Models.Dto
 {
     public class CreateDayModel
     {
