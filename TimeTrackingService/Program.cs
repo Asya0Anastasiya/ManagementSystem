@@ -13,7 +13,6 @@ using TimeTrackingService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DayAccountingValidator>());
-builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

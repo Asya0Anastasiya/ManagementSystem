@@ -7,11 +7,16 @@ namespace UserService.Models.Validators
     {
         public DepartmentValidator()
         {
-            RuleFor(model => model.Id).NotEmpty();
+            RuleFor(model => model.Id)
+                .NotEmpty();
 
-            RuleFor(model => model.Name).NotEmpty().MaximumLength(30);
+            RuleFor(model => model.Name)
+                .NotEmpty()
+                .MaximumLength(30)
+                .WithMessage("Department name can't be empty or more than 30 characters"); ;
 
-            RuleFor(model => model.BranchOfficeId).NotEmpty();
+            RuleFor(model => model.BranchOfficeId)
+                .NotEmpty();
         }
     }
 }
