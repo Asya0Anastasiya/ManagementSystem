@@ -14,7 +14,7 @@ namespace UserService.Data
         public DbSet<PositionEntity> Positions { get; set; }
         public DbSet<DepartmentEntity> Departments { get; set; }
         public DbSet<BranchOfficeEntity> Branches { get; set; }
-        public DbSet<AdressEntity> Adresses { get; set; }
+        public DbSet<AddressEntity> Addresses { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 

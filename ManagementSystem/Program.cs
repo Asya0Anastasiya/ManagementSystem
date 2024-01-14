@@ -6,6 +6,8 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using UserService.Models.Validators;
 using UserService.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddressValidator>());
+
 builder.Services.Configure <RefreshTokenOptions>(builder.Configuration.GetSection("RefreshToken"));
+
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
