@@ -5,6 +5,7 @@ using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Mappers;
 using TimeTrackingService.Middleware;
+using TimeTrackingService.Options;
 using TimeTrackingService.Repositories;
 using TimeTrackingService.Services;
 
@@ -31,6 +32,8 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddDbContext<TimeTrackingContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
 
 var mappingConfig = new MapperConfiguration(x =>
 {
