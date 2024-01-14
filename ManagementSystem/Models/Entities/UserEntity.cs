@@ -37,10 +37,11 @@ namespace UserService.Models.Entities
         public string PhoneNumber { get; set; }
 
         [Required]
-        // !!!!!!!!!!!!!!!!
         [MaxLength(65)]
         public string Password { get; set; } = "";
 
         public byte[] UserImage { get; set; }
+
+        public RefreshToken RefreshToken { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace UserService.Helpers
@@ -13,6 +14,7 @@ namespace UserService.Helpers
         {
                 _configuration = configuration;
         }
+
         public string CreateJwt(string role, string email, Guid id)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
@@ -27,11 +29,16 @@ namespace UserService.Helpers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = credentials
             };
             var token = jwtHandler.CreateToken(tokenDescriptor);
             return jwtHandler.WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
     }
 }

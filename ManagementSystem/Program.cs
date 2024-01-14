@@ -6,12 +6,14 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using UserService.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.Configure <RefreshTokenOptions>(builder.Configuration.GetSection("RefreshToken"));
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
