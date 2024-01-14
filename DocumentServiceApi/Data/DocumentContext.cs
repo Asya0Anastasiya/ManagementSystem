@@ -7,7 +7,7 @@ namespace DocumentServiceApi.Data
     {
         public DocumentContext(DbContextOptions<DocumentContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<DocumentEntity> Documents { get; set; }

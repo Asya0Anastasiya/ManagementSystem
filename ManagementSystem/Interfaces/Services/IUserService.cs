@@ -1,5 +1,7 @@
 ﻿using UserService.Helpers;
 using UserService.Helpers.Pagination;
+using UserService.Models.Entities;
+using UserService.Models.TokenDto;
 using UserService.Models.UserDto;
 
 namespace UserService.Interfaces.Services
@@ -8,7 +10,7 @@ namespace UserService.Interfaces.Services
     {
         public Task Create(SignUpModel user);
 
-        public Task<string> Login(SignInModel signInModel);
+        public Task<Tokens> Login(SignInModel signInModel);
 
         public Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, int pageNumber, int pageSize);
 
@@ -25,5 +27,7 @@ namespace UserService.Interfaces.Services
         public Task SetUserImageAsync(Guid userId, IFormFile file);
 
         public Task<byte[]> GetUserImageAsync(Guid userId);
+
+        public Task<Tokens> ValidateRefreshTokenAsync(string refreshToken);
     }
 }
