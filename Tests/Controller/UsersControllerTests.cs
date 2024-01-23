@@ -44,25 +44,5 @@ namespace Tests.Controller
             var result = await _userController.CreateUserAsync(signUpModel);
             Assert.IsType<OkResult>(result);
         }
-
-        //[Fact]
-        //// не проходит из-за строки, где добавляются заголовки к респонсу
-        //public async Task GetUsersAsync_Returns200WithObj()
-        //{
-        //    // Arrange
-        //    var fp = new FilteringParameters()
-        //    {
-        //        FirstName = null
-        //    };
-        //    var pp = new PaginationParameters(1, 5);
-        //    _mediator.Setup(_ => _.GetUsersAsync(fp, pp.PageNumber, pp.PageSize))
-        //        .ReturnsAsync(UserMockData.GetUsersInfoModel());
-
-        //    // Act
-        //    var result = await _userController.GetUsersAsync(fp, 1, 5);
-
-        //    // Assert
-        //    Assert.IsType<OkObjectResult>(result);
-        //}
     }
 }
