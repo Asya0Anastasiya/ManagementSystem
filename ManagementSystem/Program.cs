@@ -6,6 +6,9 @@ using UserService.Mappers;
 using UserService.Middleware;
 using UserService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using UserService.Models.Validators;
+using UserService.Helpers;
 using MediatR;
 using UserService.MediatR;
 using FluentValidation;
@@ -22,11 +25,15 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddressValidator>());
+
+builder.Services.Configure <RefreshTokenOptions>(builder.Configuration.GetSection("RefreshToken"));
+
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
     {
-        // почему принимает запросы с хоста оцелота, даже если стоит .WithOrigins("не_хост_оцелота")???????????
         builder.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
