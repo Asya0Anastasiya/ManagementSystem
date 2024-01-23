@@ -1,10 +1,15 @@
 using AutoMapper;
+using FluentValidation;
+using MediatR;
 using FluentValidation.AspNetCore;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Mappers;
+using TimeTrackingService.MediatR;
 using TimeTrackingService.Middleware;
 using TimeTrackingService.Models.Validators;
 using TimeTrackingService.Options;
@@ -18,11 +23,20 @@ builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyCont
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMediatR(config => 
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
 builder.Services.AddScoped<IDayAccountingRepository, DayAccountingRepository>();
 builder.Services.AddScoped<IDayAccountingService, DayAccountingService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddHostedService<Consumer>();
+
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>

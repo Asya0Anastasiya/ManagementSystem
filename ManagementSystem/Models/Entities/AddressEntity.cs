@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace UserService.Models.Entities
+﻿namespace UserService.Models.Entities
 {
-    public class AddressEntity
-    {
+    public class AddressEntity {
+
         public Guid Id { get; set; }
 
         public string Country { get; set; }

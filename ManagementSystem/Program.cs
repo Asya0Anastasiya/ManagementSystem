@@ -9,9 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using UserService.Models.Validators;
 using UserService.Helpers;
+using MediatR;
+using UserService.MediatR;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>))
+    );
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

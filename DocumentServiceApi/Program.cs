@@ -9,8 +9,25 @@ using DocumentServiceApi.Repositiries;
 using DocumentServiceApi.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using MediatR;
+using DocumentServiceApi.MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
+
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
 

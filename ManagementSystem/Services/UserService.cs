@@ -36,10 +36,6 @@ namespace UserService.Services
             if (user != null)
             {
                 throw new InternalException("Such user already exists");
-            }
-
-            PasswordValidator.CheckPasswordStrength(signUpModel.Password);
-
             user = _mapper.Map<UserEntity>(signUpModel);
             user.Role = Roles.User;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
