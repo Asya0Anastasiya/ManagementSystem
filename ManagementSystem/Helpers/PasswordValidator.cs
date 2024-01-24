@@ -1,21 +1,17 @@
-﻿using System.Text.RegularExpressions;
-using UserService.Exceptions;
+﻿using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace UserService.Helpers
 {
-    public class PasswordValidator
+    public static class FluentValidationExtensions
     {
-        public static void CheckPasswordStrength(string password)
+        public static IRuleBuilderOptions<T, string> PasswordValidator<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
-            if (password.Length < 8)
-            {
-                throw new InternalException("Password must contain at least 8 chars");
-            }
-
-            if (!(Regex.IsMatch(password, "[a-z, A-Z, 0-9, !,@,#,$,%,^,&,*,(,),_,=,+,{,}]")))
-            {
-                throw new InternalException("Password must be Alphanumeric with special chars");
-            }
+            return ruleBuilder
+                .MinimumLength(8)
+                .MinimumLength(25)
+                .Must(val => Regex.IsMatch(val, "[a-z, A-Z, 0-9, !,@,#,$,%,^,&,*,(,),_,=,+,{,}]"))
+                .WithMessage("Password must contains of 8 chars at least and be Alphanumeric with special chars");
         }
     }
 }

@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserService.Models.Entities
 {
-    public class AddressEntity
-    {
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
+    public class AddressEntity {
+
         public Guid Id { get; set; }
 
         [Required]

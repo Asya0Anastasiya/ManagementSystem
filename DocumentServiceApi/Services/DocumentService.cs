@@ -6,6 +6,7 @@ using DocumentServiceApi.Models.Dto;
 using DocumentServiceApi.Models.Entities;
 using DocumentServiceApi.Models.Enums;
 using DocumentServiceApi.Models.Messages;
+using DocumentServiceApi.Options;
 using Google.Cloud.Storage.V1;
 
 namespace DocumentServiceApi.Services
@@ -15,12 +16,15 @@ namespace DocumentServiceApi.Services
         private readonly IDocumentRepository _repository;
         private readonly IMapper _mapper;
         private readonly IMessageProducer _producer;
+        private readonly BucketOptions _bucketOptions;
 
-        public DocumentService(IDocumentRepository repository, IMapper mapper, IMessageProducer producer)
+        public DocumentService(IDocumentRepository repository, IMapper mapper, 
+                                IMessageProducer producer, BucketOptions bucketOptions)
         {
             _repository = repository;
             _mapper = mapper;
             _producer = producer;
+            _bucketOptions = bucketOptions;
         }
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
@@ -33,9 +37,7 @@ namespace DocumentServiceApi.Services
             var client = StorageClient.Create();
 
             var stream = new MemoryStream();
-
-            var obj = await client.DownloadObjectAsync("test_bucket_asiyar", fileName, stream);
-
+            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, fileName, stream);
             stream.Position = 0;
 
             var document = new DocumentDto()
@@ -62,7 +64,7 @@ namespace DocumentServiceApi.Services
             var client = StorageClient.Create();
 
             var obj = await client.UploadObjectAsync(
-                "test_bucket_asiyar",
+                _bucketOptions.BucketName,
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));
@@ -80,7 +82,7 @@ namespace DocumentServiceApi.Services
 
             if (document.Type == Types.TimeTracking)
             {
-                await DocCreatedNotification(document);
+                await DocCreatedNotification(doc.Name, doc.UserId);
             }
         }
 
@@ -91,7 +93,7 @@ namespace DocumentServiceApi.Services
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
-        private async Task DocCreatedNotification(DocumentEntity documentEntity)
+        public async Task DocCreatedNotification(string name, Guid userId)
         {
             var document = await _repository.GetUserDocumentByName(documentEntity.Name, documentEntity.UserId);
 

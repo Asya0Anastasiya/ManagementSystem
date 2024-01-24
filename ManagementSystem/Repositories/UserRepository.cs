@@ -4,6 +4,8 @@ using UserService.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using UserService.Helpers.Pagination;
 using UserService.Helpers.Filtering;
+using UserService.Helpers;
+using Newtonsoft.Json.Linq;
 using UserService.Models.Params;
 
 namespace UserService.Repositories
@@ -26,7 +28,7 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.AsNoTracking()
+            return await _context.Users.Include(x => x.RefreshToken).AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
@@ -79,6 +81,32 @@ namespace UserService.Repositories
                 .FirstOrDefaultAsync(x => x.Id == userId);
 
             return user.UserImage;
+        }
+
+        public async Task RemoveRefreshTokenAsync(UserEntity user)
+        {
+            var token = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Id == user.RefreshToken.Id);
+
+            if (token != null)
+            {
+                _context.RefreshTokens.Remove(token);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
+        {
+            await _context.RefreshTokens.AddAsync(refreshToken);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<UserEntity> GetUserByRefreshTokenAsync(string refreshToken)
+        {
+            return await _context.Users
+                .Include(x => x.RefreshToken)
+                .FirstOrDefaultAsync(x => x.RefreshToken.Token == refreshToken);
         }
     }
 }

@@ -3,11 +3,33 @@ using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Interfaces.Services;
 using DocumentServiceApi.Mappers;
+using DocumentServiceApi.Models.Validators;
+using DocumentServiceApi.Options;
 using DocumentServiceApi.Repositiries;
 using DocumentServiceApi.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using MediatR;
+using DocumentServiceApi.MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
+
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(typeof(Program).Assembly)
+    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DocumentValidator>());
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
@@ -26,6 +48,8 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddDbContext<DocumentContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.Configure<BucketOptions>(builder.Configuration.GetSection("Bucket"));
 
 var mappingConfig = new MapperConfiguration(x =>
 {
