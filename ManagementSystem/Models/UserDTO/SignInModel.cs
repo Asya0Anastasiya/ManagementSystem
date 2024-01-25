@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace UserService.Models.UserDto
+﻿namespace UserService.Models.UserDto
 {
     public class SignInModel
     {

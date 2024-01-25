@@ -9,6 +9,7 @@ using UserService.Models.Enums;
 using UserService.Models.TokenDto;
 using UserService.Models.Params;
 using UserService.Models.UserDto;
+using Microsoft.Extensions.Options;
 
 namespace UserService.Services
 {
@@ -22,12 +23,12 @@ namespace UserService.Services
         public UserService(IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
-                          RefreshTokenOptions refreshTokenOptions)
+                          IOptions<RefreshTokenOptions> refreshTokenOptions)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
-            _refreshTokenOptions = refreshTokenOptions;
+            _refreshTokenOptions = refreshTokenOptions.Value;
         }
 
         private const int MaxFileSize = 10_485_760;
@@ -39,6 +40,8 @@ namespace UserService.Services
             if (user != null)
             {
                 throw new InternalException("Such user already exists");
+            }
+
             user = _mapper.Map<UserEntity>(signUpModel);
             user.Role = Roles.User;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
@@ -111,7 +114,7 @@ namespace UserService.Services
 
             if (user.RefreshToken != null)
             {
-                await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
+                await _userRepository.RemoveRefreshTokenAsync(user);
             }
 
             await _userRepository.AddRefreshTokenAsync(refreshToken);

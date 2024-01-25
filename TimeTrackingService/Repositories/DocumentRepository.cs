@@ -33,10 +33,16 @@ namespace TimeTrackingService.Repositories
                 .Select(x => x.Name).ToListAsync();
         }
 
-        public async Task<Document> GetUserDocByName(Guid userId, string docName)
+        public async Task<Document?> GetUserDocByName(Guid userId, string docName)
         {
             return await _context.Documents.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Name == docName);
+        }
+
+        public async Task<Document?> GetDocumentById(Guid documentId)
+        {
+            return await _context.Documents.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == documentId);
         }
 
         public async Task UpdateDocument(Document document)

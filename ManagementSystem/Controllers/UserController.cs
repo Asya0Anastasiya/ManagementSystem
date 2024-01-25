@@ -1,15 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserService.Models.UserDto;
-using UserService.Helpers;
-using UserService.Helpers.Pagination;
-using Newtonsoft.Json;
-using UserService.Models.TokenDto;
-using UserService.Models.Entities;
-using UserService.Models.TokenDto;
-using UserService.Models.Entities;
-using MediatR;
-using UserService.MediatR.Queries;
-using UserService.MediatR.Commands;
 using MediatR;
 using UserService.MediatR.Queries;
 using UserService.MediatR.Commands;
@@ -53,8 +43,7 @@ namespace UserService.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> LoginAsync([FromBody] SignInModel signInModel)
         {
-            Tokens tokens = await _userService.Login(signInModel);
-            string token = await _mediator.Send(new LoginCommand(signInModel));
+            var tokens = await _mediator.Send(new LoginCommand(signInModel));
             return Ok(new
             {
                 Token = tokens.Token,
@@ -105,7 +94,7 @@ namespace UserService.Controllers
         [HttpPost("refreshTokenVerification")]
         public async Task<IActionResult> RefreshTokenVerification([FromHeader] string refreshToken)
         {
-            return Ok(await _userService.ValidateRefreshTokenAsync(refreshToken));
+            return Ok(await _mediator.Send(new ValidateRefreshTokenCommand(refreshToken)));
         }
     }
 }

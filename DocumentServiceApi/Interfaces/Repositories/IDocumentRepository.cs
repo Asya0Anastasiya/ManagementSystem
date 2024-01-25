@@ -1,5 +1,4 @@
-﻿using DocumentServiceApi.Models.Dto;
-using DocumentServiceApi.Models.Entities;
+﻿using DocumentServiceApi.Models.Entities;
 
 namespace DocumentServiceApi.Interfaces.Repositories
 {

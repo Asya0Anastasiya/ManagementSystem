@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using TimeTrackingService.Models.Enums;
+﻿using TimeTrackingService.Models.Enums;
 
 namespace TimeTrackingService.Models.Entities
 {
@@ -12,7 +10,7 @@ namespace TimeTrackingService.Models.Entities
 
         public Guid UserId { get; set; }
 
-        public Types Type { get; set; }
+        public DocumentTypes Type { get; set; }
 
         public Guid SourceId { get; set; }
 

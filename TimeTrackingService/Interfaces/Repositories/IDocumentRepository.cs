@@ -10,7 +10,9 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId);
 
-        public Task<Document> GetUserDocByName(Guid userId, string docName);
+        public Task<Document?> GetUserDocByName(Guid userId, string docName);
+
+        public Task<Document?> GetDocumentById(Guid documentId);
 
         public Task UpdateDocument(Document document);
     }

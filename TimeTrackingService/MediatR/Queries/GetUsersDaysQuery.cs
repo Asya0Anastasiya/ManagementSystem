@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.MediatR.Queries
 {

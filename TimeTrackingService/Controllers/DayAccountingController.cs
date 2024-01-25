@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.MediatR.Commands;
 using TimeTrackingService.MediatR.Queries;
-using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Params;
 
@@ -25,7 +23,6 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostDayAsync(CreateDayModel dayModel)
         {
             await _mediator.Send(new AddDayCommand(dayModel));
-            await _service.AddDay(dayModel);
 
             return Ok();
         }
@@ -35,7 +32,6 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<CreateDayModel> daysAccounting)
         {
             await _mediator.Send(new AddDaysRangeCommand(daysAccounting));
-            await _service.AddRangeOfDays(daysAccounting);
 
             return Ok();
         }
@@ -53,8 +49,7 @@ namespace TimeTrackingService.Controllers
         [Route("getUnconfirmedDaysCount/{userId}")]
         public async Task<IActionResult> GetUnconfirmedDaysCount(Guid userId)
         {
-            var count = await _mediator.Send(new GetUnconfirmedDaysCountQuery(id));
-            var count = await _service.GetUnconfirmedDaysCount(userId);
+            var count = await _mediator.Send(new GetUnconfirmedDaysCountQuery(userId));
 
             return Ok(count);
         }
@@ -63,7 +58,6 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
             await _mediator.Send(new RemoveDayCommand(id));
-            await _service.RemoveDayAsync(id);
 
             return Ok();
         }
@@ -73,7 +67,6 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> RemoveDaysRangeAsync(List<Guid> ids)
         {
             await _mediator.Send(new RemoveDaysRangeCommand(ids));
-            await _service.RemoveRangeOfDays(ids);
 
             return Ok();
         }
@@ -83,7 +76,6 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> ApproveDayAsync(Guid id)
         {
             await _mediator.Send(new ApproveDayCommand (id));
-            await _service.ApproveDayAsync(id);
 
             return Ok("Successfully approved");
         }

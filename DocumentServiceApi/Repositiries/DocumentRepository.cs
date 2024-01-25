@@ -1,7 +1,6 @@
 ﻿using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Models.Entities;
-using DocumentServiceApi.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocumentServiceApi.Repositiries

@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using UserService.Interfaces.Services;
+using UserService.Models.TokenDto;
 using UserService.Models.UserDto;
 
 namespace UserService.MediatR.Commands
 {
-    public class LoginCommand : IRequest<string>
+    public class LoginCommand : IRequest<Tokens>
     {
         public SignInModel SignInModel { get; }
 
@@ -32,7 +33,7 @@ namespace UserService.MediatR.Commands
         }
     }
 
-    public class LoginHandler : IRequestHandler<LoginCommand, string>
+    public class LoginHandler : IRequestHandler<LoginCommand, Tokens>
     {
         private readonly IUserService _userService;
 
@@ -41,7 +42,7 @@ namespace UserService.MediatR.Commands
             _userService = userService;
         }
 
-        public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Tokens> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             return await _userService.Login(request.SignInModel);
         }

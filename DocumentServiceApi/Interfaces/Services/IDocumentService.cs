@@ -1,6 +1,4 @@
 ﻿using DocumentServiceApi.Models.Dto;
-using Google.Cloud.Storage.V1;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentServiceApi.Interfaces.Services
 {

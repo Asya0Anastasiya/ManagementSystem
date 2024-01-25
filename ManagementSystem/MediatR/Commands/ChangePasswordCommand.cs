@@ -20,7 +20,7 @@ namespace UserService.MediatR.Commands
     {
         public ChangePasswordCommandValidator()
         {
-            RuleFor(model => model.ChangePasswordModel.Id)
+            RuleFor(model => model.ChangePasswordModel.UserId)
                 .NotEmpty()
                 .WithMessage("Invalid user Id");
 
@@ -44,7 +44,7 @@ namespace UserService.MediatR.Commands
 
         public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            await _userService.ChangePassword(request.ChangePasswordModel.Id,
+            await _userService.ChangePassword(request.ChangePasswordModel.UserId,
                                             request.ChangePasswordModel.OldPassword,
                                             request.ChangePasswordModel.NewPassword);
         }

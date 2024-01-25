@@ -30,6 +30,7 @@ namespace TimeTrackingService.MediatR.Commands
 
             RuleFor(model => model.CreateDayModel.AccountingType)
                 .NotEmpty()
+                .IsInEnum()
                 .WithMessage("Invalid accounting type");
 
             RuleFor(model => model.CreateDayModel.UserId)

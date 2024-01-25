@@ -3,7 +3,6 @@ using TimeTrackingService.Data;
 using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
-using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Enums;
 using TimeTrackingService.Models.Params;
@@ -98,7 +97,8 @@ namespace TimeTrackingService.Repositories
 
         public async Task<DayAccounting> CheckDayForExistenceAsync(DateTime date, Guid userId)
         { 
-            return await _timeTrackingContext.DaysAccounting.AsNoTracking()
+            return await _timeTrackingContext.DaysAccounting
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Date.Date == date.Date);
         }
     }

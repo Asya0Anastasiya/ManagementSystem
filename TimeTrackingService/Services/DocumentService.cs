@@ -1,5 +1,4 @@
-﻿using TimeTrackingService.Data;
-using TimeTrackingService.Exceptions;
+﻿using TimeTrackingService.Exceptions;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Entities;
@@ -35,7 +34,7 @@ namespace TimeTrackingService.Services
                 throw new NotFoundException("Document not found");
             }
 
-            var day = await _dayAccountingRepository.CheckDayForExistanceAsync(dateTime, userId);
+            var day = await _dayAccountingRepository.CheckDayForExistenceAsync(dateTime, userId);
 
             if (day == null )
             {

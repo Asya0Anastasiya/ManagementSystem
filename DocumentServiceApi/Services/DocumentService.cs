@@ -8,6 +8,7 @@ using DocumentServiceApi.Models.Enums;
 using DocumentServiceApi.Models.Messages;
 using DocumentServiceApi.Options;
 using Google.Cloud.Storage.V1;
+using Microsoft.Extensions.Options;
 
 namespace DocumentServiceApi.Services
 {
@@ -19,12 +20,12 @@ namespace DocumentServiceApi.Services
         private readonly BucketOptions _bucketOptions;
 
         public DocumentService(IDocumentRepository repository, IMapper mapper, 
-                                IMessageProducer producer, BucketOptions bucketOptions)
+                                IMessageProducer producer, IOptions<BucketOptions> bucketOptions)
         {
             _repository = repository;
             _mapper = mapper;
             _producer = producer;
-            _bucketOptions = bucketOptions;
+            _bucketOptions = bucketOptions.Value;
         }
 
         public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
@@ -82,7 +83,7 @@ namespace DocumentServiceApi.Services
 
             if (document.Type == Types.TimeTracking)
             {
-                await DocCreatedNotification(doc.Name, doc.UserId);
+                await DocCreatedNotification(document.Name, document.UserId);
             }
         }
 
@@ -95,7 +96,7 @@ namespace DocumentServiceApi.Services
 
         public async Task DocCreatedNotification(string name, Guid userId)
         {
-            var document = await _repository.GetUserDocumentByName(documentEntity.Name, documentEntity.UserId);
+            var document = await _repository.GetUserDocumentByName(name, userId);
 
             if (document == null)
             {
@@ -106,7 +107,7 @@ namespace DocumentServiceApi.Services
             {
                 Name = document.Name,
                 Type = document.Type,
-                UserId = documentEntity.UserId,
+                UserId = userId,
                 SourceId = document.Id,
             };
 

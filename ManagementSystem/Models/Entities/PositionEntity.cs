@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace UserService.Models.Entities
+﻿namespace UserService.Models.Entities
 {
     public class PositionEntity
     {
