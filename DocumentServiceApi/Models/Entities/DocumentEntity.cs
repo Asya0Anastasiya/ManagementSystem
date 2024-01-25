@@ -14,8 +14,6 @@ namespace DocumentServiceApi.Models.Entities
 
         public Types Type { get; set; }
 
-        public DateTime UploadDate { get; set; }
-
         public Guid UserId { get; set; }
     }
 }

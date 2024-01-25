@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.Helpers.Pagination;
@@ -48,13 +49,7 @@ namespace TimeTrackingService.Repositories
             await _timeTrackingContext.SaveChangesAsync();
         }
 
-        public async Task RemoveRangeOfDays(List<Guid> ids)
-        {
-            _timeTrackingContext.RemoveRange(ids);
-            await _timeTrackingContext.SaveChangesAsync();
-        }
-
-        public async Task ApproveDayAsync(DayAccounting dayAccounting)
+        public async Task UpdateDayAsync(DayAccounting dayAccounting)
         {
             _timeTrackingContext.DaysAccounting.Update(dayAccounting);
             await _timeTrackingContext.SaveChangesAsync();

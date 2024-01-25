@@ -39,7 +39,7 @@ namespace TimeTrackingService.Migrations
 				);
 
 				CREATE TABLE DaysAccountingDocument(
-					DaysAccountingId uniqueidentifier NOT NULL,
+					DayAccountingId uniqueidentifier NOT NULL,
 					DocumentsId uniqueidentifier NOT NULL,
 					CONSTRAINT PK_DayAccountingDocument PRIMARY KEY CLUSTERED 
 				(

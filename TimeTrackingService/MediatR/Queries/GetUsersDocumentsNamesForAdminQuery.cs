@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Models.Dto;
 
 namespace TimeTrackingService.MediatR.Queries
 {
-    public class GetUsersDocumentsNamesForAdminQuery : IRequest<List<string>>
+    public class GetUsersDocumentsNamesForAdminQuery : IRequest<List<DocumentWithSourceIdModel>>
     {
         public Guid UserId {  get; }
         public DateTime DateTime { get; }
@@ -15,7 +16,7 @@ namespace TimeTrackingService.MediatR.Queries
         }
     }
 
-    public class GetUsersDocumentsNamesForAdminHandler : IRequestHandler<GetUsersDocumentsNamesForAdminQuery, List<string>>
+    public class GetUsersDocumentsNamesForAdminHandler : IRequestHandler<GetUsersDocumentsNamesForAdminQuery, List<DocumentWithSourceIdModel>>
     {
         private readonly IDocumentService _documentService;
 
@@ -24,7 +25,7 @@ namespace TimeTrackingService.MediatR.Queries
             _documentService = documentService;
         }
 
-        public async Task<List<string>> Handle(GetUsersDocumentsNamesForAdminQuery request, CancellationToken cancellationToken)
+        public async Task<List<DocumentWithSourceIdModel>> Handle(GetUsersDocumentsNamesForAdminQuery request, CancellationToken cancellationToken)
         {
             return await _documentService.GetAttachedUsersDocumentsNames(request.UserId, request.DateTime);
         }

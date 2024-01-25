@@ -6,9 +6,9 @@ namespace TimeTrackingService.Interfaces.Repositories
     { 
         public Task AddDocumentAsync(Document document);
 
-        public Task<List<string>> GetAttachedDocumentsNamesAsync(Guid userId, DateTime date);
+        public Task<List<Document>> GetAttachedDocumentsNamesAsync(Guid userId, DateTime date);
 
-        public Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId);
+        public Task<List<Document>> GetUserTimeTrackDocsAsync(Guid userId);
 
         public Task<Document?> GetUserDocByName(Guid userId, string docName);
 

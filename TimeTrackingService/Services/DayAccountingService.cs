@@ -76,11 +76,6 @@ namespace TimeTrackingService.Services
             await _repository.RemoveDayAsync(day);
         }
 
-        public async Task RemoveRangeOfDays(List<Guid> ids)
-        {
-            await _repository.RemoveRangeOfDays(ids);
-        }
-
         public async Task ApproveDayAsync(Guid id)
         {
             var day = await _repository.GetDayByIdAsync(id);
@@ -92,7 +87,7 @@ namespace TimeTrackingService.Services
 
             day.IsConfirmed = true;
 
-            await _repository.ApproveDayAsync(day);
+            await _repository.UpdateDayAsync(day);
         }
 
         public async Task<DayAccounting> GetUserDay(Guid userId, DateTime date)

@@ -30,9 +30,6 @@ namespace DocumentServiceApi.Models.Validators
                 .IsInEnum()
                 .WithMessage("Invalid document type");
 
-            RuleFor(model => model.UploadDate)
-                .NotEmpty();
-
             RuleFor(model => model.UserId)
                 .NotEmpty()
                 .WithMessage("Invalid user Id");

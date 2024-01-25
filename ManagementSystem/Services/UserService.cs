@@ -95,7 +95,7 @@ namespace UserService.Services
 
             if (user == null)
             {
-                throw new NotFoundException("Such user does not exist");
+                throw new NotFoundException("Invalid credentials");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(signInModel.Password, user.Password))

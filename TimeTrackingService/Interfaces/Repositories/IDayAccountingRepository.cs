@@ -18,9 +18,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task RemoveDayAsync(DayAccounting day);
 
-        public Task RemoveRangeOfDays(List<Guid> ids);
-
-        public Task ApproveDayAsync(DayAccounting dayAccounting);
+        public Task UpdateDayAsync(DayAccounting dayAccounting);
 
         public Task<int> GetUsersWorkDaysCount(Guid id, int month, int year);
 

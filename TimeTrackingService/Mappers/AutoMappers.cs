@@ -27,6 +27,10 @@ namespace TimeTrackingService.Mappers
         private void Documents()
         {
             CreateMap<UpcomingDocumentModel, Document>();
+
+            CreateMap<Document, DocumentInfoModel>();
+
+            CreateMap<Document, DocumentWithSourceIdModel>();
         }
     }
 }

@@ -6,13 +6,14 @@ namespace DocumentServiceApi.MediatR.Queries
 {
     public class DownloadDocumentQuery : IRequest<DocumentDto>
     {
-        public string FileName { get; }
+        public Guid DocumentId { get; }
+
         public Guid UserId { get; }
 
-        public DownloadDocumentQuery(Guid userId, string fileName)
+        public DownloadDocumentQuery(Guid userId, Guid documentId)
         {
             UserId = userId;
-            FileName = fileName;
+            DocumentId = documentId;
         }
     }
 
@@ -27,7 +28,7 @@ namespace DocumentServiceApi.MediatR.Queries
 
         public async Task<DocumentDto> Handle(DownloadDocumentQuery request, CancellationToken cancellationToken)
         {
-            return await _documentService.DownloadDocumentAsync(request.FileName, request.UserId);
+            return await _documentService.DownloadDocumentAsync(request.DocumentId, request.UserId);
         }
     }
 }

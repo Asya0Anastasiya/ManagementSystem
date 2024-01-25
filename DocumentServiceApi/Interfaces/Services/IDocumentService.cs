@@ -4,7 +4,7 @@ namespace DocumentServiceApi.Interfaces.Services
 {
     public interface IDocumentService
     {
-        public Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId);
+        public Task<DocumentDto> DownloadDocumentAsync(Guid documentId, Guid userId);
 
         public Task UploadDocumentAsync(UploadDocument uploadDocument);
 

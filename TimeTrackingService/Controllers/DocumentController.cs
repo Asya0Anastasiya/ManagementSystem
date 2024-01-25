@@ -18,10 +18,11 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpGet]
-        [Route("getAttachedUsersTimeTrackingDocumentsNames/{userId}")]
-        public async Task<List<string>> GetUsersDocumentsNamesForAdminAsync(Guid userId, [FromQuery] DateTime date)
+        [Route("getAttachedUsersTimeTrackingDocuments/{userId}")]
+        public async Task<List<DocumentWithSourceIdModel>> GetUsersDocumentsNamesForAdminAsync(Guid userId, [FromQuery] DateTime date)
         {
-            return await _mediator.Send(new GetUsersDocumentsNamesForAdminQuery(userId, date));
+            var docs = await _mediator.Send(new GetUsersDocumentsNamesForAdminQuery(userId, date));
+            return docs;
         }
 
         [HttpPost]
@@ -34,7 +35,7 @@ namespace TimeTrackingService.Controllers
 
         [HttpGet]
         [Route("getAllUsersTimeTrackingDocs/{userId}")]
-        public async Task<List<string>> GetAllUsersTimeTrackDocsNamesAsync(Guid userId)
+        public async Task<List<DocumentInfoModel>> GetAllUsersTimeTrackDocsNamesAsync(Guid userId)
         {
             return await _mediator.Send(new GetAllUsersTimeTrackDocsNamesQuery(userId));
         }

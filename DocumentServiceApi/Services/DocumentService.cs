@@ -28,9 +28,11 @@ namespace DocumentServiceApi.Services
             _bucketOptions = bucketOptions.Value;
         }
 
-        public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
+        public async Task<DocumentDto> DownloadDocumentAsync(Guid documentId, Guid userId)
         {
-            if (!(await _repository.IsDocumentExist(fileName, userId)))
+            var doc = await _repository.GetDocumentById(documentId);
+
+            if (doc == null)
             {
                 throw new NotFoundException("Document not found or you do not have permissions to download it...");
             }
@@ -38,7 +40,7 @@ namespace DocumentServiceApi.Services
             var client = StorageClient.Create();
 
             var stream = new MemoryStream();
-            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, fileName, stream);
+            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, doc.Name, stream);
             stream.Position = 0;
 
             var document = new DocumentDto()
@@ -74,7 +76,7 @@ namespace DocumentServiceApi.Services
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
-                Size = uploadDocument.File.Length,
+                Size = uploadDocument.File.Length / 1000,
                 Type = uploadDocument.Type,
                 UserId = uploadDocument.UserId
             };

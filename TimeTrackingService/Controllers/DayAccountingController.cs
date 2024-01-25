@@ -62,15 +62,6 @@ namespace TimeTrackingService.Controllers
             return Ok();
         }
 
-        //add to ocelot
-        [HttpDelete("removeDays")]
-        public async Task<IActionResult> RemoveDaysRangeAsync(List<Guid> ids)
-        {
-            await _mediator.Send(new RemoveDaysRangeCommand(ids));
-
-            return Ok();
-        }
-
         [HttpGet]
         [Route("approveDay/{id}")]
         public async Task<IActionResult> ApproveDayAsync(Guid id)
