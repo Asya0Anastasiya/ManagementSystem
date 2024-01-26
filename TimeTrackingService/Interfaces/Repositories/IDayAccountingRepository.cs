@@ -1,5 +1,4 @@
-﻿using TimeTrackingService.Helpers.Pagination;
-using TimeTrackingService.Models.Entities;
+﻿using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Interfaces.Repositories
@@ -10,7 +9,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task AddRangeOfDays(List<DayAccounting> daysAccounts);
 
-        public Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination);
+        public Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering);
 
         public Task<int> GetUnconfirmedDaysCount(Guid id);
 

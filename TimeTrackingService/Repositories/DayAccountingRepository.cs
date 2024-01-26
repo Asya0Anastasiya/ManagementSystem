@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Models.Enums;
@@ -30,7 +29,7 @@ namespace TimeTrackingService.Repositories
             await _timeTrackingContext.SaveChangesAsync();
         }
 
-        public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination)
+        public async Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering)
         {
             var days = _timeTrackingContext.DaysAccounting.AsNoTracking().AsQueryable();
             days = FilteringHelper.FilterDays(filtering, days);

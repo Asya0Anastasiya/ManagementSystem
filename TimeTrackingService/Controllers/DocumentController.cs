@@ -19,7 +19,7 @@ namespace TimeTrackingService.Controllers
 
         [HttpGet]
         [Route("getAttachedUsersTimeTrackingDocuments/{userId}")]
-        public async Task<List<DocumentWithSourceIdModel>> GetUsersDocumentsNamesForAdminAsync(Guid userId, [FromQuery] DateTime date)
+        public async Task<List<DocumentWithSourceIdModel>> GetUsersDocumentsForAdminAsync(Guid userId, [FromQuery] DateTime date)
         {
             var docs = await _mediator.Send(new GetUsersDocumentsNamesForAdminQuery(userId, date));
             return docs;

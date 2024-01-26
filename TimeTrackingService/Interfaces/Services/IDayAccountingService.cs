@@ -10,7 +10,7 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task AddRangeOfDays(List<CreateDayModel> days);
 
-        public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, int pageNumber, int pageSize);
+        public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters);
 
         public Task<int> GetUnconfirmedDaysCount(Guid id);
 

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
@@ -50,11 +49,9 @@ namespace TimeTrackingService.Services
             await _repository.AddRangeOfDays(days);
         }
 
-        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, int pageNumber, int pageSize)
+        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters)
         {
-            var pagination = new PaginationParameters(pageNumber, pageSize);
-
-            var days = await _repository.GetUsersDays(parameters, pagination);
+            var days = await _repository.GetUsersDays(parameters);
 
             return _mapper.Map<List<DayAccountingModel>>(days);
         }

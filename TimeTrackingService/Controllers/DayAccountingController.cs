@@ -37,10 +37,10 @@ namespace TimeTrackingService.Controllers
         }
 
         [HttpGet]
-        [Route("getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}")]
-        public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
+        [Route("getUsersDays")]
+        public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters)
         {
-            var days = await _mediator.Send(new GetUsersDaysQuery(parameters, pageNumber, pageSize));
+            var days = await _mediator.Send(new GetUsersDaysQuery(parameters));
             
             return Ok(days);
         }
