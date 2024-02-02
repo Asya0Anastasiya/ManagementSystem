@@ -19,6 +19,8 @@ namespace DocumentServiceApi.Services
         private readonly IMessageProducer _producer;
         private readonly BucketOptions _bucketOptions;
 
+        private const int BytesCount = 1024;
+
         public DocumentService(IDocumentRepository repository, IMapper mapper, 
                                 IMessageProducer producer, IOptions<BucketOptions> bucketOptions)
         {
@@ -76,7 +78,7 @@ namespace DocumentServiceApi.Services
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
-                Size = uploadDocument.File.Length / 1000,
+                Size = ConvertBytesToKiloBytes(uploadDocument.File.Length),
                 Type = uploadDocument.Type,
                 UserId = uploadDocument.UserId
             };
@@ -119,6 +121,11 @@ namespace DocumentServiceApi.Services
             };
 
             _producer.SendMessage(message);
+        }
+
+        private double ConvertBytesToKiloBytes(long fileSize)
+        {
+            return fileSize / BytesCount;
         }
     }
 }
