@@ -80,6 +80,7 @@ namespace DocumentServiceApi.Services
                 ContentType = obj.ContentType,
                 Size = ConvertBytesToKiloBytes(uploadDocument.File.Length),
                 Type = uploadDocument.Type,
+                UploadDate = DateTime.Now,
                 UserId = uploadDocument.UserId
             };
 
