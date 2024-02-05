@@ -1,8 +1,8 @@
-﻿namespace UserService.Helpers
+﻿namespace UserService.Models.Params
 {
     public class FilteringParameters
     {
-        public string FirstName { get; set; } 
+        public string FirstName { get; set; }
 
         public string LastName { get; set; }
 

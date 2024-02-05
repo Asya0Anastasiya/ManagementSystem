@@ -1,10 +1,11 @@
 ﻿using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Helpers.Filtering
 {
-    public class FilteringHelper
+    public static class FilteringHelper
     {
-        public IQueryable<DayAccounting> FilterDays(FilteringParameters parameters, IQueryable<DayAccounting> days)
+        public static IQueryable<DayAccounting> FilterDays(FilteringParameters parameters, IQueryable<DayAccounting> days)
         {
             if (parameters.FromDate != null)
             {

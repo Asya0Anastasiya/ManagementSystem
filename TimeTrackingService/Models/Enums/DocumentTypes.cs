@@ -1,6 +1,6 @@
 ﻿namespace TimeTrackingService.Models.Enums
 {
-    public enum Types
+    public enum DocumentTypes
     {
         TimeTracking = 1,
         Other = 2

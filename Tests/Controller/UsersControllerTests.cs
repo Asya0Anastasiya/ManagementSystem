@@ -6,6 +6,8 @@ using UserService.Controllers;
 using UserService.Helpers;
 using UserService.Helpers.Pagination;
 using UserService.MediatR.Queries;
+using UserService.Interfaces.Services;
+using UserService.Models.Params;
 using UserService.Models.UserDto;
 
 namespace Tests.Controller

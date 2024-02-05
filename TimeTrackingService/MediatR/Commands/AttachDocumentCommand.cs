@@ -21,9 +21,6 @@ namespace TimeTrackingService.MediatR.Commands
     {
         public AttachDocumentCommandValidator()
         {
-            RuleFor(model => model.AttachDocModel.Name)
-                .NotEmpty();
-
             RuleFor(model => model.AttachDocModel.Date)
                 .NotEmpty();
         }
@@ -40,7 +37,7 @@ namespace TimeTrackingService.MediatR.Commands
 
         public async Task Handle(AttachDocumentCommand request, CancellationToken cancellationToken)
         {
-            await _documentService.AttachDocumentToDay(request.AttachDocModel.Name, request.AttachDocModel.Date, request.UserId);
+            await _documentService.AttachDocumentToDay(request.AttachDocModel.DocumentId, request.AttachDocModel.Date, request.UserId);
         }
     }
 }

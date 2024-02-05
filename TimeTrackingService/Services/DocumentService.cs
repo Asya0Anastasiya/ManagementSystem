@@ -1,7 +1,8 @@
-﻿using TimeTrackingService.Data;
+﻿using AutoMapper;
 using TimeTrackingService.Exceptions;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
+using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Services
@@ -10,11 +11,15 @@ namespace TimeTrackingService.Services
     {
         private readonly IDocumentRepository _repository;
         private readonly IDayAccountingRepository _dayAccountingRepository;
+        private readonly IMapper _mapper;
 
-        public DocumentService(IDocumentRepository repository, IDayAccountingRepository dayAccountingRepository)
+        public DocumentService(IDocumentRepository repository, 
+                                IDayAccountingRepository dayAccountingRepository, 
+                                IMapper mapper)
         {
             _repository = repository;
             _dayAccountingRepository = dayAccountingRepository;
+            _mapper = mapper;
         }
 
         public async Task AddDocumentAsync(Document document)
@@ -22,23 +27,27 @@ namespace TimeTrackingService.Services
             await _repository.AddDocumentAsync(document);
         }
 
-        public async Task<List<string>> GetAttachedUsersDocumentsNames(Guid userId, DateTime date)
+        public async Task<List<DocumentWithSourceIdModel>> GetAttachedUsersDocumentsNames(Guid userId, DateTime date)
         {
-            return await _repository.GetAttachedDocumentsNamesAsync(userId, date);
+            var documents = await _repository.GetAttachedDocumentsNamesAsync(userId, date);
+
+            return _mapper.Map<List<DocumentWithSourceIdModel>>(documents);
         }
 
-        public async Task AttachDocumentToDay(string name, DateTime dateTime, Guid userId)
+        public async Task AttachDocumentToDay(Guid documentId, DateTime dateTime, Guid userId)
         {
-            var document = await _repository.GetUserDocByName(userId, name);
+            var document = await _repository.GetDocumentById(documentId);
+
             if (document == null )
             {
                 throw new NotFoundException("Document not found");
             }
 
-            var day = await _dayAccountingRepository.CheckDayForExistanceAsync(dateTime, userId);
+            var day = await _dayAccountingRepository.CheckDayForExistenceAsync(dateTime, userId);
+
             if (day == null )
             {
-                throw new NotFoundException("No such day");
+                throw new NotFoundException("Day not found");
             }
 
             document.DaysAccounting.Add(day);
@@ -46,9 +55,11 @@ namespace TimeTrackingService.Services
             await _repository.UpdateDocument(document);
         }
 
-        public async Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId)
+        public async Task<List<DocumentInfoModel>> GetAllUsersTimeTrackDocsNames(Guid userId)
         {
-            return await _repository.GetAllUsersTimeTrackDocsNames(userId);
+            var documents = await _repository.GetUserTimeTrackDocsAsync(userId);
+
+            return _mapper.Map<List<DocumentInfoModel>>(documents);
         }
     }
 }

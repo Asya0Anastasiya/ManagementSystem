@@ -18,10 +18,10 @@ namespace DocumentServiceApi.Controllers
         }
 
         [HttpGet]
-        [Route("downloadUserDocument/{fileName}/{userId}")]
-        public async Task<IActionResult> DownloadDocumentAsync([FromRoute] string fileName, Guid userId)
+        [Route("downloadUserDocument/{documentId}/{userId}")]
+        public async Task<IActionResult> DownloadDocumentAsync([FromRoute] Guid documentId, Guid userId)
         {
-            var obj = await _mediator.Send(new DownloadDocumentQuery(userId, fileName));
+            var obj = await _mediator.Send(new DownloadDocumentQuery(userId, documentId));
             return File(obj.Stream, obj.ContentType, obj.Name);
         }
 

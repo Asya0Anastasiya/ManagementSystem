@@ -9,7 +9,7 @@ namespace TimeTrackingService.Models.Dto
 
         public Guid UserId { get; set; }
 
-        public Types Type { get; set; }
+        public DocumentTypes Type { get; set; }
 
         public Guid SourceId { get; set; }
 

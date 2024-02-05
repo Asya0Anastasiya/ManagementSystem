@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TimeTrackingService.Helpers.Filtering;
 using TimeTrackingService.MediatR.Commands;
 using TimeTrackingService.MediatR.Queries;
 using TimeTrackingService.Models.Dto;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Controllers
 {
@@ -23,6 +23,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostDayAsync(CreateDayModel dayModel)
         {
             await _mediator.Send(new AddDayCommand(dayModel));
+
             return Ok();
         }
 
@@ -31,23 +32,25 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> PostRangeOfDaysAsync([FromBody] List<CreateDayModel> daysAccounting)
         {
             await _mediator.Send(new AddDaysRangeCommand(daysAccounting));
+
             return Ok();
         }
 
         [HttpGet]
-        [Route("getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}")]
-        public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters, int pageNumber, int pageSize)
+        [Route("getUsersDays")]
+        public async Task<IActionResult> GetUsersDaysAsync([FromQuery] FilteringParameters parameters)
         {
-            var days = await _mediator.Send(new GetUsersDaysQuery(parameters, pageNumber, pageSize));
+            var days = await _mediator.Send(new GetUsersDaysQuery(parameters));
             
             return Ok(days);
         }
 
         [HttpGet]
-        [Route("getUnconfirmedDaysCount/{id}")]
-        public async Task<IActionResult> GetUnconfirmedDaysCount(Guid id)
+        [Route("getUnconfirmedDaysCount/{userId}")]
+        public async Task<IActionResult> GetUnconfirmedDaysCount(Guid userId)
         {
-            var count = await _mediator.Send(new GetUnconfirmedDaysCountQuery(id));
+            var count = await _mediator.Send(new GetUnconfirmedDaysCountQuery(userId));
+
             return Ok(count);
         }
 
@@ -55,14 +58,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> RemoveDayAsync(Guid id)
         {
             await _mediator.Send(new RemoveDayCommand(id));
-            return Ok();
-        }
 
-        //add to ocelot
-        [HttpDelete("removeDays")]
-        public async Task<IActionResult> RemoveDaysRangeAsync(List<Guid> ids)
-        {
-            await _mediator.Send(new RemoveDaysRangeCommand(ids));
             return Ok();
         }
 
@@ -71,6 +67,7 @@ namespace TimeTrackingService.Controllers
         public async Task<IActionResult> ApproveDayAsync(Guid id)
         {
             await _mediator.Send(new ApproveDayCommand (id));
+
             return Ok("Successfully approved");
         }
 

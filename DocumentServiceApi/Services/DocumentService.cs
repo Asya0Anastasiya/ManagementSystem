@@ -8,6 +8,7 @@ using DocumentServiceApi.Models.Enums;
 using DocumentServiceApi.Models.Messages;
 using DocumentServiceApi.Options;
 using Google.Cloud.Storage.V1;
+using Microsoft.Extensions.Options;
 
 namespace DocumentServiceApi.Services
 {
@@ -18,37 +19,45 @@ namespace DocumentServiceApi.Services
         private readonly IMessageProducer _producer;
         private readonly BucketOptions _bucketOptions;
 
+        private const int BytesCount = 1024;
+
         public DocumentService(IDocumentRepository repository, IMapper mapper, 
-                                IMessageProducer producer, BucketOptions bucketOptions)
+                                IMessageProducer producer, IOptions<BucketOptions> bucketOptions)
         {
             _repository = repository;
             _mapper = mapper;
             _producer = producer;
-            _bucketOptions = bucketOptions;
+            _bucketOptions = bucketOptions.Value;
         }
 
-        public async Task<DocumentDto> DownloadDocumentAsync(string fileName, Guid userId)
+        public async Task<DocumentDto> DownloadDocumentAsync(Guid documentId, Guid userId)
         {
-            if (!(await _repository.IsDocumestExist(fileName, userId)))
+            var doc = await _repository.GetDocumentById(documentId);
+
+            if (doc == null)
             {
                 throw new NotFoundException("Document not found or you do not have permissions to download it...");
             }
+
             var client = StorageClient.Create();
+
             var stream = new MemoryStream();
-            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, fileName, stream);
+            var obj = await client.DownloadObjectAsync(_bucketOptions.BucketName, doc.Name, stream);
             stream.Position = 0;
+
             var document = new DocumentDto()
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
                 Stream = stream
             };
+
             return document;
         }
 
         public async Task UploadDocumentAsync(UploadDocument uploadDocument)
         {
-            if (await _repository.IsDocumestExist(uploadDocument.File.Name, uploadDocument.UserId))
+            if (await _repository.IsDocumentExist(uploadDocument.File.Name, uploadDocument.UserId))
             {
                 throw new InternalException("Document with such name already exist... Please, rename your document");
             }
@@ -58,32 +67,35 @@ namespace DocumentServiceApi.Services
             await uploadDocument.File.CopyToAsync(memoryStream);
 
             var client = StorageClient.Create();
+
             var obj = await client.UploadObjectAsync(
                 _bucketOptions.BucketName,
                 uploadDocument.File.FileName,
                 uploadDocument.File.ContentType,
                 new MemoryStream(memoryStream.ToArray()));
 
-            var doc = new DocumentEntity()
+            var document = new DocumentEntity()
             {
                 Name = obj.Name,
                 ContentType = obj.ContentType,
-                Size = uploadDocument.File.Length,
+                Size = ConvertBytesToKiloBytes(uploadDocument.File.Length),
                 Type = uploadDocument.Type,
+                UploadDate = DateTime.Now,
                 UserId = uploadDocument.UserId
             };
 
-            await _repository.AddDocumentAsync(doc);
+            await _repository.AddDocumentAsync(document);
 
-            if (doc.Type == Types.TimeTracking)
+            if (document.Type == Types.TimeTracking)
             {
-                await DocCreatedNotification(doc.Name, doc.UserId);
+                await DocCreatedNotification(document.Name, document.UserId);
             }
         }
 
         public async Task<List<DocumentInfo>> GetUserDocuments(Guid userId)
         {
             var documents = await _repository.GetUserDocuments(userId);
+
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
@@ -110,6 +122,11 @@ namespace DocumentServiceApi.Services
             };
 
             _producer.SendMessage(message);
+        }
+
+        private double ConvertBytesToKiloBytes(long fileSize)
+        {
+            return fileSize / BytesCount;
         }
     }
 }

@@ -7,7 +7,9 @@ using UserService.Interfaces.Services;
 using UserService.Models.Entities;
 using UserService.Models.Enums;
 using UserService.Models.TokenDto;
+using UserService.Models.Params;
 using UserService.Models.UserDto;
+using Microsoft.Extensions.Options;
 
 namespace UserService.Services
 {
@@ -21,13 +23,15 @@ namespace UserService.Services
         public UserService(IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
-                          RefreshTokenOptions refreshTokenOptions)
+                          IOptions<RefreshTokenOptions> refreshTokenOptions)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
-            _refreshTokenOptions = refreshTokenOptions;
+            _refreshTokenOptions = refreshTokenOptions.Value;
         }
+
+        private const int MaxFileSize = 10_485_760;
 
         public async Task Create(SignUpModel signUpModel)
         {
@@ -36,6 +40,8 @@ namespace UserService.Services
             if (user != null)
             {
                 throw new InternalException("Such user already exists");
+            }
+
             user = _mapper.Map<UserEntity>(signUpModel);
             user.Role = Roles.User;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
@@ -89,7 +95,7 @@ namespace UserService.Services
 
             if (user == null)
             {
-                throw new NotFoundException("Such user does not exist");
+                throw new NotFoundException("Invalid credentials");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(signInModel.Password, user.Password))
@@ -108,7 +114,7 @@ namespace UserService.Services
 
             if (user.RefreshToken != null)
             {
-                await _userRepository.RemoveRefreshTokenAsync(user.RefreshToken.Id);
+                await _userRepository.RemoveRefreshTokenAsync(user);
             }
 
             await _userRepository.AddRefreshTokenAsync(refreshToken);
@@ -165,7 +171,7 @@ namespace UserService.Services
                 throw new NotFoundException("User Not Found");
             }
 
-            if (file.Length > 5242880 * 2)
+            if (file.Length > MaxFileSize)
             {
                 throw new InternalException("File is more then 10mb.");
             }
@@ -190,7 +196,7 @@ namespace UserService.Services
 
             if (user == null)
             {
-                throw new NotFoundException("User Not FFFound");
+                throw new NotFoundException("User Not found");
             }
 
             if (user.UserImage == null)

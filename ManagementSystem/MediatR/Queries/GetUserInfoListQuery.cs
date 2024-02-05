@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using UserService.Helpers;
 using UserService.Interfaces.Services;
-using UserService.Models.UserDto;
+using UserService.Models.Params;
 using UserService.Models.UserDTO;
 
 namespace UserService.MediatR.Queries

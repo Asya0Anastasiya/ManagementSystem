@@ -1,7 +1,5 @@
-﻿using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Helpers.Pagination;
-using TimeTrackingService.Models.Dto;
-using TimeTrackingService.Models.Entities;
+﻿using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Interfaces.Repositories
 {
@@ -11,7 +9,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task AddRangeOfDays(List<DayAccounting> daysAccounts);
 
-        public Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering, PaginationParameters pagination);
+        public Task<List<DayAccounting>> GetUsersDays(FilteringParameters filtering);
 
         public Task<int> GetUnconfirmedDaysCount(Guid id);
 
@@ -19,9 +17,7 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task RemoveDayAsync(DayAccounting day);
 
-        public Task RemoveRangeOfDays(List<Guid> ids);
-
-        public Task ApproveDayAsync(DayAccounting dayAccounting);
+        public Task UpdateDayAsync(DayAccounting dayAccounting);
 
         public Task<int> GetUsersWorkDaysCount(Guid id, int month, int year);
 
@@ -29,10 +25,6 @@ namespace TimeTrackingService.Interfaces.Repositories
 
         public Task<int> GetUsersHolidaysCount(Guid id, int month, int year);
 
-        public Task<int> GetPaidDaysCount(Guid id, int month, int year);
-
-        public Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year);
-
-        public Task<DayAccounting> CheckDayForExistanceAsync(DateTime date, Guid userId);
+        public Task<DayAccounting> CheckDayForExistenceAsync(DateTime date, Guid userId);
     }
 }

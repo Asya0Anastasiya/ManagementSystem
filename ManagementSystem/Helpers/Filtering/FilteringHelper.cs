@@ -1,28 +1,29 @@
 ﻿using UserService.Models.Entities;
+using UserService.Models.Params;
 
 namespace UserService.Helpers.Filtering
 {
-    public class FilteringHelper
+    public static class FilteringHelper
     {
-        public IQueryable<UserEntity> FilterUsers(FilteringParameters parameters, IQueryable<UserEntity> users)
+        public static IQueryable<UserEntity> FilterUsers(FilteringParameters parameters, IQueryable<UserEntity> users)
         {
             if (parameters == null)
             {
                 return users;
             }
-            if (parameters.FirstName != null)
+            if (!string.IsNullOrEmpty(parameters.FirstName))
             {
                 users = users.Where(x => x.FirstName.Contains(parameters.FirstName));
             }
-            if (parameters.LastName != null)
+            if (!string.IsNullOrEmpty(parameters.LastName))
             {
                 users = users.Where(x => x.LastName.Contains(parameters.LastName));
             }
-            if (parameters.Email != null)
+            if (!string.IsNullOrEmpty(parameters.Email))
             {
                 users = users.Where(x => x.Email.Contains(parameters.Email));
             }
-            if (parameters.PhoneNumber != null)
+            if (!string.IsNullOrEmpty(parameters.PhoneNumber))
             {
                 users = users.Where(x => x.PhoneNumber.StartsWith(parameters.PhoneNumber));
             }

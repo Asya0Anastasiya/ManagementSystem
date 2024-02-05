@@ -1,16 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
-namespace TimeTrackingService.Migrations
-{
-    public partial class DaysAccounting : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
-                CREATE TABLE DaysAccounting(
+CREATE TABLE DaysAccounting(
 					Id uniqueidentifier NOT NULL,
 					Hours int NOT NULL CHECK(Hours >= 1 AND Hours <= 24),
 					Day int NOT NULL CHECK(Day >= 1 AND Day <= 31),
@@ -39,7 +27,7 @@ namespace TimeTrackingService.Migrations
 				);
 
 				CREATE TABLE DaysAccountingDocument(
-					DaysAccountingId uniqueidentifier NOT NULL,
+					DayAccountingId uniqueidentifier NOT NULL,
 					DocumentsId uniqueidentifier NOT NULL,
 					CONSTRAINT PK_DayAccountingDocument PRIMARY KEY CLUSTERED 
 				(
@@ -50,7 +38,4 @@ namespace TimeTrackingService.Migrations
 						REFERENCES DaysAccounting (Id) ON DELETE CASCADE,
 					CONSTRAINT FK_DaysAccountingDocument_Document_DocumentsId FOREIGN KEY(DocumentsId)
 						REFERENCES Documents (Id) ON DELETE CASCADE
-				);");
-        }
-    }
-}
+				);

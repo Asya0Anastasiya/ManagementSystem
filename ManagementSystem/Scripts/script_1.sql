@@ -1,16 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
-namespace UserService.Migrations
-{
-    public partial class InitialMigration : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
-                CREATE TABLE Addresses (
+CREATE TABLE Addresses (
 	                Id uniqueidentifier NOT NULL,
 	                Country nvarchar(30) NOT NULL,
 	                City nvarchar(30) NOT NULL,
@@ -88,7 +76,4 @@ namespace UserService.Migrations
 					CONSTRAINT UQ_RefreshToken_UserId UNIQUE (UserId),
 					CONSTRAINT FK_RefreshTokens_Users_UserId FOREIGN KEY(UserId)
 						REFERENCES Users (Id)
-					);");
-        }
-    }
-}
+					);

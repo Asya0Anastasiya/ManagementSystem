@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Helpers.Pagination;
 using TimeTrackingService.Interfaces.Repositories;
 using TimeTrackingService.Interfaces.Services;
 using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
 using TimeTrackingService.Exceptions;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Services
 {
@@ -21,16 +20,15 @@ namespace TimeTrackingService.Services
 
         public async Task AddDay(CreateDayModel dayModel)
         {
-            var day = await _repository.CheckDayForExistanceAsync(dayModel.Date, dayModel.UserId);
+            var day = await _repository.CheckDayForExistenceAsync(dayModel.Date, dayModel.UserId);
 
             if (day != null)
             {
                 throw new InternalException($"That day -- {dayModel.Date} -- already exist");
             }
+
             var daysAccounting = _mapper.Map<DayAccounting>(dayModel);
-            daysAccounting.Day = dayModel.Date.Day;
-            daysAccounting.Month = dayModel.Date.Month;
-            daysAccounting.Year = dayModel.Date.Year;
+
             await _repository.AddDay(daysAccounting);
         }
 
@@ -38,7 +36,7 @@ namespace TimeTrackingService.Services
         {
             foreach (var dayModel in daysModels)
             {
-                var day = await _repository.CheckDayForExistanceAsync(dayModel.Date, dayModel.UserId);
+                var day = await _repository.CheckDayForExistenceAsync(dayModel.Date, dayModel.UserId);
 
                 if (day != null)
                 {
@@ -47,19 +45,14 @@ namespace TimeTrackingService.Services
             }
 
             var days = _mapper.Map<List<DayAccounting>>(daysModels);
-            for (var i = 0; i < daysModels.Count; i++)
-            {
-                days[i].Day = daysModels[i].Date.Day;
-                days[i].Month = daysModels[i].Date.Month;
-                days[i].Year = daysModels[i].Date.Year;
-            }
+
             await _repository.AddRangeOfDays(days);
         }
 
-        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, int pageNumber, int pageSize)
+        public async Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters)
         {
-            var pagination = new PaginationParameters(pageNumber, pageSize);
-            var days = await _repository.GetUsersDays(parameters, pagination);
+            var days = await _repository.GetUsersDays(parameters);
+
             return _mapper.Map<List<DayAccountingModel>>(days);
         }
 
@@ -71,38 +64,59 @@ namespace TimeTrackingService.Services
         public async Task RemoveDayAsync(Guid id)
         {
             var day = await _repository.GetDayByIdAsync(id);
+
             if (day == null)
             {
                 throw new NotFoundException("This day not found");
             }
-            await _repository.RemoveDayAsync(day);
-        }
 
-        public async Task RemoveRangeOfDays(List<Guid> ids)
-        {
-            await _repository.RemoveRangeOfDays(ids);
+            await _repository.RemoveDayAsync(day);
         }
 
         public async Task ApproveDayAsync(Guid id)
         {
             var day = await _repository.GetDayByIdAsync(id);
+
             if (day == null)
             {
-                throw new Exception("There is no such day in DB");
+                throw new Exception("Day not found");
             }
+
             day.IsConfirmed = true;
-            await _repository.ApproveDayAsync(day);
+
+            await _repository.UpdateDayAsync(day);
         }
 
         public async Task<DayAccounting> GetUserDay(Guid userId, DateTime date)
         {
-            //if == null throw...
-            return await _repository.CheckDayForExistanceAsync(date, userId);
+            var day = await _repository.CheckDayForExistenceAsync(date, userId);
+
+            if (day == null)
+            {
+                throw new NotFoundException("Day not found");
+            }
+
+            return day;
+        }
+
+        private async Task<int> GetPaidDaysCount(Guid id, int month, int year)
+        {
+            var daysCount = await _repository.GetUsersWorkDaysCount(id, month, year)
+                    + await _repository.GetUsersSickDaysCount(id, month, year)
+                    + await _repository.GetUsersHolidaysCount(id, month, year);
+            return daysCount;
         }
 
         public async Task<UsersDaysModel> GetUsersDaysInfo(Guid id, int month, int year)
         {
-            return await _repository.GetUsersDaysInfo(id, month, year);
+            UsersDaysModel model = new()
+            {
+                WorkDaysCount = await _repository.GetUsersWorkDaysCount(id, month, year),
+                SickDaysCount = await _repository.GetUsersSickDaysCount(id, month, year),
+                HolidaysCount = await _repository.GetUsersHolidaysCount(id, month, year),
+                PaidDaysCount = await GetPaidDaysCount(id, month, year)
+            };
+            return model;
         }
     }
 }

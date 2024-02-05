@@ -1,6 +1,6 @@
-﻿using TimeTrackingService.Helpers.Filtering;
-using TimeTrackingService.Models.Dto;
+﻿using TimeTrackingService.Models.Dto;
 using TimeTrackingService.Models.Entities;
+using TimeTrackingService.Models.Params;
 
 namespace TimeTrackingService.Interfaces.Services
 {
@@ -10,13 +10,11 @@ namespace TimeTrackingService.Interfaces.Services
 
         public Task AddRangeOfDays(List<CreateDayModel> days);
 
-        public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters, int pageNumber, int pageSize);
+        public Task<List<DayAccountingModel>> GetUsersDays(FilteringParameters parameters);
 
         public Task<int> GetUnconfirmedDaysCount(Guid id);
 
         public Task RemoveDayAsync(Guid id);
-
-        public Task RemoveRangeOfDays(List<Guid> ids);
 
         public Task ApproveDayAsync(Guid id);
 

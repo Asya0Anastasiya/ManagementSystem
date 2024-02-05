@@ -1,4 +1,5 @@
-﻿using TimeTrackingService.Models.Entities;
+﻿using TimeTrackingService.Models.Dto;
+using TimeTrackingService.Models.Entities;
 
 namespace TimeTrackingService.Interfaces.Services
 {
@@ -6,10 +7,10 @@ namespace TimeTrackingService.Interfaces.Services
     {
         public Task AddDocumentAsync(Document document);
 
-        public Task<List<string>> GetAttachedUsersDocumentsNames(Guid userId, DateTime date);
+        public Task<List<DocumentWithSourceIdModel>> GetAttachedUsersDocumentsNames(Guid userId, DateTime date);
 
-        public Task<List<string>> GetAllUsersTimeTrackDocsNames(Guid userId);
+        public Task<List<DocumentInfoModel>> GetAllUsersTimeTrackDocsNames(Guid userId);
 
-        public Task AttachDocumentToDay(string name, DateTime dateTime, Guid userId);
+        public Task AttachDocumentToDay(Guid documentId, DateTime dateTime, Guid userId);
     }
 }

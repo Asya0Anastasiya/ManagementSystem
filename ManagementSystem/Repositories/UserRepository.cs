@@ -6,6 +6,7 @@ using UserService.Helpers.Pagination;
 using UserService.Helpers.Filtering;
 using UserService.Helpers;
 using Newtonsoft.Json.Linq;
+using UserService.Models.Params;
 
 namespace UserService.Repositories
 {
@@ -21,6 +22,7 @@ namespace UserService.Repositories
         public async Task CreateUserAsync(UserEntity userEntity)
         {
             _context.Users.Add(userEntity);
+
             await _context.SaveChangesAsync();
         }
 
@@ -37,11 +39,10 @@ namespace UserService.Repositories
                 .Include(user => user.Position)
                 .ThenInclude(position => position.Department)
                 .ThenInclude(department => department.BranchOffice).AsQueryable();
-            FilteringHelper filteringHelper = new();
 
-            users = filteringHelper.FilterUsers(parameters, users);
+            users = FilteringHelper.FilterUsers(parameters, users);
 
-            return PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
+            return await PagedList<UserEntity>.ToPagedItems(users, pagination.PageNumber, pagination.PageSize);
         }
 
         public async Task<int> GetUsersCountAsync()
@@ -52,12 +53,14 @@ namespace UserService.Repositories
         public async Task UpdateUserAsync(UserEntity user)
         {
             _context.Users.Update(user);
+
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteUserAsync(UserEntity user)
         {
             _context.Users.Remove(user);
+
             await _context.SaveChangesAsync();
         }
 

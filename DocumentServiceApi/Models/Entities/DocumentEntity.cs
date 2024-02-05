@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using DocumentServiceApi.Models.Enums;
+﻿using DocumentServiceApi.Models.Enums;
 
 namespace DocumentServiceApi.Models.Entities
 {

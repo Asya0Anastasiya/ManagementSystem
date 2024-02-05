@@ -4,6 +4,7 @@ using UserService.Data;
 using UserService.Helpers;
 using UserService.Helpers.Pagination;
 using UserService.Models.Entities;
+using UserService.Models.Params;
 using UserService.Repositories;
 
 namespace Tests.Service

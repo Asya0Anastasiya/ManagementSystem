@@ -1,6 +1,6 @@
 ﻿using TimeTrackingService.Models.Enums;
 
-namespace TimeTrackingService.Helpers.Filtering
+namespace TimeTrackingService.Models.Params
 {
     public class FilteringParameters
     {

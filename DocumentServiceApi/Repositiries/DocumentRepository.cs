@@ -1,7 +1,6 @@
 ﻿using DocumentServiceApi.Data;
 using DocumentServiceApi.Interfaces.Repositories;
 using DocumentServiceApi.Models.Entities;
-using DocumentServiceApi.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocumentServiceApi.Repositiries
@@ -15,17 +14,16 @@ namespace DocumentServiceApi.Repositiries
             _context = context;
         }
 
-        public async Task<bool> IsDocumestExist(string fileName, Guid userId)
+        public async Task<bool> IsDocumentExist(Guid documentId)
         {
-            var existance = await _context.Documents.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Name == fileName && x.UserId == userId);
+            return await _context.Documents.AsNoTracking()
+                .AnyAsync(x => x.Id == documentId);
+        }
 
-            if (existance == null)
-            {
-                return false;
-            }
-
-            return true;
+        public async Task<bool> IsDocumentExist(string documentName, Guid userId)
+        {
+            return await _context.Documents.AsNoTracking()
+                .AnyAsync(x => x.Name == documentName && x.UserId == userId);
         }
 
         public async Task<List<DocumentEntity>> GetUserDocuments(Guid userId)
@@ -44,6 +42,12 @@ namespace DocumentServiceApi.Repositiries
         {
             return await _context.Documents.AsNoTracking().
                 FirstOrDefaultAsync(x => x.Name == name && x.UserId == userId);
+        }
+
+        public async Task<DocumentEntity> GetDocumentById(Guid documentId)
+        {
+            return await _context.Documents.AsNoTracking().
+                FirstOrDefaultAsync(x => x.Id == documentId);
         }
     }
 }

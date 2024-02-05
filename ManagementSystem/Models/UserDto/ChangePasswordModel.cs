@@ -1,16 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace UserService.Models.UserDto
+﻿namespace UserService.Models.UserDto
 {
     public class ChangePasswordModel
     {
-        [Required]
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
-        [Required]
         public string OldPassword { get; set; }
 
-        [Required]
         public string NewPassword { get; set; }
     }
 }

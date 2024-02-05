@@ -1,4 +1,6 @@
-﻿namespace UserService.Helpers.Pagination
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace UserService.Helpers.Pagination
 {
     public class PagedList<T>
     {
@@ -26,10 +28,10 @@
             Values = items;
         }
 
-        public static List<T> ToPagedItems(IQueryable<T> source, int pageNumber, int pageSize)
+        public async static Task<List<T>> ToPagedItems(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            var count = source.Count();
-            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var count = await source.CountAsync();
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return new PagedList<T>(items, count, pageNumber, pageSize).Values.ToList();
         }
