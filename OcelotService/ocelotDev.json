@@ -320,9 +320,9 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/getAttachedUsersTimeTrackingDocuments/{userId}",
+      "UpstreamPathTemplate": "/getUsersDocuments/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/Document/getAttachedUsersTimeTrackingDocuments/{userId}",
+      "DownstreamPathTemplate": "/api/Document/getUsersDocuments/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

@@ -1,16 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
-namespace DocumentServiceApi.Migrations
-{
-    public partial class initial : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
-                CREATE TABLE Documents (
+CREATE TABLE Documents (
                     Id uniqueidentifier NOT NULL,
                     Name nvarchar(60) NOT NULL,
                     UserId uniqueidentifier NOT NULL,
@@ -22,7 +10,4 @@ namespace DocumentServiceApi.Migrations
 	                (
 		                Id ASC
 	                )
-                );");
-        }
-    }
-}
+                );
