@@ -2,8 +2,6 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using FluentValidation.AspNetCore;
-using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
@@ -15,8 +13,21 @@ using TimeTrackingService.Models.Validators;
 using TimeTrackingService.Options;
 using TimeTrackingService.Repositories;
 using TimeTrackingService.Services;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    //.AddRabbitMQ()
+    .AddCheck<ApiHealthCheck>(nameof(ApiHealthCheck));
+
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage();
 
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DayAccountingValidator>());
 
@@ -74,5 +85,12 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();

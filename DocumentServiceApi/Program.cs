@@ -12,8 +12,21 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using MediatR;
 using DocumentServiceApi.MediatR;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//.AddRabbitMQ(); 
+
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage(); 
+
 builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(typeof(Program).Assembly)
     .AddOpenBehavior(typeof(ValidationBehavior<,>)));
@@ -77,5 +90,12 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();

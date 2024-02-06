@@ -12,8 +12,23 @@ using UserService.Helpers;
 using MediatR;
 using UserService.MediatR;
 using FluentValidation;
+using HealthChecks.UI.Client;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .AddCheck<ApiHealthCheck>(nameof(ApiHealthCheck));
+
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/healthcheck");
+    })
+    .AddInMemoryStorage();
 
 builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(typeof(Program).Assembly)
@@ -72,5 +87,12 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthcheck", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();
