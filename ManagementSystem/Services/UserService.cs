@@ -43,7 +43,7 @@ namespace UserService.Services
             }
 
             user = _mapper.Map<UserEntity>(signUpModel);
-            user.Role = Roles.User;
+            user.Role = Roles.DepartmentManager;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
 
             await _userRepository.CreateUserAsync(user);
@@ -103,7 +103,7 @@ namespace UserService.Services
                 throw new InternalException("Wrong password");
             }
 
-            var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id);
+            var token = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id, user.Position.Department.Name);
 
             var refreshToken = new RefreshToken
             {
@@ -237,7 +237,7 @@ namespace UserService.Services
 
             await _userRepository.AddRefreshTokenAsync(newRefreshToken);
 
-            var newJwtToken = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id);
+            var newJwtToken = new JwtGenerator(_config).CreateJwt(user.Role.ToString(), user.Email, user.Id, user.Position.Department.Name);
 
             return new Tokens
             {
