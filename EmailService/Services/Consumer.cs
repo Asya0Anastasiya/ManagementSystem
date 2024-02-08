@@ -4,7 +4,6 @@ using EmailService.Models.Enums;
 using EmailService.Models.Messages;
 using EmailService.Options;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Crypto;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -37,7 +36,9 @@ namespace EmailService.Services
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var channel = _connection.CreateModel();
+
             channel.QueueDeclare(_rabbitMqOptions.QueueName, durable: true, exclusive: false);
+
             var consumer = new EventingBasicConsumer(channel);
 
             consumer.Received += async (model, ea) =>
