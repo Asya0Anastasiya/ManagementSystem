@@ -4,6 +4,6 @@ namespace EmailService.Interfaces
 {
     public interface IEmailSender
     {
-        void SendEmail(Message message);
+        public Task SendEmail(Message message);
     }
 }

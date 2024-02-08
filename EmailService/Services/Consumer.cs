@@ -61,7 +61,7 @@ namespace EmailService.Services
                                 Message email = new(new string[] { newUserAdded.UserCredentials.Email }, 
                                     "Welcome!", $"Here is your temporary password: {newUserAdded.UserCredentials.Password}");
 
-                                emailService.SendEmail(email);
+                                await emailService.SendEmail(email);
                             }
 
                             break;

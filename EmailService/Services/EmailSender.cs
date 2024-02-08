@@ -15,11 +15,11 @@ namespace EmailService.Services
             _emailConfig = emailConfig;
         }
 
-        public void SendEmail(Message message)
+        public async Task SendEmail(Message message)
         {
             var emailMessage = CreateEmailMessage(message);
 
-            Send(emailMessage);
+            await SendAsync(emailMessage);
         }
 
         private MimeMessage CreateEmailMessage(Message message)
@@ -36,19 +36,20 @@ namespace EmailService.Services
 
             return emailMessage;
         }
-        private void Send(MimeMessage mailMessage)
+
+        private async Task SendAsync(MimeMessage mailMessage)
         {
             using (var client = new SmtpClient())
             {
                 try
                 {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                    await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
 
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
 
-                    client.Send(mailMessage);
+                    await client.SendAsync(mailMessage);
                 }
                 catch
                 {
@@ -56,7 +57,7 @@ namespace EmailService.Services
                 }
                 finally
                 {
-                    client.Disconnect(true);
+                    await client.DisconnectAsync(true);
 
                     client.Dispose();
                 }
