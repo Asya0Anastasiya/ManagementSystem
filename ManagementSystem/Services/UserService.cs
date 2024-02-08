@@ -10,6 +10,8 @@ using UserService.Models.TokenDto;
 using UserService.Models.Params;
 using UserService.Models.UserDto;
 using Microsoft.Extensions.Options;
+using UserService.Models.UserDTO;
+using UserService.Models.Messages;
 
 namespace UserService.Services
 {
@@ -19,16 +21,19 @@ namespace UserService.Services
         private readonly RefreshTokenOptions _refreshTokenOptions;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IMessageProducer _producer;
 
         public UserService(IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
-                          IOptions<RefreshTokenOptions> refreshTokenOptions)
+                          IOptions<RefreshTokenOptions> refreshTokenOptions,
+                          IMessageProducer producer)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
             _refreshTokenOptions = refreshTokenOptions.Value;
+            _producer = producer;
         }
 
         private const int MaxFileSize = 10_485_760;
@@ -47,6 +52,16 @@ namespace UserService.Services
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
 
             await _userRepository.CreateUserAsync(user);
+
+            var message = new NewUserAddedMessage
+            {
+                UserCredentials = new() {
+                    Email = user.Email,
+                    Password = signUpModel.Password
+                }
+            };
+
+            _producer.SendMessage(message);
         }
 
         public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, int pageNumber, int pageSize)

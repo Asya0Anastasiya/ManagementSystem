@@ -99,7 +99,7 @@ namespace DocumentServiceApi.Services
             return _mapper.Map<List<DocumentInfo>>(documents);
         }
 
-        public async Task DocCreatedNotification(string name, Guid userId)
+        private async Task DocCreatedNotification(string name, Guid userId)
         {
             var document = await _repository.GetUserDocumentByName(name, userId);
 

@@ -10,7 +10,9 @@ var emailConfig = builder.Configuration
 
 builder.Services.AddSingleton(emailConfig);
 
+builder.Services.AddHostedService<Consumer>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
