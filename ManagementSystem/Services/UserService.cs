@@ -43,7 +43,7 @@ namespace UserService.Services
             }
 
             user = _mapper.Map<UserEntity>(signUpModel);
-            user.Role = Roles.DepartmentManager;
+            user.Role = Roles.User;
             user.Password = BCrypt.Net.BCrypt.HashPassword(signUpModel.Password);
 
             await _userRepository.CreateUserAsync(user);
