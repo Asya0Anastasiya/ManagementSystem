@@ -4,6 +4,7 @@ using MediatR;
 using UserService.MediatR.Queries;
 using UserService.MediatR.Commands;
 using UserService.Models.Params;
+using UserService.Models.UserDTO;
 
 namespace UserService.Controllers
 {
@@ -95,6 +96,20 @@ namespace UserService.Controllers
         public async Task<IActionResult> RefreshTokenVerification([FromHeader] string refreshToken)
         {
             return Ok(await _mediator.Send(new ValidateRefreshTokenCommand(refreshToken)));
+        }
+
+        [HttpPost("changeUserPermissions")]
+        public async Task<IActionResult> ChangeUserPermissions([FromBody] ChangePermissionsModel permissionsModel)
+        {
+            await _mediator.Send(new ChangePermissionsCommand(permissionsModel));
+            return Ok();
+        }
+
+        [HttpPost("changeUserPosition")]
+        public async Task<IActionResult> ChangeUserPosition([FromBody] ChangePositionModel positionModel)
+        {
+            await _mediator.Send(new ChangePositionCommand(positionModel));
+            return Ok();
         }
     }
 }

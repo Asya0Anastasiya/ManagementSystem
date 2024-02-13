@@ -108,5 +108,10 @@ namespace UserService.Repositories
                 .Include(x => x.RefreshToken)
                 .FirstOrDefaultAsync(x => x.RefreshToken.Token == refreshToken);
         }
+
+        public async Task<PositionEntity> FindPositionById(Guid positionId)
+        {
+            return await _context.Positions.FindAsync(positionId);
+        }
     }
 }
