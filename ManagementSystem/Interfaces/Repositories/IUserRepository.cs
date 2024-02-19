@@ -26,5 +26,7 @@ namespace UserService.Interfaces.Repositories
 
         public Task<UserEntity> GetUserByRefreshTokenAsync(string refreshToken);
 
+        public Task<PositionEntity> FindPositionById(Guid positionId);
+
     }
 }

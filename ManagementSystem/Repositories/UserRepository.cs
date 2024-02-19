@@ -28,7 +28,10 @@ namespace UserService.Repositories
 
         public async Task<UserEntity> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.Include(x => x.RefreshToken).AsNoTracking()
+            return await _context.Users.Include(x => x.RefreshToken)
+                .Include(user => user.Position)
+                .ThenInclude(position => position.Department)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email.ToUpper() == email.Trim().ToUpper());
         }
 
@@ -107,6 +110,11 @@ namespace UserService.Repositories
             return await _context.Users
                 .Include(x => x.RefreshToken)
                 .FirstOrDefaultAsync(x => x.RefreshToken.Token == refreshToken);
+        }
+
+        public async Task<PositionEntity> FindPositionById(Guid positionId)
+        {
+            return await _context.Positions.FindAsync(positionId);
         }
     }
 }
