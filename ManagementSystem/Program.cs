@@ -38,8 +38,9 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:4200")
         .AllowAnyMethod()
+        .AllowCredentials()
         .AllowAnyHeader();
         builder.WithExposedHeaders("X-Pagination");
     });
