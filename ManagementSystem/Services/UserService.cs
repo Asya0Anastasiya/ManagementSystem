@@ -11,7 +11,8 @@ using UserService.Models.Params;
 using UserService.Models.UserDto;
 using Microsoft.Extensions.Options;
 using UserService.Models.UserDTO;
-using UserService.Models.Messages;
+using UserService.Models.MessageDto;
+using NETCore.MailKit.Core;
 
 namespace UserService.Services
 {
@@ -20,20 +21,20 @@ namespace UserService.Services
         private readonly IConfiguration _config;
         private readonly RefreshTokenOptions _refreshTokenOptions;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
-        private readonly IMessageProducer _producer;
 
         public UserService(IConfiguration config,
                           IUserRepository userRepository,
                           IMapper mapper,
                           IOptions<RefreshTokenOptions> refreshTokenOptions,
-                          IMessageProducer producer)
+                          IEmailSender emailSender)
         {
             _config = config;
             _userRepository = userRepository;
             _mapper = mapper;
             _refreshTokenOptions = refreshTokenOptions.Value;
-            _producer = producer;
+            _emailSender = emailSender;
         }
 
         private const int MaxFileSize = 10_485_760;
@@ -53,15 +54,10 @@ namespace UserService.Services
 
             await _userRepository.CreateUserAsync(user);
 
-            var message = new NewUserAddedMessage
-            {
-                UserCredentials = new() {
-                    Email = user.Email,
-                    Password = signUpModel.Password
-                }
-            };
+            EmailMessage email = new(new string[] { signUpModel.Email },
+                                    "Welcome!", $"Here is your temporary password: {signUpModel.Password}");
 
-            _producer.SendMessage(message);
+            await _emailSender.SendEmail(email);
         }
 
         public async Task<List<UserInfoModel>> GetUsersAsync(FilteringParameters parameters, int pageNumber, int pageSize)
