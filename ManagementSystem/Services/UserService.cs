@@ -10,6 +10,7 @@ using UserService.Models.TokenDto;
 using UserService.Models.Params;
 using UserService.Models.UserDto;
 using Microsoft.Extensions.Options;
+using UserService.Models.UserDTO;
 
 namespace UserService.Services
 {
@@ -244,6 +245,55 @@ namespace UserService.Services
                 Token = newJwtToken,
                 RefreshToken = newRefreshToken.Token
             };
+        }
+
+        public async Task ChangeUserPermissionsAsync(ChangePermissionsModel permissionsModel)
+        {
+            var user = await _userRepository.GetUserByIdAsync(permissionsModel.UserId);
+
+            var admin = await _userRepository.GetUserByIdAsync(permissionsModel.AdminId);
+
+            if (user == null || admin == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            if (admin.Role != Roles.Admin)
+            {
+                throw new NotFoundException("Invalid user");
+            }
+
+            user.Role = (Roles)permissionsModel.NewRole;
+
+            await _userRepository.UpdateUserAsync(user);
+        }
+
+        public async Task ChangeUserPositionAsync(ChangePositionModel positionModel)
+        {
+            var user = await _userRepository.GetUserByIdAsync(positionModel.UserId);
+
+            var admin = await _userRepository.GetUserByIdAsync(positionModel.AdminId);
+
+            if (user == null || admin == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            if (admin.Role != Roles.Admin)
+            {
+                throw new NotFoundException("Invalid user");
+            }
+
+            var position = await _userRepository.FindPositionById(positionModel.PositionId);
+
+            if (position == null)
+            {
+                throw new NotFoundException("Invalid position");
+            }
+            user.PositionId = positionModel.PositionId;
+            user.Position = position;
+
+            await _userRepository.UpdateUserAsync(user);
         }
     }
 }
