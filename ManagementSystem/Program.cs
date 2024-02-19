@@ -12,6 +12,8 @@ using UserService.Helpers;
 using MediatR;
 using UserService.MediatR;
 using FluentValidation;
+using UserService.Services;
+using UserService.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +24,11 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<ChatService>();
 
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddressValidator>());
 
@@ -72,5 +76,6 @@ app.UseCors("MyPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();
