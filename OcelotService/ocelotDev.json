@@ -34,10 +34,10 @@
       ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin"
+        ]
       }
     },
     {
@@ -96,10 +96,10 @@
       ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin"
+        ]
       }
     },
     {
@@ -199,9 +199,9 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
+      "UpstreamPathTemplate": "/getUsersDays",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
+      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -227,10 +227,10 @@
       ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin", "DepartmentManager"
+        ]
       }
     },
     {
@@ -246,10 +246,10 @@
       ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin", "DepartmentManager"
+        ]
       }
     },
     {
@@ -265,10 +265,10 @@
       ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin", "DepartmentManager"
+        ]
       }
     },
     {

@@ -3,6 +3,7 @@ using UserService.Models.Entities;
 using UserService.Models.TokenDto;
 using UserService.Models.Params;
 using UserService.Models.UserDto;
+using UserService.Models.UserDTO;
 
 namespace UserService.Interfaces.Services
 {
@@ -29,5 +30,9 @@ namespace UserService.Interfaces.Services
         public Task<byte[]> GetUserImageAsync(Guid userId);
 
         public Task<Tokens> ValidateRefreshTokenAsync(string refreshToken);
+
+        public Task ChangeUserPermissionsAsync(ChangePermissionsModel permissionsModel);
+
+        public Task ChangeUserPositionAsync(ChangePositionModel positionModel);
     }
 }

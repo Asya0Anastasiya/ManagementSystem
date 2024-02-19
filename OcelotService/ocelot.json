@@ -199,9 +199,9 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
+      "UpstreamPathTemplate": "/getUsersDays",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays/pageNumber/{pageNumber}/pageSize/{pageSize}",
+      "DownstreamPathTemplate": "/api/DayAccounting/getUsersDays",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
