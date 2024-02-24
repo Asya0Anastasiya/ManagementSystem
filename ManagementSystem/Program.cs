@@ -14,6 +14,8 @@ using UserService.MediatR;
 using FluentValidation;
 using UserService.Services;
 using UserService.Hubs;
+using UserService.Models.Options;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +31,14 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ChatService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddressValidator>());
 
 builder.Services.Configure <RefreshTokenOptions>(builder.Configuration.GetSection("RefreshToken"));
+
+builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("EmailOptions"));
 
 builder.Services.AddCors(option =>
 {

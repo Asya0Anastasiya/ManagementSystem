@@ -2,8 +2,6 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using FluentValidation.AspNetCore;
-using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingService.Data;
 using TimeTrackingService.Interfaces.Repositories;
