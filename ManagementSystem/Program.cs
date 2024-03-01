@@ -55,6 +55,7 @@ builder.Services.AddCors(option =>
 builder.Services.AddDbContext<Context>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //.LogTo(Console.WriteLine, LogLevel.Information);
 });
 
 var mappingConfig = new MapperConfiguration(x =>

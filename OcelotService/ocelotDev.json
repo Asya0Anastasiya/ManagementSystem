@@ -167,6 +167,44 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/changeUserPermissions",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/User/changeUserPermissions",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44307
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin"
+        ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/changeUserPosition",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/User/changeUserPosition",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44307
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "Admin"
+        ]
+      }
+    },
+    {
       "UpstreamPathTemplate": "/addDay",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/DayAccounting/addDay",
@@ -229,7 +267,8 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [
-          "Admin", "DepartmentManager"
+          "Admin",
+          "DepartmentManager"
         ]
       }
     },
@@ -248,7 +287,8 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [
-          "Admin", "DepartmentManager"
+          "Admin",
+          "DepartmentManager"
         ]
       }
     },
@@ -267,7 +307,8 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [
-          "Admin", "DepartmentManager"
+          "Admin",
+          "DepartmentManager"
         ]
       }
     },

@@ -12,7 +12,6 @@ using UserService.Models.UserDto;
 using Microsoft.Extensions.Options;
 using UserService.Models.UserDTO;
 using UserService.Models.MessageDto;
-using NETCore.MailKit.Core;
 
 namespace UserService.Services
 {
